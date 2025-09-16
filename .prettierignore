@@ -1,0 +1,9 @@
+dist
+coverage
+node_modules
+*.json
+*.md
+*.yml
+*.yaml
+.yarn
+.pnp.*
