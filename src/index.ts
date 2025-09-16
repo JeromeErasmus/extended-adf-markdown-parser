@@ -7,9 +7,19 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
 import type { ADFDocument, ADFNode, ConversionOptions, ValidationResult } from './types';
+import type { ConversionContext } from './parser/types';
 import { AdfValidator } from './validators/AdfValidator';
 import { MarkdownValidator } from './validators/MarkdownValidator';
 import { ParserError, ValidationError } from './errors';
+import { ConverterRegistry } from './parser/ConverterRegistry';
+
+// Import converters
+import { ParagraphConverter } from './parser/adf-to-markdown/nodes/ParagraphConverter';
+import { TextConverter } from './parser/adf-to-markdown/nodes/TextConverter';
+import { HeadingConverter } from './parser/adf-to-markdown/nodes/HeadingConverter';
+import { StrongConverter } from './parser/adf-to-markdown/marks/StrongConverter';
+import { EmConverter } from './parser/adf-to-markdown/marks/EmConverter';
+import { CodeConverter } from './parser/adf-to-markdown/marks/CodeConverter';
 
 // Export all types
 export * from './types';
@@ -20,16 +30,19 @@ export { ParserError, ConversionError } from './errors';
  */
 export class Parser {
   private remarkProcessor;
-  private adfConverters: Map<string, any>;
+  private registry: ConverterRegistry;
+  private options: ConversionOptions;
   
   constructor(options?: ConversionOptions) {
+    this.options = options || {};
+    
     // Initialize remark with our custom plugins
     this.remarkProcessor = unified()
       .use(remarkParse)
       // TODO: Add custom ADF plugin here
       .use(remarkStringify);
       
-    this.adfConverters = new Map();
+    this.registry = new ConverterRegistry();
     this.registerConverters();
   }
   
@@ -83,12 +96,37 @@ export class Parser {
   
   // Private implementation methods
   private registerConverters(): void {
-    // TODO: Register all node converters
+    // Register node converters
+    this.registry.registerNodes([
+      new ParagraphConverter(),
+      new TextConverter(),
+      new HeadingConverter()
+    ]);
+    
+    // Register mark converters
+    this.registry.registerMarks([
+      new StrongConverter(),
+      new EmConverter(),
+      new CodeConverter()
+    ]);
   }
   
   private convertAdfToMarkdown(adf: ADFDocument): string {
-    // TODO: Implement ADF to Markdown conversion
-    return '';
+    const context: ConversionContext = {
+      convertChildren: (nodes: ADFNode[]) => {
+        return nodes.map(node => {
+          const converter = this.registry.getNodeConverter(node.type);
+          return converter.toMarkdown(node, context);
+        }).join('');
+      },
+      depth: 0,
+      options: {
+        ...this.options,
+        registry: this.registry
+      }
+    };
+    
+    return context.convertChildren(adf.content || []);
   }
   
   private convertMdastToAdf(mdast: any): ADFDocument {
