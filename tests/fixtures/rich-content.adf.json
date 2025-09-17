@@ -1,0 +1,129 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Rich Content Examples"
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "info"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is an "
+            },
+            {
+              "type": "text",
+              "text": "information panel",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": " with mixed formatting including "
+            },
+            {
+              "type": "text",
+              "text": "links",
+              "marks": [
+                {
+                  "type": "link",
+                  "attrs": {
+                    "href": "https://developer.atlassian.com",
+                    "title": "Atlassian Developer"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": " and "
+            },
+            {
+              "type": "text",
+              "text": "inline code",
+              "marks": [
+                {
+                  "type": "code"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": "javascript"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "import { Parser } from '@extended-adf/parser';\n\nconst parser = new Parser();\nconst markdown = parser.adfToMarkdown(adfDocument);"
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is a blockquote with "
+            },
+            {
+              "type": "text",
+              "text": "emphasized text",
+              "marks": [
+                {
+                  "type": "em"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": " and "
+            },
+            {
+              "type": "text",
+              "text": "strikethrough",
+              "marks": [
+                {
+                  "type": "strike"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": " formatting."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

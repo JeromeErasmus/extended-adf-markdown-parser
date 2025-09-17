@@ -22,6 +22,9 @@ export default {
     ]
   },
   roots: ['<rootDir>/src', '<rootDir>/tests'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(unified|remark.*|micromark.*|mdast-util.*|unist-util.*|vfile.*|bail|trough|is-plain-obj)/)'
+  ],
   testMatch: [
     '**/__tests__/**/*.+(ts|tsx)',
     '**/?(*.)+(spec|test).+(ts|tsx)'

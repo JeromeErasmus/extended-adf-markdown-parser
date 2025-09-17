@@ -1,0 +1,16 @@
+# Edge Cases & Complex Scenarios <!-- adf:heading attrs='{"customId":"main-heading","anchor":true}' -->
+
+Text with <span style="color: #FF5630">***multiple***</span> overlapping marks and `special chars: <>&"'`.
+
+| Merged Header <!-- colspan=2 --><!-- adf:tableHeader attrs='{"rowspan":1,"colwidth":[150,200]}' --> | Single |
+| -------- | -------- | -------- |
+| Cell with<br>multiple<br>lines | - Nested list in cell | ```json<br>{<br>  "nested": "code in cell"<br>}<br>``` |
+<!-- adf:table attrs='{"isNumberColumnEnabled":true,"layout":"full-width"}' -->
+
+~~~panel type=warning attrs='{"customData":"test-value","priority":1}'
+Warning panel with custom attributes and <u>~~empty~~</u> marks.
+~~~
+
+5. List starting at 5
+  - Nested bullet item
+6. Item after empty

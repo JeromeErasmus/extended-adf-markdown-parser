@@ -1,0 +1,270 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1,
+        "customId": "main-heading",
+        "anchor": true
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Edge Cases & Complex Scenarios"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Text with "
+        },
+        {
+          "type": "text",
+          "text": "multiple",
+          "marks": [
+            {
+              "type": "strong"
+            },
+            {
+              "type": "em"
+            },
+            {
+              "type": "textColor",
+              "attrs": {
+                "color": "#FF5630"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " overlapping marks and "
+        },
+        {
+          "type": "text",
+          "text": "special chars: <>&\"'",
+          "marks": [
+            {
+              "type": "code"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "attrs": {
+        "isNumberColumnEnabled": true,
+        "layout": "full-width"
+      },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableHeader",
+              "attrs": {
+                "colspan": 2,
+                "rowspan": 1,
+                "colwidth": [150, 200]
+              },
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Merged Header"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "attrs": {
+                "colspan": 1
+              },
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Single"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Cell with\nmultiple\nlines"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "bulletList",
+                  "content": [
+                    {
+                      "type": "listItem",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Nested list in cell"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "codeBlock",
+                  "attrs": {
+                    "language": "json"
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "{\n  \"nested\": \"code in cell\"\n}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "warning",
+        "customData": "test-value",
+        "priority": 1
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Warning panel with custom attributes and "
+            },
+            {
+              "type": "text",
+              "text": "empty",
+              "marks": [
+                {
+                  "type": "strike"
+                },
+                {
+                  "type": "underline"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": " marks."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "attrs": {
+        "order": 5
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "List starting at 5"
+                }
+              ]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Nested bullet item"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": []
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Item after empty"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
