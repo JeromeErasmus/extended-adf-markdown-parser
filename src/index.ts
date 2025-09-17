@@ -30,6 +30,7 @@ import { TableHeaderConverter } from './parser/adf-to-markdown/nodes/TableHeader
 import { TableCellConverter } from './parser/adf-to-markdown/nodes/TableCellConverter';
 import { ExpandConverter, NestedExpandConverter } from './parser/adf-to-markdown/nodes/ExpandConverter';
 import { BlockquoteConverter } from './parser/adf-to-markdown/nodes/BlockquoteConverter';
+import { RuleConverter } from './parser/adf-to-markdown/nodes/RuleConverter';
 
 // Import mark converters
 import { StrongConverter } from './parser/adf-to-markdown/marks/StrongConverter';
@@ -49,6 +50,9 @@ export { ConverterRegistry } from './parser/ConverterRegistry.js';
 
 // Export test utilities  
 export { normalizeMarkdownForComparison, expectMarkdownEqual, toMatchMarkdown } from './utils/test-utils.js';
+
+// Export markdown parser components
+export { MarkdownParser } from './parser/markdown-to-adf/MarkdownParser.js';
 
 /**
  * Main parser class - wraps unified/remark complexity
@@ -139,7 +143,8 @@ export class Parser {
       new TableCellConverter(),
       new ExpandConverter(),
       new NestedExpandConverter(),
-      new BlockquoteConverter()
+      new BlockquoteConverter(),
+      new RuleConverter()
     ]);
     
     // Register mark converters
@@ -173,7 +178,7 @@ export class Parser {
     const content = (adf.content || []).map(node => {
       const converter = this.registry.getNodeConverter(node.type);
       return converter.toMarkdown(node, context);
-    }).filter(content => content.trim().length > 0).join('\n\n');
+    }).filter(content => content.length > 0).join('\n\n');
     
     return content;
   }
@@ -181,6 +186,7 @@ export class Parser {
   private convertMdastToAdf(mdast: any): ADFDocument {
     // TODO: Implement mdast to ADF conversion
     return {
+      version: 1,
       type: 'doc',
       content: []
     };
@@ -189,6 +195,7 @@ export class Parser {
   private fallbackConversion(markdown: string): ADFDocument {
     // TODO: Implement fallback conversion
     return {
+      version: 1,
       type: 'doc',
       content: [
         {

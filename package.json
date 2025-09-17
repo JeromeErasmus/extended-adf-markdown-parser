@@ -53,6 +53,7 @@
   "homepage": "https://github.com/JeromeErasmus/extended-markdown-adf-parser#readme",
   "dependencies": {
     "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "micromark": "^4.0.2",
     "remark": "^15.0.1",
     "remark-parse": "^11.0.0",

@@ -4,6 +4,7 @@
  */
 
 export interface ADFDocument {
+  version: number;
   type: 'doc';
   content: ADFNode[];
 }

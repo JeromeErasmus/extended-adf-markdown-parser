@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.extended-adf.com/adf-document.json",
+  "title": "ADF Document Schema",
+  "description": "Schema for validating Atlassian Document Format (ADF) documents",
+  "type": "object",
+  "required": ["version", "type", "content"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "ADF format version"
+    },
+    "type": {
+      "type": "string",
+      "const": "doc",
+      "description": "Document root type"
+    },
+    "content": {
+      "type": "array",
+      "description": "Document content nodes",
+      "items": {
+        "$ref": "#/definitions/node"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "node": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "paragraph", "heading", "blockquote", "bulletList", "orderedList", "listItem",
+            "codeBlock", "panel", "expand", "table", "tableRow", "tableHeader", "tableCell",
+            "mediaSingle", "mediaGroup", "media", "rule", "text", "hardBreak"
+          ]
+        },
+        "attrs": {
+          "type": "object",
+          "description": "Node attributes"
+        },
+        "content": {
+          "type": "array",
+          "description": "Child nodes",
+          "items": {
+            "$ref": "#/definitions/node"
+          }
+        },
+        "marks": {
+          "type": "array",
+          "description": "Text formatting marks",
+          "items": {
+            "$ref": "#/definitions/mark"
+          }
+        },
+        "text": {
+          "type": "string",
+          "description": "Text content for text nodes"
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "heading" } } },
+          "then": {
+            "properties": {
+              "attrs": {
+                "type": "object",
+                "required": ["level"],
+                "properties": {
+                  "level": { "type": "integer", "minimum": 1, "maximum": 6 }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "panel" } } },
+          "then": {
+            "properties": {
+              "attrs": {
+                "type": "object",
+                "required": ["panelType"],
+                "properties": {
+                  "panelType": {
+                    "type": "string",
+                    "enum": ["info", "warning", "error", "success", "note"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "codeBlock" } } },
+          "then": {
+            "properties": {
+              "attrs": {
+                "type": "object",
+                "properties": {
+                  "language": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "text" } } },
+          "then": {
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string", "minLength": 0 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "orderedList" } } },
+          "then": {
+            "properties": {
+              "attrs": {
+                "type": "object",
+                "properties": {
+                  "order": { "type": "integer", "minimum": 1 }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "mark": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "strong", "em", "code", "link", "strike", "underline", 
+            "textColor", "backgroundColor", "subsup"
+          ]
+        },
+        "attrs": {
+          "type": "object",
+          "description": "Mark attributes"
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "link" } } },
+          "then": {
+            "properties": {
+              "attrs": {
+                "type": "object",
+                "required": ["href"],
+                "properties": {
+                  "href": { "type": "string", "format": "uri" },
+                  "title": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "type": { "const": "textColor" } } },
+          "then": {
+            "properties": {
+              "attrs": {
+                "type": "object",
+                "required": ["color"],
+                "properties": {
+                  "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": true
+    }
+  }
+}
