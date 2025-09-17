@@ -6,8 +6,8 @@ This directory contains extensive integration tests for the Extended Markdown to
 
 ### Current Test Coverage
 - **704 total tests** across 44 test suites
-- **685 tests passing** (97.3% pass rate)
-- **19 tests failing** (advanced features not yet implemented)
+- **688 tests passing** (97.7% pass rate)
+- **16 tests failing** (advanced features not yet implemented)
 
 ## Test Files Overview
 
@@ -63,18 +63,22 @@ npm test -- --testNamePattern="should convert simple document"
 
 ## Remaining Work
 
-### Tests Failing (19 out of 704):
+### Tests Failing (16 out of 704):
 The failing tests identify specific **advanced features** that need implementation:
 
-#### Priority 1: Text Formatting Marks
-- `**bold**` → `strong` mark
-- `*italic*` → `em` mark  
-- `` `code` `` → `code` mark
-- `~~strikethrough~~` → `strike` mark
+#### ✅ Implemented: Basic Text Formatting Marks
+- ✅ `**bold**` → `strong` mark
+- ✅ `*italic*` → `em` mark  
+- ✅ `` `code` `` → `code` mark
+- ✅ `~~strikethrough~~` → `strike` mark
 
-#### Priority 2: Advanced Markdown Features
+#### Priority 1: Advanced Text Formatting
+- Complex nested formatting (e.g., **bold _italic_**)
+- Link parsing and conversion
+- Advanced mark combinations
+
+#### Priority 2: Advanced Markdown Features  
 - Setext headings (underline style)
-- Complex nested formatting
 - Link reference definitions
 - Indented code blocks
 - Advanced table alignment
@@ -82,8 +86,8 @@ The failing tests identify specific **advanced features** that need implementati
 
 ### Implementation Roadmap
 
-1. **Text Formatting**: Implement mark tokenization and ADF conversion (would fix ~50% of failures)
-2. **Advanced Features**: Add remaining markdown syntax support
+1. ✅ **Basic Text Formatting**: Implemented mark tokenization and ADF conversion (3 tests now passing)
+2. **Advanced Features**: Add remaining markdown syntax support (16 tests remaining)
 3. **Feature Complete**: Achieve 100% test pass rate
 
 ## Test Quality Metrics
