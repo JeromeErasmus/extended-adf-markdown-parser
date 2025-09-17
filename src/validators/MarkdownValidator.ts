@@ -6,7 +6,7 @@ import type { ValidationResult } from '../types';
 
 export class MarkdownValidator {
   validate(markdown: string): ValidationResult {
-    const errors: Array<{ path?: string; message: string; code?: string }> = [];
+    const errors: Array<{ path?: string; message: string; code?: string; line?: number }> = [];
     const warnings: string[] = [];
     
     // Check for basic markdown structure
@@ -16,7 +16,8 @@ export class MarkdownValidator {
         errors: [
           {
             message: 'Input must be a string',
-            code: 'INVALID_TYPE'
+            code: 'INVALID_TYPE',
+            line: 1
           }
         ]
       };
@@ -24,6 +25,12 @@ export class MarkdownValidator {
     
     // Split into lines for line-by-line validation
     const lines = markdown.split(/\r?\n/);
+    
+    // Check for empty or whitespace-only content
+    const hasContent = lines.some(line => line.trim().length > 0 && !line.trim().startsWith('<!--'));
+    if (!hasContent) {
+      warnings.push('Document appears to be empty or contains only whitespace and comments');
+    }
     
     // Validate fence blocks
     this.validateFenceBlocks(lines, errors, warnings);
@@ -52,7 +59,7 @@ export class MarkdownValidator {
   
   private validateFenceBlocks(
     lines: string[], 
-    errors: Array<{ path?: string; message: string; code?: string }>, 
+    errors: Array<{ path?: string; message: string; code?: string; line?: number }>, 
     warnings: string[]
   ): void {
     const fenceStack: Array<{type: string; line: number; content: string}> = [];
@@ -77,7 +84,8 @@ export class MarkdownValidator {
             errors.push({
               message: `Panel fence block missing required "type" attribute at line ${index + 1}`,
               code: 'MISSING_PANEL_TYPE',
-              path: `line:${index + 1}`
+              path: `line:${index + 1}`,
+              line: index + 1
             });
           } else {
             const typeMatch = attributes.match(/type=(\w+)/);
@@ -88,7 +96,8 @@ export class MarkdownValidator {
                 errors.push({
                   message: `Invalid panel type "${panelType}" at line ${index + 1}. Valid types: ${validPanelTypes.join(', ')}`,
                   code: 'INVALID_PANEL_TYPE',
-                  path: `line:${index + 1}`
+                  path: `line:${index + 1}`,
+                  line: index + 1
                 });
               }
             }
@@ -105,7 +114,8 @@ export class MarkdownValidator {
           errors.push({
             message: `Unmatched closing fence block at line ${index + 1}`,
             code: 'UNMATCHED_FENCE_CLOSE',
-            path: `line:${index + 1}`
+            path: `line:${index + 1}`,
+            line: index + 1
           });
         } else {
           fenceStack.pop();
@@ -124,7 +134,8 @@ export class MarkdownValidator {
           errors.push({
             message: `Unmatched code block closing at line ${index + 1}`,
             code: 'UNMATCHED_CODE_CLOSE',
-            path: `line:${index + 1}`
+            path: `line:${index + 1}`,
+            line: index + 1
           });
         } else {
           // This is an opening fence (```javascript, etc.)
@@ -139,14 +150,15 @@ export class MarkdownValidator {
       errors.push({
         message: `Unclosed ${fence.type} fence block starting at line ${fence.line}`,
         code: 'UNCLOSED_FENCE_BLOCK',
-        path: `line:${fence.line}`
+        path: `line:${fence.line}`,
+        line: fence.line
       });
     });
   }
   
   private validateHeadings(
     lines: string[], 
-    errors: Array<{ path?: string; message: string; code?: string }>, 
+    errors: Array<{ path?: string; message: string; code?: string; line?: number }>, 
     warnings: string[]
   ): void {
     lines.forEach((line, index) => {
@@ -162,7 +174,8 @@ export class MarkdownValidator {
           errors.push({
             message: `Invalid heading level ${level} at line ${index + 1}. Maximum level is 6.`,
             code: 'INVALID_HEADING_LEVEL',
-            path: `line:${index + 1}`
+            path: `line:${index + 1}`,
+            line: index + 1
           });
         }
         
@@ -176,7 +189,7 @@ export class MarkdownValidator {
   
   private validateAdfMetadata(
     lines: string[], 
-    errors: Array<{ path?: string; message: string; code?: string }>, 
+    errors: Array<{ path?: string; message: string; code?: string; line?: number }>, 
     warnings: string[]
   ): void {
     lines.forEach((line, index) => {
@@ -194,14 +207,16 @@ export class MarkdownValidator {
             errors.push({
               message: `ADF metadata attributes must be an object at line ${index + 1}`,
               code: 'INVALID_METADATA_ATTRS',
-              path: `line:${index + 1}`
+              path: `line:${index + 1}`,
+              line: index + 1
             });
           }
         } catch (error) {
           errors.push({
             message: `Invalid JSON in ADF metadata at line ${index + 1}`,
             code: 'INVALID_METADATA_JSON',
-            path: `line:${index + 1}`
+            path: `line:${index + 1}`,
+            line: index + 1
           });
         }
       }
@@ -210,7 +225,7 @@ export class MarkdownValidator {
   
   private validateFrontmatter(
     lines: string[], 
-    errors: Array<{ path?: string; message: string; code?: string }>, 
+    errors: Array<{ path?: string; message: string; code?: string; line?: number }>, 
     warnings: string[]
   ): void {
     if (lines.length === 0) return;
@@ -227,8 +242,9 @@ export class MarkdownValidator {
           break;
         }
         
-        // Prevent infinite frontmatter
-        if (lineCount > 50) {
+        // Prevent infinite frontmatter (increased limit for valid large frontmatter)
+        if (lineCount > 1000) {
+          warnings.push('Very long frontmatter block detected (>1000 lines)');
           break;
         }
       }
@@ -237,7 +253,8 @@ export class MarkdownValidator {
         errors.push({
           message: 'Unclosed YAML frontmatter block',
           code: 'UNCLOSED_FRONTMATTER',
-          path: 'line:1'
+          path: 'line:1',
+          line: 1
         });
       }
     }
@@ -245,7 +262,7 @@ export class MarkdownValidator {
   
   private validateLists(
     lines: string[], 
-    errors: Array<{ path?: string; message: string; code?: string }>, 
+    errors: Array<{ path?: string; message: string; code?: string; line?: number }>, 
     warnings: string[]
   ): void {
     lines.forEach((line, index) => {
@@ -280,7 +297,7 @@ export class MarkdownValidator {
   
   private validateLinksAndMedia(
     lines: string[], 
-    errors: Array<{ path?: string; message: string; code?: string }>, 
+    errors: Array<{ path?: string; message: string; code?: string; line?: number }>, 
     warnings: string[]
   ): void {
     lines.forEach((line, index) => {
@@ -293,7 +310,8 @@ export class MarkdownValidator {
             errors.push({
               message: `Empty media ID in placeholder at line ${index + 1}`,
               code: 'EMPTY_MEDIA_ID',
-              path: `line:${index + 1}`
+              path: `line:${index + 1}`,
+              line: index + 1
             });
           }
         });
@@ -308,7 +326,8 @@ export class MarkdownValidator {
             errors.push({
               message: `Empty user ID in mention at line ${index + 1}`,
               code: 'EMPTY_USER_ID',
-              path: `line:${index + 1}`
+              path: `line:${index + 1}`,
+              line: index + 1
             });
           }
         });
@@ -327,7 +346,8 @@ export class MarkdownValidator {
               errors.push({
                 message: `Empty URL in link at line ${index + 1}`,
                 code: 'EMPTY_LINK_URL',
-                path: `line:${index + 1}`
+                path: `line:${index + 1}`,
+                line: index + 1
               });
             }
             

@@ -146,9 +146,14 @@ export class ASTBuilder {
   private convertParagraph(token: Token): ADFNode {
     const customAttrs = this.extractCustomAttributes(token.metadata);
     
+    // Use inline tokens if available, otherwise parse content string
+    const content = token.children && token.children.length > 0 
+      ? this.convertInlineTokensToNodes(token.children)
+      : this.convertInlineContent(token.content);
+    
     const node: ADFNode = {
       type: 'paragraph',
-      content: this.convertInlineContent(token.content)
+      content
     };
 
     if (Object.keys(customAttrs).length > 0) {
@@ -441,6 +446,64 @@ export class ASTBuilder {
         }
       ]
     };
+  }
+
+  private convertInlineTokensToNodes(tokens: Token[]): ADFNode[] {
+    const nodes: ADFNode[] = [];
+    
+    for (const token of tokens) {
+      const node = this.convertInlineTokenToNode(token);
+      if (node) {
+        nodes.push(node);
+      }
+    }
+    
+    return nodes;
+  }
+  
+  private convertInlineTokenToNode(token: Token): ADFNode | null {
+    switch (token.type) {
+      case 'text':
+        return {
+          type: 'text',
+          text: token.content
+        };
+        
+      case 'strong':
+        return {
+          type: 'text',
+          text: token.content,
+          marks: [{ type: 'strong' }]
+        };
+        
+      case 'emphasis':
+        return {
+          type: 'text', 
+          text: token.content,
+          marks: [{ type: 'em' }]
+        };
+        
+      case 'strikethrough':
+        return {
+          type: 'text',
+          text: token.content,
+          marks: [{ type: 'strike' }]
+        };
+        
+      case 'inlineCode':
+        return {
+          type: 'text',
+          text: token.content,
+          marks: [{ type: 'code' }]
+        };
+        
+      default:
+        // Unknown inline token type, treat as plain text
+        return {
+          type: 'text',
+          text: token.content || token.raw
+        };
+    }
   }
 
   private convertInlineContent(content: string): ADFNode[] {

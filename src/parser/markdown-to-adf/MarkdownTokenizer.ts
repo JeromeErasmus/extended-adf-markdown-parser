@@ -601,12 +601,99 @@ export class MarkdownTokenizer {
       raw += this.consumeLine() + '\n';
     }
 
+    const content = lines.join('\n');
+    const inlineTokens = this.parseInlineContent(content);
+    
     return {
       type: 'paragraph',
-      content: lines.join('\n'),
+      content: content,
+      children: inlineTokens.length > 0 ? inlineTokens : undefined,
       position: startPos,
       raw: raw.trimEnd()
     };
+  }
+
+  private parseInlineContent(text: string): Token[] {
+    const tokens: Token[] = [];
+    let position = 0;
+    
+    // Regex patterns for inline formatting
+    const patterns = [
+      { type: 'strong' as TokenType, regex: /\*\*(.*?)\*\*/g, markLength: 2 },
+      { type: 'emphasis' as TokenType, regex: /\*(.*?)\*/g, markLength: 1 },
+      { type: 'strikethrough' as TokenType, regex: /~~(.*?)~~/g, markLength: 2 },
+      { type: 'inlineCode' as TokenType, regex: /`(.*?)`/g, markLength: 1 }
+    ];
+    
+    // Find all inline formatting matches
+    const matches: Array<{
+      type: TokenType;
+      start: number;
+      end: number;
+      content: string;
+      fullMatch: string;
+    }> = [];
+    
+    for (const pattern of patterns) {
+      let match;
+      pattern.regex.lastIndex = 0; // Reset regex
+      
+      while ((match = pattern.regex.exec(text)) !== null) {
+        matches.push({
+          type: pattern.type,
+          start: match.index,
+          end: match.index + match[0].length,
+          content: match[1],
+          fullMatch: match[0]
+        });
+      }
+    }
+    
+    // Sort matches by position
+    matches.sort((a, b) => a.start - b.start);
+    
+    // Process matches and create tokens
+    let lastEnd = 0;
+    
+    for (const match of matches) {
+      // Add plain text before this match
+      if (match.start > lastEnd) {
+        const plainText = text.slice(lastEnd, match.start);
+        if (plainText) {
+          tokens.push({
+            type: 'text',
+            content: plainText,
+            position: this.getCurrentPosition(),
+            raw: plainText
+          });
+        }
+      }
+      
+      // Add the formatted text token
+      tokens.push({
+        type: match.type,
+        content: match.content,
+        position: this.getCurrentPosition(),
+        raw: match.fullMatch
+      });
+      
+      lastEnd = match.end;
+    }
+    
+    // Add remaining plain text
+    if (lastEnd < text.length) {
+      const plainText = text.slice(lastEnd);
+      if (plainText) {
+        tokens.push({
+          type: 'text',
+          content: plainText,
+          position: this.getCurrentPosition(),
+          raw: plainText
+        });
+      }
+    }
+    
+    return tokens;
   }
 
   // Helper methods
