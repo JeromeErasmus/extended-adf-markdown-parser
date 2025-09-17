@@ -23,7 +23,8 @@ export default {
   },
   roots: ['<rootDir>/src', '<rootDir>/tests'],
   transformIgnorePatterns: [
-    'node_modules/(?!(unified|remark.*|micromark.*|mdast-util.*|unist-util.*|vfile.*|bail|trough|is-plain-obj)/)'
+    // Transform almost all node_modules for ESM support
+    'node_modules/(?!.*)'
   ],
   testMatch: [
     '**/__tests__/**/*.+(ts|tsx)',

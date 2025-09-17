@@ -4,12 +4,15 @@
 
 import { describe, it, expect } from '@jest/globals';
 import { readFileSync } from 'fs';
-import { join } from 'path';
-import { Parser } from '../../dist/index.js';
-import type { ADFDocument } from '../../dist/index.js';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { Parser } from '../../src/index.js';
+import type { ADFDocument } from '../../src/index.js';
 
 describe('ADF Fixtures Integration Tests', () => {
   const parser = new Parser();
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const fixturesDir = join(__dirname, '..', 'fixtures');
 
   const loadFixture = (name: string): { adf: ADFDocument; expected: string } => {
