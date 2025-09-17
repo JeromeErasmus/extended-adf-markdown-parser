@@ -433,7 +433,7 @@ User mention: {user:user123}`;
       const mediaSingle = adf.content[0];
       expect(mediaSingle.type).toBe('mediaSingle');
       expect(mediaSingle.attrs?.layout).toBe('center');
-      expect(mediaSingle.attrs?.width).toBe('80');
+      expect(mediaSingle.attrs?.width).toBe(80);
     });
 
     it('should handle mediaGroup blocks', () => {

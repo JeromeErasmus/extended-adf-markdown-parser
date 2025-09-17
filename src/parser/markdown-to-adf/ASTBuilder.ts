@@ -452,57 +452,119 @@ export class ASTBuilder {
     const nodes: ADFNode[] = [];
     
     for (const token of tokens) {
-      const node = this.convertInlineTokenToNode(token);
-      if (node) {
-        nodes.push(node);
-      }
+      const convertedNodes = this.convertInlineTokenToNode(token);
+      nodes.push(...convertedNodes);
     }
     
     return nodes;
   }
   
-  private convertInlineTokenToNode(token: Token): ADFNode | null {
+  private convertInlineTokenToNode(token: Token): ADFNode[] {
     switch (token.type) {
       case 'text':
-        return {
+        return [{
           type: 'text',
           text: token.content
-        };
+        }];
         
       case 'strong':
-        return {
-          type: 'text',
-          text: token.content,
-          marks: [{ type: 'strong' }]
-        };
-        
-      case 'emphasis':
-        return {
-          type: 'text', 
-          text: token.content,
-          marks: [{ type: 'em' }]
-        };
-        
+      case 'emphasis': 
       case 'strikethrough':
-        return {
-          type: 'text',
-          text: token.content,
-          marks: [{ type: 'strike' }]
-        };
-        
       case 'inlineCode':
-        return {
-          type: 'text',
-          text: token.content,
-          marks: [{ type: 'code' }]
-        };
+        return this.convertFormattingToken(token);
+        
+      case 'link':
+        return this.convertLinkToken(token);
         
       default:
         // Unknown inline token type, treat as plain text
-        return {
+        return [{
           type: 'text',
           text: token.content || token.raw
-        };
+        }];
+    }
+  }
+  
+  private convertFormattingToken(token: Token): ADFNode[] {
+    const markType = this.getADFMarkType(token.type);
+    
+    // If token has children (nested formatting), process them
+    if (token.children && token.children.length > 0) {
+      const childNodes = this.convertInlineTokensToNodes(token.children);
+      
+      // Apply the mark to all child text nodes
+      return childNodes.map(node => {
+        if (node.type === 'text') {
+          const marks = node.marks ? [...node.marks] : [];
+          marks.push({ type: markType });
+          return {
+            ...node,
+            marks
+          };
+        }
+        return node;
+      });
+    } else {
+      // Simple formatting token
+      return [{
+        type: 'text',
+        text: token.content,
+        marks: [{ type: markType }]
+      }];
+    }
+  }
+  
+  private getADFMarkType(tokenType: string): string {
+    switch (tokenType) {
+      case 'strong': return 'strong';
+      case 'emphasis': return 'em';
+      case 'strikethrough': return 'strike';
+      case 'inlineCode': return 'code';
+      default: return 'unknown';
+    }
+  }
+  
+  private convertLinkToken(token: Token): ADFNode[] {
+    const href = token.metadata?.attrs?.href;
+    const title = token.metadata?.attrs?.title;
+    
+    if (!href) {
+      // Invalid link, treat as plain text
+      return [{
+        type: 'text',
+        text: token.content || token.raw
+      }];
+    }
+    
+    // Create link mark attributes
+    const linkAttrs: any = { href };
+    if (title) {
+      linkAttrs.title = title;
+    }
+    
+    // If token has children (formatted link text), process them
+    if (token.children && token.children.length > 0) {
+      const childNodes = this.convertInlineTokensToNodes(token.children);
+      
+      // Apply the link mark to all child text nodes
+      return childNodes.map(node => {
+        if (node.type === 'text') {
+          const marks = node.marks ? [...node.marks] : [];
+          marks.push({ type: 'link', attrs: linkAttrs });
+          return {
+            ...node,
+            marks
+          };
+        }
+        return node;
+      });
+    } else {
+      // Simple link token
+      return [{
+        type: 'text',
+        text: token.content || 'link',
+        marks: [{ type: 'link', attrs: linkAttrs }]
+      }];
     }
   }
 

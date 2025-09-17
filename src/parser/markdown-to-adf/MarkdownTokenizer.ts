@@ -615,51 +615,45 @@ export class MarkdownTokenizer {
 
   private parseInlineContent(text: string): Token[] {
     const tokens: Token[] = [];
+    
+    // Use a more sophisticated parser that can handle nested formatting
+    const parsed = this.parseInlineRecursive(text);
+    return parsed;
+  }
+  
+  private parseInlineRecursive(text: string): Token[] {
+    if (!text) return [];
+    
+    const tokens: Token[] = [];
     let position = 0;
     
-    // Regex patterns for inline formatting
+    // Look for formatting patterns in order of precedence
     const patterns = [
-      { type: 'strong' as TokenType, regex: /\*\*(.*?)\*\*/g, markLength: 2 },
-      { type: 'emphasis' as TokenType, regex: /\*(.*?)\*/g, markLength: 1 },
-      { type: 'strikethrough' as TokenType, regex: /~~(.*?)~~/g, markLength: 2 },
-      { type: 'inlineCode' as TokenType, regex: /`(.*?)`/g, markLength: 1 }
+      { type: 'inlineCode' as TokenType, start: '`', end: '`' },
+      { type: 'strong' as TokenType, start: '**', end: '**' },
+      { type: 'emphasis' as TokenType, start: '*', end: '*' },
+      { type: 'strikethrough' as TokenType, start: '~~', end: '~~' }
     ];
     
-    // Find all inline formatting matches
-    const matches: Array<{
-      type: TokenType;
-      start: number;
-      end: number;
-      content: string;
-      fullMatch: string;
-    }> = [];
-    
-    for (const pattern of patterns) {
-      let match;
-      pattern.regex.lastIndex = 0; // Reset regex
-      
-      while ((match = pattern.regex.exec(text)) !== null) {
-        matches.push({
-          type: pattern.type,
-          start: match.index,
-          end: match.index + match[0].length,
-          content: match[1],
-          fullMatch: match[0]
-        });
-      }
+    // First, handle links which have a more complex pattern
+    const linkMatches = this.findLinkMatches(text);
+    if (linkMatches.length > 0) {
+      return this.parseTextWithLinks(text, linkMatches);
     }
     
-    // Sort matches by position
-    matches.sort((a, b) => a.start - b.start);
-    
-    // Process matches and create tokens
-    let lastEnd = 0;
-    
-    for (const match of matches) {
-      // Add plain text before this match
-      if (match.start > lastEnd) {
-        const plainText = text.slice(lastEnd, match.start);
-        if (plainText) {
+    while (position < text.length) {
+      let foundMatch = false;
+      
+      for (const pattern of patterns) {
+        const startIndex = text.indexOf(pattern.start, position);
+        if (startIndex === -1) continue;
+        
+        const endIndex = text.indexOf(pattern.end, startIndex + pattern.start.length);
+        if (endIndex === -1) continue;
+        
+        // Add text before the match
+        if (startIndex > position) {
+          const plainText = text.slice(position, startIndex);
           tokens.push({
             type: 'text',
             content: plainText,
@@ -667,30 +661,147 @@ export class MarkdownTokenizer {
             raw: plainText
           });
         }
+        
+        const content = text.slice(startIndex + pattern.start.length, endIndex);
+        const fullMatch = text.slice(startIndex, endIndex + pattern.end.length);
+        
+        // For inline code, don't parse content recursively
+        if (pattern.type === 'inlineCode') {
+          tokens.push({
+            type: pattern.type,
+            content: content,
+            position: this.getCurrentPosition(),
+            raw: fullMatch
+          });
+        } else {
+          // For other formatting, check if content has nested formatting
+          const nestedTokens = this.parseInlineRecursive(content);
+          if (nestedTokens.length === 1 && nestedTokens[0].type === 'text') {
+            // Simple case - no nested formatting
+            tokens.push({
+              type: pattern.type,
+              content: content,
+              position: this.getCurrentPosition(),
+              raw: fullMatch
+            });
+          } else {
+            // Nested formatting - create a token with children or merge marks
+            tokens.push({
+              type: pattern.type,
+              content: content,
+              children: nestedTokens,
+              position: this.getCurrentPosition(),
+              raw: fullMatch
+            });
+          }
+        }
+        
+        position = endIndex + pattern.end.length;
+        foundMatch = true;
+        break;
       }
       
-      // Add the formatted text token
-      tokens.push({
-        type: match.type,
-        content: match.content,
-        position: this.getCurrentPosition(),
-        raw: match.fullMatch
-      });
-      
-      lastEnd = match.end;
+      if (!foundMatch) {
+        // No more formatting found, add remaining text
+        const remainingText = text.slice(position);
+        if (remainingText) {
+          tokens.push({
+            type: 'text',
+            content: remainingText,
+            position: this.getCurrentPosition(),
+            raw: remainingText
+          });
+        }
+        break;
+      }
     }
     
-    // Add remaining plain text
-    if (lastEnd < text.length) {
-      const plainText = text.slice(lastEnd);
-      if (plainText) {
-        tokens.push({
-          type: 'text',
-          content: plainText,
-          position: this.getCurrentPosition(),
-          raw: plainText
-        });
+    return tokens;
+  }
+  
+  private findLinkMatches(text: string): Array<{
+    start: number;
+    end: number;
+    linkText: string;
+    href: string;
+    title?: string;
+  }> {
+    const matches: Array<{
+      start: number;
+      end: number;
+      linkText: string;
+      href: string;
+      title?: string;
+    }> = [];
+    
+    // Regular markdown links: [text](url) or [text](url "title")
+    const linkRegex = /\[([^\]]*)\]\(([^)]+?)(?:\s+"([^"]*)")?\)/g;
+    let match;
+    
+    while ((match = linkRegex.exec(text)) !== null) {
+      const [fullMatch, linkText, href, title] = match;
+      matches.push({
+        start: match.index,
+        end: match.index + fullMatch.length,
+        linkText,
+        href,
+        title
+      });
+    }
+    
+    return matches;
+  }
+  
+  private parseTextWithLinks(text: string, linkMatches: Array<{
+    start: number;
+    end: number;
+    linkText: string;
+    href: string;
+    title?: string;
+  }>): Token[] {
+    const tokens: Token[] = [];
+    let position = 0;
+    
+    for (const link of linkMatches) {
+      // Add text before the link
+      if (link.start > position) {
+        const beforeText = text.slice(position, link.start);
+        const beforeTokens = this.parseInlineRecursive(beforeText);
+        tokens.push(...beforeTokens);
       }
+      
+      // Add the link token
+      const linkToken: Token = {
+        type: 'link',
+        content: link.linkText,
+        position: this.getCurrentPosition(),
+        raw: text.slice(link.start, link.end),
+        metadata: {
+          nodeType: 'link',
+          attrs: {
+            href: link.href,
+            ...(link.title && { title: link.title })
+          }
+        }
+      };
+      
+      // Parse the link text for nested formatting
+      if (link.linkText) {
+        const linkTextTokens = this.parseInlineRecursive(link.linkText);
+        if (linkTextTokens.length > 0) {
+          linkToken.children = linkTextTokens;
+        }
+      }
+      
+      tokens.push(linkToken);
+      position = link.end;
+    }
+    
+    // Add remaining text
+    if (position < text.length) {
+      const remainingText = text.slice(position);
+      const remainingTokens = this.parseInlineRecursive(remainingText);
+      tokens.push(...remainingTokens);
     }
     
     return tokens;
