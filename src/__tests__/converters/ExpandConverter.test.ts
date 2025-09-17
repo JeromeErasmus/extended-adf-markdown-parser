@@ -10,12 +10,17 @@ import type { ExpandNode } from '../../types';
 describe('ExpandConverter', () => {
   const converter = new ExpandConverter();
 
+  const mockNodeConverter = {
+    nodeType: 'paragraph',
+    toMarkdown: jest.fn()
+  };
+
   const mockContext: ConversionContext = {
     convertChildren: jest.fn(),
     depth: 0,
     options: {
       registry: {
-        getNodeConverter: jest.fn()
+        getNodeConverter: jest.fn().mockReturnValue(mockNodeConverter)
       } as any
     }
   };
@@ -45,11 +50,11 @@ describe('ExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Hidden content here');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Hidden content here');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="Click to expand"\nHidden content here\n~~~');
-      expect(mockContext.convertChildren).toHaveBeenCalledWith(node.content!);
+      expect(mockNodeConverter.toMarkdown).toHaveBeenCalledWith(node.content![0], mockContext);
     });
 
     it('should convert expand without title', () => {
@@ -63,7 +68,7 @@ describe('ExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Content without title');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Content without title');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title=""\nContent without title\n~~~');
@@ -120,7 +125,7 @@ describe('ExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Content with custom attributes');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Content with custom attributes');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="Custom expand" attrs=\'{"defaultOpen":true,"level":2}\'\nContent with custom attributes\n~~~');
@@ -144,7 +149,9 @@ describe('ExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('First paragraph\n\nSecond paragraph');
+      (mockNodeConverter.toMarkdown as jest.Mock)
+        .mockReturnValueOnce('First paragraph')
+        .mockReturnValueOnce('Second paragraph');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="Multi-line expand"\nFirst paragraph\n\nSecond paragraph\n~~~');
@@ -164,7 +171,7 @@ describe('ExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Content');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Content');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="Title with "quotes" and more"\nContent\n~~~');
@@ -175,12 +182,17 @@ describe('ExpandConverter', () => {
 describe('NestedExpandConverter', () => {
   const converter = new NestedExpandConverter();
 
+  const mockNestedNodeConverter = {
+    nodeType: 'paragraph',
+    toMarkdown: jest.fn()
+  };
+
   const mockContext: ConversionContext = {
     convertChildren: jest.fn(),
     depth: 1,
     options: {
       registry: {
-        getNodeConverter: jest.fn()
+        getNodeConverter: jest.fn().mockReturnValue(mockNestedNodeConverter)
       } as any
     }
   };
@@ -210,7 +222,7 @@ describe('NestedExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Nested content');
+      (mockNestedNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Nested content');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="Nested expand" attrs=\'{"nested":true}\'\nNested content\n~~~');
@@ -240,7 +252,7 @@ describe('NestedExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Nested without title');
+      (mockNestedNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Nested without title');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="" attrs=\'{"nested":true}\'\nNested without title\n~~~');
@@ -274,7 +286,7 @@ describe('NestedExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Custom nested content');
+      (mockNestedNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Custom nested content');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="Custom nested expand" attrs=\'{"collapsible":false,"theme":"dark","nested":true}\'\nCustom nested content\n~~~');
@@ -298,7 +310,9 @@ describe('NestedExpandConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Paragraph 1\n\n```\nconsole.log("nested");\n```');
+      (mockNestedNodeConverter.toMarkdown as jest.Mock)
+        .mockReturnValueOnce('Paragraph 1')
+        .mockReturnValueOnce('```\nconsole.log("nested");\n```');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('~~~expand title="Complex nested" attrs=\'{"nested":true}\'\nParagraph 1\n\n```\nconsole.log("nested");\n```\n~~~');

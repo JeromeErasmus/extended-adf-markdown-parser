@@ -51,7 +51,7 @@ export class ListItemConverter implements NodeConverter {
       const converter = context.options.registry?.getNodeConverter(node.type);
       if (!converter) return '';
       return converter.toMarkdown(node, context);
-    }).filter(content => content.trim().length > 0).join('\n');
+    }).filter(content => content.trim().length > 0).join('\n\n');
     
     // Handle multi-paragraph list items by indenting continuation paragraphs
     const lines = content.split('\n');

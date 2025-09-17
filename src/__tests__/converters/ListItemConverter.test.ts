@@ -10,12 +10,17 @@ import type { ListItemNode } from '../../types';
 describe('ListItemConverter', () => {
   const converter = new ListItemConverter();
 
+  const mockNodeConverter = {
+    nodeType: 'paragraph',
+    toMarkdown: jest.fn()
+  };
+
   const mockContext: ConversionContext = {
     convertChildren: jest.fn(),
     depth: 0,
     options: {
       registry: {
-        getNodeConverter: jest.fn()
+        getNodeConverter: jest.fn().mockReturnValue(mockNodeConverter)
       } as any
     }
   };
@@ -42,11 +47,11 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Simple item');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Simple item');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- Simple item');
-      expect(mockContext.convertChildren).toHaveBeenCalledWith(node.content!);
+      expect(mockNodeConverter.toMarkdown).toHaveBeenCalledWith(node.content![0], mockContext);
     });
 
     it('should handle multi-line content with proper indentation', () => {
@@ -60,7 +65,7 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('First line\nSecond line\nThird line');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('First line\nSecond line\nThird line');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- First line\n  Second line\n  Third line');
@@ -81,7 +86,9 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('First paragraph\n\nSecond paragraph');
+      (mockNodeConverter.toMarkdown as jest.Mock)
+        .mockReturnValueOnce('First paragraph')
+        .mockReturnValueOnce('Second paragraph');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- First paragraph\n\n  Second paragraph');
@@ -98,7 +105,7 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Line 1\n\nLine 3');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Line 1\n\nLine 3');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- Line 1\n\n  Line 3');
@@ -134,7 +141,7 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- ');
@@ -151,10 +158,10 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('\n\n');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('\n\n');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('- \n\n');
+      expect(result).toBe('- ');
     });
 
     it('should include custom attributes in metadata', () => {
@@ -172,7 +179,7 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Item with metadata');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Item with metadata');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- Item with metadata<!-- adf:listItem attrs=\'{"customAttr":"value","indent":2}\' -->');
@@ -189,7 +196,7 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Simple item');
+      (mockNodeConverter.toMarkdown as jest.Mock).mockReturnValue('Simple item');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- Simple item');
@@ -214,7 +221,10 @@ describe('ListItemConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('Paragraph 1\n\n```\ncode content\n```\n\nParagraph 2');
+      (mockNodeConverter.toMarkdown as jest.Mock)
+        .mockReturnValueOnce('Paragraph 1')
+        .mockReturnValueOnce('```\ncode content\n```')
+        .mockReturnValueOnce('Paragraph 2');
 
       const result = converter.toMarkdown(node, mockContext);
       expect(result).toBe('- Paragraph 1\n\n  ```\n  code content\n  ```\n\n  Paragraph 2');

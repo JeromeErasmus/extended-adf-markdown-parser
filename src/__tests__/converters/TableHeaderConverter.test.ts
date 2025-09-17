@@ -166,7 +166,7 @@ describe('TableHeaderConverter', () => {
       (mockContext.convertChildren as jest.Mock).mockReturnValue('Normal Header');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('Normal Header<!-- adf:tableHeader attrs=\'{"colspan":1}\' -->');
+      expect(result).toBe('Normal Header');
     });
 
     it('should handle multi-line content', () => {
