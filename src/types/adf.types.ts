@@ -103,6 +103,11 @@ export interface ExpandNode extends ADFNode {
   content?: ADFNode[];
 }
 
+export interface BlockquoteNode extends ADFNode {
+  type: 'blockquote';
+  content?: ADFNode[];
+}
+
 export interface TableNode extends ADFNode {
   type: 'table';
   attrs?: {
