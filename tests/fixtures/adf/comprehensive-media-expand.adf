@@ -1,0 +1,616 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Comprehensive Media and Expand Testing"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media Single Elements"
+        }
+      ]
+    },
+    {
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center"
+      },
+      "content": [
+        {
+          "type": "media",
+          "attrs": {
+            "id": "abc123",
+            "type": "file",
+            "collection": "contentId-123456789",
+            "width": 800,
+            "height": 600
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Image above demonstrates basic media single with center layout."
+        }
+      ]
+    },
+    {
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "align-start",
+        "width": 50
+      },
+      "content": [
+        {
+          "type": "media",
+          "attrs": {
+            "id": "def456",
+            "type": "file",
+            "collection": "contentId-987654321",
+            "width": 400,
+            "height": 300
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "This media is aligned to the start with 50% width. Text wraps around it naturally when the content is long enough to demonstrate the text wrapping behavior."
+        }
+      ]
+    },
+    {
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "align-end",
+        "width": 30
+      },
+      "content": [
+        {
+          "type": "media",
+          "attrs": {
+            "id": "ghi789",
+            "type": "file",
+            "collection": "contentId-555666777",
+            "width": 200,
+            "height": 150
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Right-aligned media with 30% width creates interesting layout possibilities."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media Group"
+        }
+      ]
+    },
+    {
+      "type": "mediaGroup",
+      "content": [
+        {
+          "type": "media",
+          "attrs": {
+            "id": "group1",
+            "type": "file",
+            "collection": "gallery-001",
+            "width": 300,
+            "height": 200
+          }
+        },
+        {
+          "type": "media",
+          "attrs": {
+            "id": "group2",
+            "type": "file",
+            "collection": "gallery-001",
+            "width": 300,
+            "height": 200
+          }
+        },
+        {
+          "type": "media",
+          "attrs": {
+            "id": "group3",
+            "type": "file",
+            "collection": "gallery-001",
+            "width": 300,
+            "height": 200
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Media groups allow multiple images to be displayed together in a gallery format."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Basic Expand Element"
+        }
+      ]
+    },
+    {
+      "type": "expand",
+      "attrs": {
+        "title": "Click to expand this section"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This content is hidden by default and revealed when the expand element is clicked. It can contain "
+            },
+            {
+              "type": "text",
+              "text": "rich formatting",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": " and "
+            },
+            {
+              "type": "text",
+              "text": "links",
+              "marks": [
+                {
+                  "type": "link",
+                  "attrs": {
+                    "href": "https://example.com"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Expand with Complex Content"
+        }
+      ]
+    },
+    {
+      "type": "expand",
+      "attrs": {
+        "title": "Technical Implementation Details"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This expand section contains more complex content including:"
+            }
+          ]
+        },
+        {
+          "type": "bulletList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Bullet lists with multiple items"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Code examples"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Tables and other structured content"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "codeBlock",
+          "attrs": {
+            "language": "typescript"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "interface ExpandProps {\n  title: string;\n  isOpen?: boolean;\n  onToggle?: () => void;\n  children: ReactNode;\n}"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "attrs": {
+            "isNumberColumnEnabled": false,
+            "layout": "default"
+          },
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableHeader",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Property"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableHeader",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Type"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableHeader",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Required"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "title"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "string"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Yes"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "isOpen"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "boolean"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "attrs": {},
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "No"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Nested Expand Elements"
+        }
+      ]
+    },
+    {
+      "type": "expand",
+      "attrs": {
+        "title": "Parent Expand Section"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This expand contains another expand section nested within it."
+            }
+          ]
+        },
+        {
+          "type": "expand",
+          "attrs": {
+            "title": "Nested Expand"
+          },
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "This is content within a nested expand element. It demonstrates that expand elements can contain other expand elements for deeply hierarchical content organization."
+                }
+              ]
+            },
+            {
+              "type": "blockquote",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Even blockquotes work within nested expands!"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Content after the nested expand continues in the parent expand."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media with Custom Attributes"
+        }
+      ]
+    },
+    {
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "full-width",
+        "customAttribute": "special-image"
+      },
+      "content": [
+        {
+          "type": "media",
+          "attrs": {
+            "id": "custom789",
+            "type": "file",
+            "collection": "special-collection",
+            "width": 1200,
+            "height": 800,
+            "alt": "Custom image with alt text",
+            "__fileName": "example-image.png"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Full-width media with custom attributes and alt text for accessibility."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Expand with Custom Attributes"
+        }
+      ]
+    },
+    {
+      "type": "expand",
+      "attrs": {
+        "title": "Advanced Configuration",
+        "customExpandAttr": "value",
+        "isExpandedByDefault": "false"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This expand element has custom attributes that may be used for specific styling or behavior customization."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
