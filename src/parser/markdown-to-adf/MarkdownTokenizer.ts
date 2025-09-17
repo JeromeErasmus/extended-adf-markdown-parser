@@ -17,7 +17,7 @@ export class MarkdownTokenizer {
     this.options = {
       preserveWhitespace: false,
       strict: false,
-      maxDepth: 10, // Reduced from 50 to prevent stack overflow
+      maxDepth: 5, // Further reduced to prevent memory issues
       ...options
     };
     this.depth = depth;
@@ -29,6 +29,11 @@ export class MarkdownTokenizer {
    * Tokenize markdown string into structured tokens
    */
   tokenize(markdown: string): Token[] {
+    // Prevent processing excessively large inputs that could cause memory issues
+    if (markdown.length > 1000000) {
+      throw new Error('Input too large for tokenization');
+    }
+    
     this.lines = markdown.split(/\r?\n/);
     this.currentLineIndex = 0;
     this.context = this.createInitialContext();
@@ -41,11 +46,21 @@ export class MarkdownTokenizer {
       tokens.push(frontmatterToken);
     }
 
-    // Process remaining content
-    while (this.currentLineIndex < this.lines.length) {
+    // Process remaining content with safety limits
+    let iterationCount = 0;
+    const maxIterations = 10000; // Prevent infinite loops
+    
+    while (this.currentLineIndex < this.lines.length && iterationCount < maxIterations) {
+      iterationCount++;
       const token = this.parseNextToken();
       if (token) {
         tokens.push(token);
+      }
+      
+      // Safety check for excessive token count
+      if (tokens.length > 10000) {
+        console.warn('Token limit reached, stopping tokenization');
+        break;
       }
     }
 
@@ -250,7 +265,7 @@ export class MarkdownTokenizer {
 
     // Parse content as markdown tokens (with depth check)
     let children: Token[] = [];
-    if (this.depth < this.options.maxDepth!) {
+    if (this.depth < this.options.maxDepth! && contentLines.join('\n').trim()) {
       const contentTokenizer = new MarkdownTokenizer(this.options, this.depth + 1);
       children = contentTokenizer.tokenize(contentLines.join('\n'));
     }
@@ -508,7 +523,7 @@ export class MarkdownTokenizer {
 
     // Parse item content as tokens (with depth check)
     let children: Token[] = [];
-    if (this.depth < this.options.maxDepth!) {
+    if (this.depth < this.options.maxDepth! && lines.join('\n').trim()) {
       const itemTokenizer = new MarkdownTokenizer(this.options, this.depth + 1);
       children = itemTokenizer.tokenize(lines.join('\n'));
     }
@@ -538,7 +553,7 @@ export class MarkdownTokenizer {
 
     // Parse blockquote content as tokens (with depth check)
     let children: Token[] = [];
-    if (this.depth < this.options.maxDepth!) {
+    if (this.depth < this.options.maxDepth! && lines.join('\n').trim()) {
       const quoteTokenizer = new MarkdownTokenizer(this.options, this.depth + 1);
       children = quoteTokenizer.tokenize(lines.join('\n'));
     }
