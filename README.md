@@ -101,7 +101,30 @@ src/
 ├── types/           # TypeScript type definitions
 ├── errors/          # Custom error classes
 └── index.ts         # Main entry point
+
+tests/
+├── fixtures/        # Test fixtures for robustness testing
+│   ├── adf/         # ADF input files (.adf extension)
+│   └── markdown/    # Expected output files (.adfmd extension)
+└── integration/     # Integration test suites
 ```
+
+## Test Fixtures
+
+The project includes comprehensive ADF test fixtures for robustness testing:
+
+### File Extensions:
+- **`.adf`** - Atlassian Document Format files (JSON format) containing real ADF documents
+- **`.adfmd`** - Expected Markdown output files corresponding to each ADF fixture
+
+### Available Fixtures:
+- **simple-document**: Basic ADF with headings, paragraphs, and lists
+- **rich-content**: Panels, code blocks, blockquotes with complex formatting
+- **table-document**: Tables with headers, text colors, and various marks  
+- **media-expand**: Media nodes and expandable sections
+- **edge-cases**: Complex scenarios with overlapping marks and edge cases
+
+Each fixture pair (`.adf` + `.adfmd`) represents a real-world ADF document and its expected Markdown conversion, providing confidence in the parser's robustness across diverse content scenarios.
 
 ## Contributing
 

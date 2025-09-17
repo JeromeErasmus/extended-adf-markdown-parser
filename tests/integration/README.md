@@ -5,6 +5,7 @@
 This directory contains comprehensive integration tests using real ADF documents:
 
 ### Fixtures Available:
+Located in `tests/fixtures/adf/` (`.adf` files) and `tests/fixtures/markdown/` (`.adfmd` files):
 - **simple-document**: Basic ADF with headings, paragraphs, and lists
 - **rich-content**: Panels, code blocks, blockquotes with complex formatting
 - **table-document**: Tables with headers, text color, and various marks

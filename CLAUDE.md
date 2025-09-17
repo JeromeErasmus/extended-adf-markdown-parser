@@ -129,3 +129,35 @@ This project has 100% converter test coverage:
 - **288 tests** 
 - **16 node converters** tested
 - **7 mark converters** tested
+
+### Test Fixtures
+
+The project includes comprehensive ADF test fixtures for robustness testing:
+
+#### File Extensions:
+- **`.adf`** - Atlassian Document Format files (JSON format) containing real ADF documents
+- **`.adfmd`** - Expected Markdown output files corresponding to each ADF fixture
+
+#### Fixture Structure:
+```
+tests/fixtures/
+├── adf/           # ADF input files (.adf extension)
+│   ├── simple-document.adf
+│   ├── rich-content.adf
+│   ├── table-document.adf
+│   ├── media-expand.adf
+│   └── edge-cases.adf
+└── markdown/      # Expected output files (.adfmd extension)
+    ├── simple-document.adfmd
+    ├── rich-content.adfmd
+    ├── table-document.adfmd
+    ├── media-expand.adfmd
+    └── edge-cases.adfmd
+```
+
+#### Fixture Contents:
+- **simple-document**: Basic ADF with headings, paragraphs, and lists
+- **rich-content**: Panels, code blocks, blockquotes with complex formatting
+- **table-document**: Tables with headers, text colors, and various marks
+- **media-expand**: Media nodes and expandable sections
+- **edge-cases**: Complex scenarios with overlapping marks and edge cases

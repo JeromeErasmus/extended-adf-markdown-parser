@@ -13,7 +13,7 @@ describe('Round-trip Conversion Tests', () => {
   const fixturesDir = join(__dirname, '..', 'fixtures');
 
   const loadAdfFixture = (name: string): ADFDocument => {
-    const adfPath = join(fixturesDir, `${name}.adf.json`);
+    const adfPath = join(fixturesDir, 'adf', `${name}.adf`);
     return JSON.parse(readFileSync(adfPath, 'utf8')) as ADFDocument;
   };
 
