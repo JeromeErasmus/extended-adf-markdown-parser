@@ -2,7 +2,7 @@
  * @file Tests for LinkConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { LinkConverter } from '../../parser/adf-to-markdown/marks/LinkConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { LinkMark } from '../../types';

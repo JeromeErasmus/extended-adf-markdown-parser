@@ -16,7 +16,8 @@ export default {
           module: 'ES2022',
           esModuleInterop: true,
           allowSyntheticDefaultImports: true,
-          moduleResolution: 'node'
+          moduleResolution: 'node',
+          isolatedModules: true
         }
       }
     ]

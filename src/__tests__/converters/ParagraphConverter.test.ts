@@ -2,7 +2,7 @@
  * @file Tests for ParagraphConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { ParagraphConverter } from '../../parser/adf-to-markdown/nodes/ParagraphConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { ParagraphNode } from '../../types';

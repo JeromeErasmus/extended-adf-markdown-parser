@@ -2,7 +2,7 @@
  * @file Tests for TextColorConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { TextColorConverter } from '../../parser/adf-to-markdown/marks/TextColorConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { TextColorMark } from '../../types';

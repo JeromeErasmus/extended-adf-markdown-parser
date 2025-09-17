@@ -2,7 +2,7 @@
  * @file Tests for BlockquoteConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { BlockquoteConverter } from '../../parser/adf-to-markdown/nodes/BlockquoteConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { BlockquoteNode } from '../../types';

@@ -2,7 +2,7 @@
  * @file Tests for StrikeConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { StrikeConverter } from '../../parser/adf-to-markdown/marks/StrikeConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { StrikeMark } from '../../types';

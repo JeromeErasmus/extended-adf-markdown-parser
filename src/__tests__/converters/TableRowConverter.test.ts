@@ -2,7 +2,7 @@
  * @file Tests for TableRowConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { TableRowConverter } from '../../parser/adf-to-markdown/nodes/TableRowConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { TableRowNode } from '../../types';

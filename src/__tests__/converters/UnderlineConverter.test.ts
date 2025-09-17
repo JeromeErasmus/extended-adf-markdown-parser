@@ -2,7 +2,7 @@
  * @file Tests for UnderlineConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { UnderlineConverter } from '../../parser/adf-to-markdown/marks/UnderlineConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { UnderlineMark } from '../../types';

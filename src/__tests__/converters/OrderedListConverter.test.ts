@@ -2,7 +2,7 @@
  * @file Tests for OrderedListConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { OrderedListConverter } from '../../parser/adf-to-markdown/nodes/OrderedListConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { OrderedListNode } from '../../types';

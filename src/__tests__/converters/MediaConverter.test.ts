@@ -2,7 +2,7 @@
  * @file Tests for MediaConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { MediaConverter } from '../../parser/adf-to-markdown/nodes/MediaConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { MediaNode } from '../../types';

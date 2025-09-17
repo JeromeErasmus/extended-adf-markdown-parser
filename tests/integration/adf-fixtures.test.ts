@@ -17,7 +17,7 @@ describe('ADF Fixtures Integration Tests', () => {
 
   const loadFixture = (name: string): { adf: ADFDocument; expected: string } => {
     const adfPath = join(fixturesDir, 'adf', `${name}.adf`);
-    const expectedPath = join(fixturesDir, 'markdown', `${name}.adfmd`);
+    const expectedPath = join(fixturesDir, 'markdown', `${name}.md`);
     
     const adf = JSON.parse(readFileSync(adfPath, 'utf8')) as ADFDocument;
     const expected = readFileSync(expectedPath, 'utf8').trim();

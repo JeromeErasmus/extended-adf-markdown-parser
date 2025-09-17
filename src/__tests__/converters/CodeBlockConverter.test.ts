@@ -2,7 +2,7 @@
  * @file Tests for CodeBlockConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { CodeBlockConverter } from '../../parser/adf-to-markdown/nodes/CodeBlockConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { CodeBlockNode } from '../../types';

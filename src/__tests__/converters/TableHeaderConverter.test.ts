@@ -2,7 +2,7 @@
  * @file Tests for TableHeaderConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { TableHeaderConverter } from '../../parser/adf-to-markdown/nodes/TableHeaderConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { TableHeaderNode } from '../../types';

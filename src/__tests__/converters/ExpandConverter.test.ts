@@ -2,7 +2,7 @@
  * @file Tests for ExpandConverter and NestedExpandConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { ExpandConverter, NestedExpandConverter } from '../../parser/adf-to-markdown/nodes/ExpandConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { ExpandNode } from '../../types';

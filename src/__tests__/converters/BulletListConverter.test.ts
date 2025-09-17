@@ -2,7 +2,7 @@
  * @file Tests for BulletListConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { BulletListConverter } from '../../parser/adf-to-markdown/nodes/BulletListConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { BulletListNode } from '../../types';

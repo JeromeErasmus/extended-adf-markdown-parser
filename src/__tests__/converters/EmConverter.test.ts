@@ -2,7 +2,7 @@
  * @file Tests for EmConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { EmConverter } from '../../parser/adf-to-markdown/marks/EmConverter';
 import type { ConversionContext } from '../../parser/types';
 

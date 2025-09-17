@@ -136,7 +136,7 @@ The project includes comprehensive ADF test fixtures for robustness testing:
 
 #### File Extensions:
 - **`.adf`** - Atlassian Document Format files (JSON format) containing real ADF documents
-- **`.adfmd`** - Expected Markdown output files corresponding to each ADF fixture
+- **`.md`** - Expected Markdown output files corresponding to each ADF fixture
 
 #### Fixture Structure:
 ```
@@ -147,12 +147,12 @@ tests/fixtures/
 │   ├── table-document.adf
 │   ├── media-expand.adf
 │   └── edge-cases.adf
-└── markdown/      # Expected output files (.adfmd extension)
-    ├── simple-document.adfmd
-    ├── rich-content.adfmd
-    ├── table-document.adfmd
-    ├── media-expand.adfmd
-    └── edge-cases.adfmd
+└── markdown/      # Expected output files (.md extension)
+    ├── simple-document.md
+    ├── rich-content.md
+    ├── table-document.md
+    ├── media-expand.md
+    └── edge-cases.md
 ```
 
 #### Fixture Contents:

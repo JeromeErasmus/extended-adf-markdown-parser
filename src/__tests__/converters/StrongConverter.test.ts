@@ -2,7 +2,7 @@
  * @file Tests for StrongConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { StrongConverter } from '../../parser/adf-to-markdown/marks/StrongConverter';
 import type { ConversionContext } from '../../parser/types';
 

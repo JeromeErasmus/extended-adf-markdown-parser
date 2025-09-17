@@ -2,7 +2,7 @@
  * @file Tests for HeadingConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { HeadingConverter } from '../../parser/adf-to-markdown/nodes/HeadingConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { HeadingNode } from '../../types';

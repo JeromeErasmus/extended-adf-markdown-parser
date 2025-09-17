@@ -2,7 +2,7 @@
  * @file Tests for CodeConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { CodeConverter } from '../../parser/adf-to-markdown/marks/CodeConverter';
 import type { ConversionContext } from '../../parser/types';
 

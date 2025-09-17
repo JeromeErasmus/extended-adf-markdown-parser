@@ -2,7 +2,7 @@
  * @file Tests for TableCellConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { TableCellConverter } from '../../parser/adf-to-markdown/nodes/TableCellConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { TableCellNode } from '../../types';

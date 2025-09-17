@@ -2,7 +2,7 @@
  * @file Tests for TextConverter
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { TextConverter } from '../../parser/adf-to-markdown/nodes/TextConverter';
 import type { ConversionContext } from '../../parser/types';
 import type { TextNode } from '../../types';

@@ -2,7 +2,7 @@
  * @file Tests for ConverterRegistry
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, jest } from '@jest/globals';
 import { ConverterRegistry } from '../parser/ConverterRegistry';
 import type { NodeConverter, MarkConverter } from '../parser/types';
 
