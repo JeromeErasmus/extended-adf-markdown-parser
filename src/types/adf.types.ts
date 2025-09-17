@@ -92,7 +92,7 @@ export interface MediaSingleNode extends ADFNode {
     layout?: 'center' | 'wide' | 'full-width' | 'align-start' | 'align-end' | 'wrap-left' | 'wrap-right';
     width?: number;
   };
-  content: [MediaNode];
+  content?: MediaNode[];
 }
 
 export interface ExpandNode extends ADFNode {
