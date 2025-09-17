@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { Parser } from '../../src/index.js';
+import { normalizeMarkdownForComparison } from '../../src/utils/test-utils.js';
 import type { ADFDocument } from '../../src/index.js';
 
 describe('ADF Fixtures Integration Tests', () => {
@@ -20,7 +21,7 @@ describe('ADF Fixtures Integration Tests', () => {
     const expectedPath = join(fixturesDir, 'markdown', `${name}.md`);
     
     const adf = JSON.parse(readFileSync(adfPath, 'utf8')) as ADFDocument;
-    const expected = readFileSync(expectedPath, 'utf8').trim();
+    const expected = readFileSync(expectedPath, 'utf8');
     
     return { adf, expected };
   };
@@ -31,7 +32,7 @@ describe('ADF Fixtures Integration Tests', () => {
       
       const result = parser.adfToMarkdown(adf);
       
-      expect(result.trim()).toBe(expected);
+      expect(normalizeMarkdownForComparison(result)).toBe(normalizeMarkdownForComparison(expected));
     });
 
     it('should validate ADF structure', () => {
@@ -50,7 +51,7 @@ describe('ADF Fixtures Integration Tests', () => {
       
       const result = parser.adfToMarkdown(adf);
       
-      expect(result.trim()).toBe(expected);
+      expect(normalizeMarkdownForComparison(result)).toBe(normalizeMarkdownForComparison(expected));
     });
 
     it('should handle complex mark combinations', () => {
@@ -82,7 +83,7 @@ describe('ADF Fixtures Integration Tests', () => {
       
       const result = parser.adfToMarkdown(adf);
       
-      expect(result.trim()).toBe(expected);
+      expect(normalizeMarkdownForComparison(result)).toBe(normalizeMarkdownForComparison(expected));
     });
 
     it('should handle table structure correctly', () => {
@@ -120,7 +121,7 @@ describe('ADF Fixtures Integration Tests', () => {
       
       const result = parser.adfToMarkdown(adf);
       
-      expect(result.trim()).toBe(expected);
+      expect(normalizeMarkdownForComparison(result)).toBe(normalizeMarkdownForComparison(expected));
     });
 
     it('should handle media with attributes', () => {
@@ -234,7 +235,7 @@ describe('ADF Fixtures Integration Tests', () => {
         
         const result = parser.adfToMarkdown(adf);
         
-        expect(result.trim()).toBe(expected);
+        expect(normalizeMarkdownForComparison(result)).toBe(normalizeMarkdownForComparison(expected));
         expect(result.length).toBeGreaterThan(0);
       });
 

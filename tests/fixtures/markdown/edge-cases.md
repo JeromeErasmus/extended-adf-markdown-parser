@@ -16,3 +16,22 @@ Warning panel with custom attributes and <u>~~empty~~</u> marks.
   - Nested bullet item
 6. 
 7. Item after empty
+
+## Whitespace Resilience Test
+
+This section tests multiple line breaks between elements.
+
+
+Multiple empty lines above and below this paragraph.
+
+
+- List item 1
+
+
+- List item 2 with extra spacing
+
+
+> Blockquote with excessive whitespace around it
+
+
+Final paragraph with trailing spaces and multiple breaks.

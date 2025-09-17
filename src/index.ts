@@ -44,6 +44,12 @@ import { TextColorConverter } from './parser/adf-to-markdown/marks/TextColorConv
 export * from './types';
 export { ParserError, ConversionError } from './errors';
 
+// Export converter registry for external use
+export { ConverterRegistry } from './parser/ConverterRegistry.js';
+
+// Export test utilities  
+export { normalizeMarkdownForComparison, expectMarkdownEqual, toMatchMarkdown } from './utils/test-utils.js';
+
 /**
  * Main parser class - wraps unified/remark complexity
  */
