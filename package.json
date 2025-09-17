@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "description": "Bidirectional parser for ADF and Extended Markdown",
   "packageManager": "yarn@4.7.0",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "type": "module",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.js"
     },
     "./types": {
       "types": "./dist/types/index.d.ts"
@@ -22,8 +21,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "build:watch": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build:watch": "tsup src/index.ts --format esm --dts --watch",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

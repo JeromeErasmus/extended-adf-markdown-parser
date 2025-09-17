@@ -10,6 +10,28 @@
 - Faster dependency resolution and installation
 - Better workspace support for monorepos
 
+## Module System
+
+**IMPORTANT: This package is ESM-only (ES Modules). It does NOT support CommonJS.**
+
+### Why ESM-Only?
+- Dependencies (`unified`, `remark-*`) are ESM-only packages
+- Modern Node.js standard (Node.js 18+ required)
+- Cleaner import/export syntax
+- Better tree-shaking and bundling support
+
+### Usage Examples:
+```javascript
+// ✅ ESM Import (works)
+import { Parser } from '@extended-adf/parser';
+
+// ✅ Dynamic Import (works in CommonJS)
+const { Parser } = await import('@extended-adf/parser');
+
+// ❌ CommonJS require (will fail)
+const { Parser } = require('@extended-adf/parser');
+```
+
 ### Makefile Commands (Recommended):
 **Use the Makefile for standardized command execution:**
 ```bash
