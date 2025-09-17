@@ -46,7 +46,12 @@ export class ListItemConverter implements NodeConverter {
       return '- ';
     }
 
-    const content = context.convertChildren(listItemNode.content);
+    // For list item content, we need block-level spacing between elements (paragraph + nested lists)
+    const content = listItemNode.content.map(node => {
+      const converter = context.options.registry?.getNodeConverter(node.type);
+      if (!converter) return '';
+      return converter.toMarkdown(node, context);
+    }).filter(content => content.trim().length > 0).join('\n');
     
     // Handle multi-paragraph list items by indenting continuation paragraphs
     const lines = content.split('\n');

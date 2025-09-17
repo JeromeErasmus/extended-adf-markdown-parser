@@ -163,7 +163,13 @@ export class Parser {
       }
     };
     
-    return context.convertChildren(adf.content || []);
+    // For the top-level document, we need to join block elements with double newlines
+    const content = (adf.content || []).map(node => {
+      const converter = this.registry.getNodeConverter(node.type);
+      return converter.toMarkdown(node, context);
+    }).filter(content => content.trim().length > 0).join('\n\n');
+    
+    return content;
   }
   
   private convertMdastToAdf(mdast: any): ADFDocument {

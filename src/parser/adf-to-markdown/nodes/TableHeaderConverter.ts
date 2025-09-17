@@ -70,9 +70,21 @@ export class TableHeaderConverter implements NodeConverter {
       return result;
     }
     
-    // Add metadata for custom attributes (rowspan, colwidth, etc.)
+    // Add metadata for custom attributes (excluding default values)
     if (tableHeaderNode.attrs && Object.keys(tableHeaderNode.attrs).length > 0) {
-      return `${content}<!-- adf:tableHeader attrs='${JSON.stringify(tableHeaderNode.attrs)}' -->`;
+      const customAttrs = { ...tableHeaderNode.attrs };
+      
+      // Remove default values that shouldn't show in metadata
+      if ((customAttrs as any).colspan === 1) {
+        delete (customAttrs as any).colspan;
+      }
+      if ((customAttrs as any).rowspan === 1) {
+        delete (customAttrs as any).rowspan;
+      }
+      
+      if (Object.keys(customAttrs).length > 0) {
+        return `${content}<!-- adf:tableHeader attrs='${JSON.stringify(customAttrs)}' -->`;
+      }
     }
     
     return content;

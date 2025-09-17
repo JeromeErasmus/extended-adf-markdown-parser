@@ -44,7 +44,24 @@ export class ParagraphConverter implements NodeConverter {
     
     // Add metadata if paragraph has custom attributes
     if (paragraphNode.attrs && Object.keys(paragraphNode.attrs).length > 0) {
-      return `${content} <!-- adf:paragraph attrs='${JSON.stringify(paragraphNode.attrs)}' -->`;
+      // Safe JSON stringify to handle circular references
+      const safeStringify = (obj: any): string => {
+        try {
+          return JSON.stringify(obj, (key, value) => {
+            if (typeof value === 'object' && value !== null) {
+              // Detect circular reference by checking if object already exists
+              if (JSON.stringify(value).includes('"self"')) {
+                return '[Circular]';
+              }
+            }
+            return value;
+          });
+        } catch (error) {
+          return '[Complex Object]';
+        }
+      };
+      
+      return `${content} <!-- adf:paragraph attrs='${safeStringify(paragraphNode.attrs)}' -->`;
     }
     
     return content;

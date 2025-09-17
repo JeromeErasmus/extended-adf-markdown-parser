@@ -53,7 +53,12 @@ export class ExpandConverter implements NodeConverter {
     }
 
     const title = expandNode.attrs?.title || '';
-    const content = context.convertChildren(expandNode.content);
+    // For expand content, we need block-level spacing between elements
+    const content = expandNode.content.map(node => {
+      const converter = context.options.registry?.getNodeConverter(node.type);
+      if (!converter) return '';
+      return converter.toMarkdown(node, context);
+    }).filter(content => content.trim().length > 0).join('\n\n');
     
     // Add custom attributes if present (beyond title)
     const customAttrs = { ...expandNode.attrs };
@@ -90,7 +95,12 @@ export class NestedExpandConverter implements NodeConverter {
     }
 
     const title = nestedExpandNode.attrs?.title || '';
-    const content = context.convertChildren(nestedExpandNode.content);
+    // For nested expand content, we need block-level spacing between elements
+    const content = nestedExpandNode.content.map(node => {
+      const converter = context.options.registry?.getNodeConverter(node.type);
+      if (!converter) return '';
+      return converter.toMarkdown(node, context);
+    }).filter(content => content.trim().length > 0).join('\n\n');
     
     // Add custom attributes and nested indicator
     const customAttrs = { ...nestedExpandNode.attrs, nested: true };
