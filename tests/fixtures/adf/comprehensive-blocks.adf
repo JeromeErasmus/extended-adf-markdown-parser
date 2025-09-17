@@ -1,0 +1,306 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Comprehensive Block Elements Testing"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "anchor": true,
+        "customId": "custom-section"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Headings with Custom Attributes"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Level 3 Heading"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Level 4 Heading"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 5
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Level 5 Heading"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 6
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Level 6 Heading"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Regular paragraph with multiple sentences. This demonstrates basic text content in a paragraph container."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "attrs": {
+        "customAttribute": "value",
+        "alignment": "center"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Paragraph with custom attributes."
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": "javascript"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "function example() {\n  console.log('Hello, world!');\n  return 'success';\n}"
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": "python"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "def greet(name):\n    print(f'Hello, {name}!')\n    return name.upper()"
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "content": [
+        {
+          "type": "text",
+          "text": "Plain code block without language specification"
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": "json",
+        "customAttr": "test"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"name\": \"example\",\n  \"version\": \"1.0.0\",\n  \"nested\": {\n    \"key\": \"value\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is a simple blockquote with a single paragraph."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This blockquote contains multiple paragraphs to test complex content handling."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Second paragraph within the same blockquote."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "attrs": {
+        "source": "attribution"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Blockquote with custom attributes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "info"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is an info panel with important information."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "warning"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is a warning panel with cautionary information."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "error"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is an error panel with critical information."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "success"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is a success panel with positive feedback."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "note"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is a note panel with additional context."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "info",
+        "customTitle": "Custom Panel",
+        "backgroundColor": "#f0f8ff"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel with custom attributes beyond panelType."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

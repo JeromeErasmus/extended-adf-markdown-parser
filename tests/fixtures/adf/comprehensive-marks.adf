@@ -1,0 +1,285 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Comprehensive Mark Testing"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Testing "
+        },
+        {
+          "type": "text",
+          "text": "strong text",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " and "
+        },
+        {
+          "type": "text",
+          "text": "emphasized text",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " and "
+        },
+        {
+          "type": "text",
+          "text": "inline code",
+          "marks": [
+            {
+              "type": "code"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Link testing: "
+        },
+        {
+          "type": "text",
+          "text": "simple link",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://example.com"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " and "
+        },
+        {
+          "type": "text",
+          "text": "link with title",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://example.com/docs",
+                "title": "Documentation Link"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Advanced formatting: "
+        },
+        {
+          "type": "text",
+          "text": "strikethrough",
+          "marks": [
+            {
+              "type": "strike"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " and "
+        },
+        {
+          "type": "text",
+          "text": "underlined text",
+          "marks": [
+            {
+              "type": "underline"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " and "
+        },
+        {
+          "type": "text",
+          "text": "colored text",
+          "marks": [
+            {
+              "type": "textColor",
+              "attrs": {
+                "color": "#FF0000"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Combined marks: "
+        },
+        {
+          "type": "text",
+          "text": "bold italic underlined colored code",
+          "marks": [
+            {
+              "type": "strong"
+            },
+            {
+              "type": "em"
+            },
+            {
+              "type": "underline"
+            },
+            {
+              "type": "textColor",
+              "attrs": {
+                "color": "#0066CC"
+              }
+            },
+            {
+              "type": "code"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " with all marks applied."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Link with additional marks: "
+        },
+        {
+          "type": "text",
+          "text": "bold underlined link",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "https://example.com/special",
+                "title": "Special Link"
+              }
+            },
+            {
+              "type": "strong"
+            },
+            {
+              "type": "underline"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Text color variations: "
+        },
+        {
+          "type": "text",
+          "text": "hex color",
+          "marks": [
+            {
+              "type": "textColor",
+              "attrs": {
+                "color": "#FF5630"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": ", "
+        },
+        {
+          "type": "text",
+          "text": "RGB color",
+          "marks": [
+            {
+              "type": "textColor",
+              "attrs": {
+                "color": "rgb(54, 179, 126)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": ", "
+        },
+        {
+          "type": "text",
+          "text": "named color",
+          "marks": [
+            {
+              "type": "textColor",
+              "attrs": {
+                "color": "purple"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    }
+  ]
+}
