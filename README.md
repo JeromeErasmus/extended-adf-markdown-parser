@@ -70,6 +70,39 @@ Hidden content
 
 ## Development
 
+### Using Makefile (Recommended)
+
+```bash
+# Show all available commands
+make help
+
+# Install dependencies
+make install
+
+# Run tests (unit tests - 288 tests)
+make test
+
+# Run only unit tests
+make test-unit
+
+# Run fixture tests (currently has ESM import issues)
+make test-fixtures
+
+# Run tests with coverage
+make test-coverage
+
+# Build the library
+make build
+
+# Run linting
+make lint
+
+# Format code
+make format
+```
+
+### Using Yarn Directly
+
 ```bash
 # Install dependencies
 yarn install
