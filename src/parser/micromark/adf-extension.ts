@@ -8,6 +8,7 @@ import { adfFence } from './adf-fence.js';
 
 /**
  * Micromark extension that adds support for ADF fence blocks
+ * Temporarily disabled due to splice buffer issues - will implement post-processing approach
  */
 export function adfMicromarkExtension(): Extension {
   return {

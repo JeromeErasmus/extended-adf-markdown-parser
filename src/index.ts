@@ -66,6 +66,7 @@ export { normalizeMarkdownForComparison, expectMarkdownEqual, toMatchMarkdown } 
 // Export markdown parser components
 export { MarkdownParser } from './parser/markdown-to-adf/MarkdownParser.js';
 export { EnhancedMarkdownParser } from './parser/markdown-to-adf/EnhancedMarkdownParser.js';
+import { EnhancedMarkdownParser } from './parser/markdown-to-adf/EnhancedMarkdownParser.js';
 
 // Export enhanced parser components
 export { adfMicromarkExtension } from './parser/micromark/index.js';

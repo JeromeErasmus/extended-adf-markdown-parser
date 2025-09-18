@@ -1,8 +1,8 @@
 ## Media and Expandable Content
 
-![Media](adf:media:architecture-diagram-2024)
-<!-- adf:media id="architecture-diagram-2024" type="file" collection="project-assets" width="800" height="600" -->
 <!-- adf:mediaSingle layout="center" width="80" -->
+<!-- adf:media id="architecture-diagram-2024" type="file" collection="project-assets" width="800" height="600" -->
+![Media](adf:media:architecture-diagram-2024)
 
 ~~~expand title="Technical Implementation Details"
 This section contains detailed information about the implementation:

@@ -51,14 +51,15 @@ export class MediaSingleConverter implements NodeConverter {
     // Convert the inner media node
     const mediaContent = context.convertChildren(mediaSingleNode.content);
     
-    // Add mediaSingle attributes as metadata
+    // Add mediaSingle attributes as metadata (attribute format, not JSON)
     if (mediaSingleNode.attrs && Object.keys(mediaSingleNode.attrs).length > 0) {
       const attrs = Object.entries(mediaSingleNode.attrs)
         .map(([key, value]) => `${key}="${value}"`)
         .join(' ');
       
       const metadata = `<!-- adf:mediaSingle ${attrs} -->`;
-      return `${mediaContent}\n${metadata}`;
+      // Comment comes ABOVE the content
+      return `${metadata}\n${mediaContent}`;
     }
     
     return mediaContent;

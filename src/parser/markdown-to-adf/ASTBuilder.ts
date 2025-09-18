@@ -8,6 +8,7 @@ import { Token, TokenType, ADFMetadata } from './types.js';
 import { ADFDocument, ADFNode, ADFMark } from '../../types/adf.types.js';
 import type { Root } from 'mdast';
 import type { AdfFenceNode } from '../remark/adf-from-markdown.js';
+import { getNodeMetadata, applyMetadataToAdfNode, generateMetadataComment, isAdfMetadataComment } from '../../utils/metadata-comments.js';
 
 export interface ASTBuildOptions {
   strict?: boolean;
@@ -708,44 +709,88 @@ export class ASTBuilder {
    * Convert single mdast node to ADF node
    */
   private convertMdastNodeToADF(node: any): ADFNode | null {
+    let adfNode: ADFNode | null = null;
+    
     switch (node.type) {
       case 'heading':
-        return this.convertMdastHeading(node);
+        adfNode = this.convertMdastHeading(node);
+        break;
       case 'paragraph':
-        return this.convertMdastParagraph(node);
+        adfNode = this.convertMdastParagraph(node);
+        break;
       case 'blockquote':
-        return this.convertMdastBlockquote(node);
+        adfNode = this.convertMdastBlockquote(node);
+        break;
       case 'code':
-        return this.convertMdastCodeBlock(node);
+        adfNode = this.convertMdastCodeBlock(node);
+        break;
       case 'list':
-        return this.convertMdastList(node);
+        adfNode = this.convertMdastList(node);
+        break;
       case 'listItem':
-        return this.convertMdastListItem(node);
+        adfNode = this.convertMdastListItem(node);
+        break;
       case 'table':
-        return this.convertMdastTable(node);
+        adfNode = this.convertMdastTable(node);
+        break;
       case 'tableRow':
-        return this.convertMdastTableRow(node);
+        adfNode = this.convertMdastTableRow(node);
+        break;
       case 'tableCell':
-        return this.convertMdastTableCell(node);
+        adfNode = this.convertMdastTableCell(node);
+        break;
       case 'thematicBreak':
-        return { type: 'rule' };
+        adfNode = { type: 'rule' };
+        break;
       case 'adfFence':
-        return this.convertAdfFenceNode(node as AdfFenceNode);
+        adfNode = this.convertAdfFenceNode(node as AdfFenceNode);
+        break;
       case 'yaml':
       case 'toml':
         // Skip frontmatter nodes - they're handled separately
         return null;
       case 'text':
-        return { type: 'text', text: node.value };
+        adfNode = { type: 'text', text: node.value };
+        break;
+      case 'image':
+        adfNode = this.convertMdastImage(node);
+        break;
+      case 'html':
+        // Skip ADF metadata comments - they should have been processed already
+        if (node.value && isAdfMetadataComment(node.value)) {
+          return null;
+        }
+        // For other HTML nodes, preserve as unknown if option is set
+        if (this.options.preserveUnknownNodes) {
+          adfNode = {
+            type: 'paragraph',
+            content: [{ type: 'text', text: `[HTML: ${node.value}]` }]
+          };
+        } else {
+          return null;
+        }
+        break;
       default:
         if (this.options.preserveUnknownNodes) {
-          return {
+          adfNode = {
             type: 'paragraph',
             content: [{ type: 'text', text: `[Unknown node: ${node.type}]` }]
           };
+        } else {
+          return null;
         }
-        return null;
+        break;
     }
+
+    // Apply metadata from HTML comments if present
+    if (adfNode) {
+      const metadata = getNodeMetadata(node);
+      if (metadata.length > 0) {
+        adfNode = applyMetadataToAdfNode(adfNode, metadata);
+      }
+    }
+
+    return adfNode;
   }
 
   /**
@@ -842,9 +887,41 @@ export class ASTBuilder {
   }
 
   private convertMdastParagraph(node: any): ADFNode {
+    // Check if this paragraph contains only a single image that's an ADF media placeholder
+    if (node.children && node.children.length === 1 && node.children[0].type === 'image') {
+      const imageNode = node.children[0];
+      if (imageNode.url && imageNode.url.match(/^adf:media:/)) {
+        // This is a standalone media element - convert it to block-level media/mediaSingle
+        // Transfer any paragraph-level metadata to the image node
+        const paragraphMetadata = getNodeMetadata(node);
+        if (paragraphMetadata.length > 0) {
+          // Add paragraph metadata to image node
+          if (!imageNode.data) {
+            imageNode.data = {};
+          }
+          if (!imageNode.data.adfMetadata) {
+            imageNode.data.adfMetadata = [];
+          }
+          imageNode.data.adfMetadata.push(...paragraphMetadata);
+        }
+        
+        const mediaNode = this.convertMdastImage(imageNode);
+        if (mediaNode) {
+          return mediaNode;
+        }
+      }
+    }
+    
+    const content = this.convertMdastInlineNodes(node.children);
+    
+    // If paragraph content is empty (e.g., contained only unsupported images), return null
+    if (content.length === 0) {
+      return null;
+    }
+    
     return {
       type: 'paragraph',
-      content: this.convertMdastInlineNodes(node.children)
+      content
     };
   }
 
@@ -900,6 +977,69 @@ export class ASTBuilder {
   }
 
   /**
+   * Convert mdast image node to ADF media/mediaSingle node
+   */
+  private convertMdastImage(node: any): ADFNode | null {
+    if (!node.url) {
+      return null;
+    }
+
+    // Check if this is an ADF media placeholder
+    const adfMediaMatch = node.url.match(/^adf:media:(.+)$/);
+    if (!adfMediaMatch) {
+      // Regular image - not a media placeholder
+      // For now, we'll treat regular images as unsupported and return null
+      // In the future, this could be expanded to convert regular images to media nodes
+      return null;
+    }
+
+    const mediaId = adfMediaMatch[1];
+    
+    // Handle empty media ID
+    if (!mediaId) {
+      return null;
+    }
+    
+    // Get metadata from the node
+    const metadata = getNodeMetadata(node);
+    
+    // Find media and mediaSingle metadata
+    let mediaAttrs: Record<string, any> = { id: mediaId, type: 'file' };
+    let mediaSingleAttrs: Record<string, any> = {};
+    
+    for (const meta of metadata) {
+      if (meta.nodeType === 'media' && meta.attrs) {
+        mediaAttrs = { ...mediaAttrs, ...meta.attrs };
+      } else if (meta.nodeType === 'mediaSingle' && meta.attrs) {
+        mediaSingleAttrs = { ...meta.attrs };
+      }
+    }
+
+    // Add alt text if present and not empty
+    if (node.alt && node.alt.trim()) {
+      mediaAttrs.alt = node.alt;
+    }
+
+    // Create media node
+    const mediaNode: ADFNode = {
+      type: 'media',
+      attrs: mediaAttrs
+    };
+
+    // If we have mediaSingle attributes, wrap the media node
+    if (Object.keys(mediaSingleAttrs).length > 0) {
+      return {
+        type: 'mediaSingle',
+        attrs: mediaSingleAttrs,
+        content: [mediaNode]
+      };
+    }
+
+    // Return just the media node
+    return mediaNode;
+  }
+
+  /**
    * Convert inline mdast nodes to ADF text nodes with marks
    */
   private convertMdastInlineNodes(nodes: any[]): ADFNode[] {
@@ -940,6 +1080,9 @@ export class ASTBuilder {
       
       case 'break':
         return { type: 'hardBreak' };
+      
+      case 'image':
+        return this.convertMdastImage(node);
       
       default:
         // Unknown inline node, treat as text
@@ -982,42 +1125,144 @@ export class ASTBuilder {
    * Convert ADF nodes back to mdast
    */
   private convertAdfNodesToMdast(nodes: ADFNode[]): any[] {
-    return nodes.map(node => this.convertAdfNodeToMdast(node)).filter(Boolean);
+    const result: any[] = [];
+    
+    for (const node of nodes) {
+      const converted = this.convertAdfNodeToMdast(node);
+      if (converted) {
+        if (Array.isArray(converted)) {
+          result.push(...converted);
+        } else {
+          result.push(converted);
+        }
+      }
+    }
+    
+    return result;
   }
 
   /**
    * Convert single ADF node back to mdast
    */
-  private convertAdfNodeToMdast(node: ADFNode): any {
+  private convertAdfNodeToMdast(node: ADFNode): any | any[] {
+    let mdastNode: any;
+
     switch (node.type) {
       case 'heading':
-        return {
+        mdastNode = {
           type: 'heading',
           depth: (node.attrs as any)?.level || 1,
           children: this.convertAdfInlineToMdast(node.content || [])
         };
+        break;
       
       case 'paragraph':
-        return {
+        mdastNode = {
           type: 'paragraph',
           children: this.convertAdfInlineToMdast(node.content || [])
         };
+        break;
       
       case 'panel':
-        return {
+        mdastNode = {
           type: 'adfFence',
           nodeType: 'panel',
           attributes: { type: (node.attrs as any)?.panelType || 'info', ...node.attrs },
           value: this.extractContentAsText(node.content || [])
         };
+        break;
+      
+      case 'media':
+        const mediaAttrs = node.attrs as any;
+        const altText = mediaAttrs?.alt || 'Media';
+        mdastNode = {
+          type: 'image',
+          url: `adf:media:${mediaAttrs?.id || 'unknown'}`,
+          alt: altText,
+          title: null
+        };
+        
+        // Generate media metadata comment manually (including all attributes except alt)
+        const mediaMetadataAttrs: Record<string, any> = {};
+        if (mediaAttrs?.id) mediaMetadataAttrs.id = mediaAttrs.id;
+        if (mediaAttrs?.type) mediaMetadataAttrs.type = mediaAttrs.type;
+        if (mediaAttrs?.collection) mediaMetadataAttrs.collection = mediaAttrs.collection;
+        if (mediaAttrs?.width) mediaMetadataAttrs.width = mediaAttrs.width;
+        if (mediaAttrs?.height) mediaMetadataAttrs.height = mediaAttrs.height;
+        // Add any other custom attributes (excluding alt)
+        Object.keys(mediaAttrs || {}).forEach(key => {
+          if (!['id', 'type', 'collection', 'width', 'height', 'alt'].includes(key)) {
+            mediaMetadataAttrs[key] = mediaAttrs[key];
+          }
+        });
+        
+        if (Object.keys(mediaMetadataAttrs).length > 0) {
+          const metadataString = Object.entries(mediaMetadataAttrs)
+            .map(([key, value]) => `${key}="${value}"`)
+            .join(' ');
+          const mediaComment = `<!-- adf:media ${metadataString} -->`;
+          
+          // Return array with metadata comment followed by the image
+          return [
+            { type: 'html', value: mediaComment },
+            mdastNode
+          ];
+        }
+        
+        break;
+      
+      case 'mediaSingle':
+        // Convert mediaSingle by converting its inner media content
+        const mediaContent = node.content ? this.convertAdfNodesToMdast(node.content) : [];
+        
+        // Generate mediaSingle metadata comment
+        const mediaSingleComment = generateMetadataComment(node.type, node.attrs);
+        
+        if (mediaContent.length > 0) {
+          // If we have media content (which may be [comment, image] array), handle accordingly
+          const result = [];
+          
+          // Add mediaSingle metadata comment first if it exists
+          if (mediaSingleComment) {
+            result.push({ type: 'html', value: mediaSingleComment });
+          }
+          
+          // Add all media content (comments and images)
+          result.push(...mediaContent);
+          
+          return result;
+        } else {
+          // Fallback case
+          mdastNode = {
+            type: 'image',
+            url: 'adf:media:unknown',
+            alt: 'Media',
+            title: null
+          };
+        }
+        break;
       
       default:
         // Return a generic paragraph for unknown nodes
-        return {
+        mdastNode = {
           type: 'paragraph',
           children: [{ type: 'text', value: `[${node.type}]` }]
         };
+        break;
     }
+
+    // Generate metadata comment if the node has custom attributes
+    const metadataComment = generateMetadataComment(node.type, node.attrs);
+    
+    if (metadataComment) {
+      // Return array with metadata comment followed by the node
+      return [
+        { type: 'html', value: metadataComment },
+        mdastNode
+      ];
+    }
+
+    return mdastNode;
   }
 
   /**

@@ -21,12 +21,14 @@ const ADF_BLOCK_TYPES = new Set([
 
 /**
  * Tokenizer function for ADF fence blocks
+ * Simplified version following micromark patterns more closely
  */
 const tokenizeAdfFence: AdfTokenizer = function (effects, ok, nok) {
   let size = 0;
-  let marker = 126; // tilde
+  const marker = 126; // tilde
   let nodeType = '';
-  let closingSize = 0;
+  let sizeClose = 0;
+  let atBreak: boolean;
   
   return start;
 
@@ -35,23 +37,22 @@ const tokenizeAdfFence: AdfTokenizer = function (effects, ok, nok) {
     
     effects.enter('adfFence');
     effects.enter('adfFenceSequence');
-    
     return sequenceOpen(code);
   }
 
   function sequenceOpen(code: Code): State | void {
-    if (code === marker && size < 3) {
+    if (code === marker) {
       effects.consume(code);
       size++;
       return sequenceOpen;
     }
 
-    if (size === 3) {
-      effects.exit('adfFenceSequence');
-      return factorySpace(effects, infoStart, 'whitespace')(code);
+    if (size < 3) {
+      return nok(code);
     }
 
-    return nok(code);
+    effects.exit('adfFenceSequence');
+    return factorySpace(effects, infoStart, 'whitespace')(code);
   }
 
   function infoStart(code: Code): State | void {
@@ -66,7 +67,7 @@ const tokenizeAdfFence: AdfTokenizer = function (effects, ok, nok) {
 
   function info(code: Code): State | void {
     if (code === null || markdownLineEnding(code) || markdownSpace(code)) {
-      if (!ADF_BLOCK_TYPES.has(nodeType)) {
+      if (!nodeType || !ADF_BLOCK_TYPES.has(nodeType)) {
         return nok(code);
       }
       
@@ -76,7 +77,7 @@ const tokenizeAdfFence: AdfTokenizer = function (effects, ok, nok) {
         return factorySpace(effects, metaStart, 'whitespace')(code);
       }
       
-      return lineEndAfterInfo(code);
+      return lineEnd(code);
     }
 
     if ((code >= 97 && code <= 122) || (code >= 65 && code <= 90)) { // a-z or A-Z
@@ -90,7 +91,7 @@ const tokenizeAdfFence: AdfTokenizer = function (effects, ok, nok) {
 
   function metaStart(code: Code): State | void {
     if (code === null || markdownLineEnding(code)) {
-      return lineEndAfterInfo(code);
+      return lineEnd(code);
     }
     
     effects.enter('adfFenceAttributes');
@@ -100,85 +101,81 @@ const tokenizeAdfFence: AdfTokenizer = function (effects, ok, nok) {
   function meta(code: Code): State | void {
     if (code === null || markdownLineEnding(code)) {
       effects.exit('adfFenceAttributes');
-      return lineEndAfterInfo(code);
+      return lineEnd(code);
     }
 
     effects.consume(code);
     return meta;
   }
 
-  function lineEndAfterInfo(code: Code): State | void {
-    if (code === null) {
-      return nok(code);
-    }
-
+  function lineEnd(code: Code): State | void {
     if (markdownLineEnding(code)) {
       effects.consume(code);
       effects.enter('adfFenceContent');
-      return content;
+      atBreak = true;
+      return contentContinue;
     }
 
     return nok(code);
   }
 
-  function content(code: Code): State | void {
+  function contentContinue(code: Code): State | void {
     if (code === null) {
-      effects.exit('adfFenceContent');
-      return nok(code);
+      return contentEnd(code);
+    }
+
+    if (atBreak) {
+      if (markdownLineEnding(code)) {
+        effects.consume(code);
+        return contentContinue;
+      }
+
+      atBreak = false;
+
+      if (code === marker) {
+        return contentClose(code);
+      }
     }
 
     if (markdownLineEnding(code)) {
       effects.consume(code);
-      return contentAfterEol;
+      atBreak = true;
+      return contentContinue;
     }
 
     effects.consume(code);
-    return content;
+    return contentContinue;
   }
 
-  function contentAfterEol(code: Code): State | void {
+  function contentEnd(code: Code): State | void {
+    effects.exit('adfFenceContent');
+    return end(code);
+  }
+
+  function contentClose(code: Code): State | void {
     if (code === marker) {
-      closingSize = 0;
-      return closingFence(code);
-    }
-
-    return content(code);
-  }
-
-  function closingFence(code: Code): State | void {
-    if (code === marker && closingSize < 3) {
       effects.consume(code);
-      closingSize++;
-      return closingFence;
+      sizeClose++;
+      return contentClose;
     }
 
-    if (closingSize === 3) {
-      return closingFenceEnd(code);
-    }
-
-    // Not enough markers - continue as content
-    return content(code);
-  }
-
-  function closingFenceEnd(code: Code): State | void {
-    if (markdownSpace(code)) {
-      effects.consume(code);
-      return closingFenceEnd;
-    }
-
-    if (code === null || markdownLineEnding(code)) {
+    if (sizeClose >= size) {
       effects.exit('adfFenceContent');
-      
-      if (markdownLineEnding(code)) {
-        effects.consume(code);
-      }
-      
+      return factorySpace(effects, end, 'whitespace')(code);
+    }
+
+    sizeClose = 0;
+    atBreak = false;
+    return contentContinue(code);
+  }
+
+  function end(code: Code): State | void {
+    if (code === null || markdownLineEnding(code)) {
       effects.exit('adfFence');
       return ok(code);
     }
 
-    // Invalid content after closing fence - treat as regular content
-    return content(code);
+    return nok(code);
   }
 };
 

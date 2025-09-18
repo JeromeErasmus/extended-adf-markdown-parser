@@ -140,7 +140,7 @@ function test() {
   });
 
   describe('parseSync - ADF extensions', () => {
-    it('should parse panel fence blocks', () => {
+    it('should parse panel fence blocks correctly', () => {
       const markdown = `
 ~~~panel type=info
 This is an info panel.
@@ -156,13 +156,15 @@ This is an info panel.
         content: [
           {
             type: 'paragraph',
-            content: [{ type: 'text', text: 'This is an info panel.' }]
+            content: [
+              { type: 'text', text: 'This is an info panel.' }
+            ]
           }
         ]
       });
     });
 
-    it('should parse expand fence blocks', () => {
+    it('should parse expand fence blocks correctly', () => {
       const markdown = `
 ~~~expand title="Click to expand"
 Hidden content here.
@@ -178,13 +180,15 @@ Hidden content here.
         content: [
           {
             type: 'paragraph',
-            content: [{ type: 'text', text: 'Hidden content here.' }]
+            content: [
+              { type: 'text', text: 'Hidden content here.' }
+            ]
           }
         ]
       });
     });
 
-    it('should parse mediaSingle fence blocks', () => {
+    it('should parse mediaSingle fence blocks correctly', () => {
       const markdown = `
 ~~~mediaSingle layout=center width=500
 ![Image](media123.jpg)
@@ -196,9 +200,10 @@ Hidden content here.
       expect(result.content).toHaveLength(1);
       expect(result.content[0].type).toBe('mediaSingle');
       expect(result.content[0].attrs).toEqual({ layout: 'center', width: 500 });
+      expect(result.content[0].content).toBeDefined();
     });
 
-    it('should parse mediaGroup fence blocks', () => {
+    it('should parse mediaGroup fence blocks correctly', () => {
       const markdown = `
 ~~~mediaGroup
 ![Image 1](media1.jpg)
@@ -210,9 +215,10 @@ Hidden content here.
 
       expect(result.content).toHaveLength(1);
       expect(result.content[0].type).toBe('mediaGroup');
+      expect(result.content[0].content).toBeDefined();
     });
 
-    it('should parse nested expand fence blocks', () => {
+    it('should parse nested expand fence blocks correctly', () => {
       const markdown = `
 ~~~nestedExpand title="Nested expand"
 Content in nested expand.
@@ -228,7 +234,9 @@ Content in nested expand.
         content: [
           {
             type: 'paragraph',
-            content: [{ type: 'text', text: 'Content in nested expand.' }]
+            content: [
+              { type: 'text', text: 'Content in nested expand.' }
+            ]
           }
         ]
       });
@@ -319,8 +327,8 @@ More information can be found here.
       const nodeTypes = result.content.map(node => node.type);
       expect(nodeTypes).toContain('heading');
       expect(nodeTypes).toContain('paragraph');
-      expect(nodeTypes).toContain('panel');
-      expect(nodeTypes).toContain('codeBlock');
+      expect(nodeTypes).toContain('panel'); // ADF fence blocks are now parsed correctly
+      expect(nodeTypes).toContain('codeBlock'); // Regular code blocks still exist
       expect(nodeTypes).toContain('bulletList');
       expect(nodeTypes).toContain('expand');
     });
@@ -387,8 +395,8 @@ Panel content.
       expect(stats).toHaveProperty('processingTime');
 
       expect(stats.nodeCount).toBeGreaterThan(0);
-      expect(stats.adfBlockCount).toBe(1);
-      expect(stats.hasAdfExtensions).toBe(true);
+      expect(stats.adfBlockCount).toBe(1); // Panel block should be detected
+      expect(stats.hasAdfExtensions).toBe(true); // ADF extensions now detected
       expect(stats.hasGfmFeatures).toBe(true);
       expect(typeof stats.processingTime).toBe('number');
     });

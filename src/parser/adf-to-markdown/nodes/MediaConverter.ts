@@ -45,10 +45,10 @@ export class MediaConverter implements NodeConverter {
       return '![Media](adf:media:unknown)';
     }
 
-    const { id, type, collection, width, height, ...customAttrs } = mediaNode.attrs;
+    const { id, type, collection, width, height, alt, ...customAttrs } = mediaNode.attrs;
     
     // Create media reference in markdown format
-    const mediaRef = `![Media](adf:media:${id})`;
+    const mediaRef = `![${alt || 'Media'}](adf:media:${id})`;
     
     // Build attributes object for metadata
     const attrs: Record<string, any> = { id, type };
@@ -56,14 +56,15 @@ export class MediaConverter implements NodeConverter {
     if (width) attrs.width = width;
     if (height) attrs.height = height;
     
-    // Add any custom attributes
+    // Add any custom attributes (alt is not included in metadata)
     Object.assign(attrs, customAttrs);
     
-    // Add metadata comment with all attributes
+    // Add metadata comment with all attributes (attribute format, not JSON)
     const metadata = `<!-- adf:media ${Object.entries(attrs)
       .map(([key, value]) => `${key}="${value}"`)
       .join(' ')} -->`;
     
-    return `${mediaRef}\n${metadata}`;
+    // Comment comes ABOVE the content
+    return `${metadata}\n${mediaRef}`;
   }
 }
