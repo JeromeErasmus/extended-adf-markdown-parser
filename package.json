@@ -1,5 +1,5 @@
 {
-  "name": "@extended-adf/parser",
+  "name": "extended-adf-parser",
   "version": "1.0.0",
   "description": "Bidirectional parser for ADF and Extended Markdown",
   "packageManager": "yarn@4.7.0",

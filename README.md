@@ -14,9 +14,9 @@ A bidirectional parser for converting between Atlassian Document Format (ADF) an
 ## Installation
 
 ```bash
-npm install @extended-adf/parser
+npm install extended-adf-parser
 # or
-yarn add @extended-adf/parser
+yarn add extended-adf-parser
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ yarn add @extended-adf/parser
 ### Simple Example
 
 ```typescript
-import { Parser } from '@extended-adf/parser';
+import { Parser } from 'extended-adf-parser';
 
 const parser = new Parser();
 
@@ -53,7 +53,7 @@ console.log(reconstructed); // Original ADF structure
 ### Complex Example with ADF Extensions
 
 ```typescript
-import { Parser } from '@extended-adf/parser';
+import { Parser } from 'extended-adf-parser';
 
 const parser = new Parser({ enableAdfExtensions: true });
 
