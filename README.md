@@ -79,14 +79,14 @@ make help
 # Install dependencies
 make install
 
-# Run tests (unit tests - 288 tests)
+# Run all tests (704 tests across unit and integration)
 make test
 
-# Run only unit tests
+# Run only unit tests (643 tests)
 make test-unit
 
-# Run fixture tests (currently has ESM import issues)
-make test-fixtures
+# Run only integration tests (fixtures and end-to-end)
+make test-integration
 
 # Run tests with coverage
 make test-coverage
@@ -136,10 +136,15 @@ src/
 └── index.ts         # Main entry point
 
 tests/
-├── fixtures/        # Test fixtures for robustness testing
-│   ├── adf/         # ADF input files (.adf extension)
-│   └── markdown/    # Expected output files (.md extension)
-└── integration/     # Integration test suites
+├── unit/            # Unit tests organized by component
+│   ├── converters/  # Tests for individual ADF->Markdown converters
+│   ├── validators/  # Tests for ADF and Markdown validators
+│   ├── parser/      # Tests for tokenizer, parser, and AST builder
+│   └── core/        # Tests for registry and integration components
+├── integration/     # Integration test suites
+└── fixtures/        # Test fixtures for robustness testing
+    ├── adf/         # ADF input files (.adf extension)
+    └── markdown/    # Expected output files (.md extension)
 ```
 
 ## Test Fixtures

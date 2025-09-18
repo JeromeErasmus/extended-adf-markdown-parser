@@ -18,10 +18,11 @@ This directory contains extensive integration tests for the Extended Markdown to
 - **markdown-adf-comprehensive.test.ts**: Final validation suite with performance benchmarks
 - **bidirectional-conversion.test.ts**: Round-trip conversion consistency testing
 
-### Unit Test Suites:
-- **MarkdownParser.comprehensive.test.ts**: 38 test cases for parser functionality
-- **MarkdownValidator.comprehensive.test.ts**: 40 test cases for validation logic
-- **MarkdownTokenizer.test.ts**: Core tokenization with memory safety fixes
+### Unit Test Suites (located in `/tests/unit/`):
+- **Parser Tests**: MarkdownParser, MarkdownTokenizer, and ASTBuilder functionality
+- **Validator Tests**: ADF and Markdown validation with comprehensive test cases  
+- **Converter Tests**: 22+ individual converter tests for ADF-to-Markdown conversion
+- **Core Tests**: Registry and integration component tests
 
 ### Fixtures Available:
 Located in `tests/fixtures/markdown/`:
@@ -49,13 +50,18 @@ Located in `tests/fixtures/markdown/`:
 ### Running Tests
 
 ```bash
-# Run all tests (704 total)
+# Run all tests (704 total: 643 unit + 61 integration)
 npm test
 
+# Run specific test categories  
+npm test tests/unit/           # Unit tests only (643 tests)
+npm test tests/integration/    # Integration tests only (61 tests)
+
 # Run specific test suites
-npm test -- --testPathPattern="integration"
-npm test -- --testPathPattern="MarkdownParser"
-npm test -- --testPathPattern="MarkdownValidator"
+npm test -- --testPathPattern="converters"     # Converter unit tests
+npm test -- --testPathPattern="validators"     # Validator unit tests
+npm test -- --testPathPattern="parser"         # Parser unit tests
+npm test -- --testPathPattern="MarkdownParser" # Specific parser tests
 
 # Run specific test cases
 npm test -- --testNamePattern="should convert simple document"
