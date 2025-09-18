@@ -69,6 +69,7 @@ export { EnhancedMarkdownParser } from './parser/markdown-to-adf/EnhancedMarkdow
 import { EnhancedMarkdownParser } from './parser/markdown-to-adf/EnhancedMarkdownParser.js';
 import { measureSync, measureAsync, globalPerformanceMonitor } from './performance/PerformanceMonitor.js';
 import { ErrorRecoveryManager } from './errors/ErrorRecovery.js';
+import { getSafeJSONLength } from './utils/json-utils.js';
 
 // Export enhanced parser components
 export { adfMicromarkExtension } from './parser/micromark/index.js';
@@ -161,7 +162,7 @@ export class Parser {
       
       // Direct conversion using registered converters
       return this.convertAdfToMarkdown(adf);
-    }, JSON.stringify(adf).length, this.countNodes(adf.content || []));
+    }, getSafeJSONLength(adf), this.countNodes(adf.content || []));
   }
 
   /**

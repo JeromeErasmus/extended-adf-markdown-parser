@@ -8,6 +8,7 @@ import { pipeline } from 'stream/promises';
 import type { ADFDocument, ADFNode } from '../types';
 import { Parser } from '../index.js';
 import { measureAsync } from '../performance/PerformanceMonitor.js';
+import { safeJSONStringify } from '../utils/json-utils.js';
 
 export interface StreamingOptions {
   chunkSize?: number; // Default 64KB
@@ -192,7 +193,7 @@ export class StreamingParser {
             );
             
             if (opts.onChunk) {
-              opts.onChunk(JSON.stringify(adf));
+              opts.onChunk(safeJSONStringify(adf));
             }
             
             yield adf;
@@ -216,7 +217,7 @@ export class StreamingParser {
           );
           
           if (opts.onChunk) {
-            opts.onChunk(JSON.stringify(adf));
+            opts.onChunk(safeJSONStringify(adf));
           }
           
           yield adf;
@@ -269,7 +270,7 @@ export class StreamingParser {
         }
       } else {
         for await (const adf of this.markdownToAdfStream(inputStream, options)) {
-          outputStream.write(JSON.stringify(adf, null, 2) + '\n');
+          outputStream.write(safeJSONStringify(adf, 2) + '\n');
           chunksProcessed++;
         }
       }
@@ -332,7 +333,7 @@ export class StreamingParser {
             for (const doc of result.documents) {
               try {
                 const adf = self.parser.markdownToAdf(doc);
-                this.push(JSON.stringify(adf, null, 2) + '\n');
+                this.push(safeJSONStringify(adf, 2) + '\n');
               } catch (error) {
                 console.warn('Transform error:', error);
               }
@@ -356,7 +357,7 @@ export class StreamingParser {
               this.push(markdown);
             } else {
               const adf = self.parser.markdownToAdf(buffer);
-              this.push(JSON.stringify(adf, null, 2));
+              this.push(safeJSONStringify(adf, 2));
             }
           }
           callback();

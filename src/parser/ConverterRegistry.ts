@@ -3,6 +3,7 @@
  */
 
 import type { NodeConverter, MarkConverter } from './types';
+import { safeJSONStringify } from '../utils/json-utils.js';
 
 export class ConverterRegistry {
   private nodeConverters = new Map<string, NodeConverter>();
@@ -45,7 +46,7 @@ export class ConverterRegistry {
       nodeType: 'unknown',
       toMarkdown: (node) => {
         // Preserve unknown nodes as raw JSON in comments
-        return `<!-- adf:unknown type="${nodeType}" -->\n${JSON.stringify(node, null, 2)}\n<!-- /adf:unknown -->`;
+        return `<!-- adf:unknown type="${nodeType}" -->\n${safeJSONStringify(node, 2)}\n<!-- /adf:unknown -->`;
       }
     };
   }
@@ -55,7 +56,7 @@ export class ConverterRegistry {
       markType: 'unknown',
       toMarkdown: (text, mark) => {
         // Preserve unknown marks with metadata comments
-        return `${text}<!-- adf:mark type="${markType}" attrs='${JSON.stringify(mark.attrs || {})}' -->`;
+        return `${text}<!-- adf:mark type="${markType}" attrs='${safeJSONStringify(mark.attrs || {})}' -->`;
       }
     };
   }
