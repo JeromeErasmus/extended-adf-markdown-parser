@@ -49,10 +49,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:abc-123-def)\n<!-- adf:media id="abc-123-def" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="abc-123-def" type="file" -->\n![Media](adf:media:abc-123-def)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:abc-123-def)\n<!-- adf:media id="abc-123-def" type="file" -->\n<!-- adf:mediaSingle layout="center" width="80" -->');
+      expect(result).toBe('<!-- adf:mediaSingle layout="center" width="80" -->\n<!-- adf:media id="abc-123-def" type="file" -->\n![Media](adf:media:abc-123-def)');
       expect(mockContext.convertChildren).toHaveBeenCalledWith(node.content!);
     });
 
@@ -70,10 +70,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:simple-image)\n<!-- adf:media id="simple-image" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="simple-image" type="file" -->\n![Media](adf:media:simple-image)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:simple-image)\n<!-- adf:media id="simple-image" type="file" -->');
+      expect(result).toBe('<!-- adf:media id="simple-image" type="file" -->\n![Media](adf:media:simple-image)');
     });
 
     it('should handle media single with only layout attribute', () => {
@@ -93,10 +93,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:left-aligned)\n<!-- adf:media id="left-aligned" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="left-aligned" type="file" -->\n![Media](adf:media:left-aligned)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:left-aligned)\n<!-- adf:media id="left-aligned" type="file" -->\n<!-- adf:mediaSingle layout="align-start" -->');
+      expect(result).toBe('<!-- adf:mediaSingle layout="align-start" -->\n<!-- adf:media id="left-aligned" type="file" -->\n![Media](adf:media:left-aligned)');
     });
 
     it('should handle media single with only width attribute', () => {
@@ -116,10 +116,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:half-width)\n<!-- adf:media id="half-width" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="half-width" type="file" -->\n![Media](adf:media:half-width)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:half-width)\n<!-- adf:media id="half-width" type="file" -->\n<!-- adf:mediaSingle width="50" -->');
+      expect(result).toBe('<!-- adf:mediaSingle width="50" -->\n<!-- adf:media id="half-width" type="file" -->\n![Media](adf:media:half-width)');
     });
 
     it('should handle media single with empty content from convertChildren', () => {
@@ -142,7 +142,7 @@ describe('MediaSingleConverter', () => {
       (mockContext.convertChildren as jest.Mock).mockReturnValue('');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('\n<!-- adf:mediaSingle layout="center" -->');
+      expect(result).toBe('<!-- adf:mediaSingle layout="center" -->');
     });
 
     it('should handle media single with undefined content', () => {
@@ -172,10 +172,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:no-attrs)\n<!-- adf:media id="no-attrs" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="no-attrs" type="file" -->\n![Media](adf:media:no-attrs)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:no-attrs)\n<!-- adf:media id="no-attrs" type="file" -->');
+      expect(result).toBe('<!-- adf:media id="no-attrs" type="file" -->\n![Media](adf:media:no-attrs)');
     });
 
     it('should handle media single with custom attributes', () => {
@@ -198,10 +198,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:custom-media)\n<!-- adf:media id="custom-media" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="custom-media" type="file" -->\n![Media](adf:media:custom-media)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:custom-media)\n<!-- adf:media id="custom-media" type="file" -->\n<!-- adf:mediaSingle layout="wrap-right" width="75" customProp="custom-value" border="true" -->');
+      expect(result).toBe('<!-- adf:mediaSingle layout="wrap-right" width="75" customProp="custom-value" border="true" -->\n<!-- adf:media id="custom-media" type="file" -->\n![Media](adf:media:custom-media)');
     });
 
     it('should handle single media node in container', () => {
@@ -221,10 +221,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:first-media)\n<!-- adf:media id="first-media" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="first-media" type="file" -->\n![Media](adf:media:first-media)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:first-media)\n<!-- adf:media id="first-media" type="file" -->\n<!-- adf:mediaSingle layout="center" -->');
+      expect(result).toBe('<!-- adf:mediaSingle layout="center" -->\n<!-- adf:media id="first-media" type="file" -->\n![Media](adf:media:first-media)');
     });
 
 
@@ -248,10 +248,10 @@ describe('MediaSingleConverter', () => {
         ]
       };
 
-      (mockContext.convertChildren as jest.Mock).mockReturnValue('![Media](adf:media:full-width-media)\n<!-- adf:media id="full-width-media" type="file" -->');
+      (mockContext.convertChildren as jest.Mock).mockReturnValue('<!-- adf:media id="full-width-media" type="file" -->\n![Media](adf:media:full-width-media)');
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:full-width-media)\n<!-- adf:media id="full-width-media" type="file" -->\n<!-- adf:mediaSingle layout="full-width" width="100" responsive="true" priority="0" -->');
+      expect(result).toBe('<!-- adf:mediaSingle layout="full-width" width="100" responsive="true" priority="0" -->\n<!-- adf:media id="full-width-media" type="file" -->\n![Media](adf:media:full-width-media)');
     });
   });
 });

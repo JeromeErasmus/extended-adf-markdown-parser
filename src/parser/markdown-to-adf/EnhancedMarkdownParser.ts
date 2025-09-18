@@ -110,8 +110,11 @@ export class EnhancedMarkdownParser {
    */
   async parse(markdown: string): Promise<ADFDocument> {
     try {
+      // Preprocess to fix consecutive HTML comments
+      const preprocessedMarkdown = this.preprocessConsecutiveHtmlComments(markdown);
+      
       // Parse markdown to mdast using unified
-      const tree = this.processor.parse(markdown);
+      const tree = this.processor.parse(preprocessedMarkdown);
       const processedTree = await this.processor.run(tree) as Root;
 
       // Convert mdast to ADF using our AST builder
@@ -147,8 +150,11 @@ export class EnhancedMarkdownParser {
    */
   parseSync(markdown: string): ADFDocument {
     try {
+      // Preprocess to fix consecutive HTML comments
+      const preprocessedMarkdown = this.preprocessConsecutiveHtmlComments(markdown);
+      
       // Parse markdown to mdast using unified
-      const tree = this.processor.parse(markdown);
+      const tree = this.processor.parse(preprocessedMarkdown);
       const processedTree = this.processor.runSync(tree) as Root;
 
       // Convert to ADF synchronously
@@ -438,6 +444,19 @@ export class EnhancedMarkdownParser {
     }
     
     return attributes;
+  }
+
+  /**
+   * Preprocess markdown to fix consecutive HTML comments by adding line breaks
+   */
+  private preprocessConsecutiveHtmlComments(markdown: string): string {
+    // Replace consecutive HTML comments with line breaks between them
+    let processed = markdown.replace(/-->\s*<!--/g, '-->\n<!--');
+    
+    // Also ensure HTML comments are separated from following content
+    processed = processed.replace(/(-->)([^\s\n])/g, '$1\n$2');
+    
+    return processed;
   }
 
   /**

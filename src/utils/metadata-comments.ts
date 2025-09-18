@@ -20,7 +20,10 @@ export interface AdfMetadata {
  */
 const METADATA_PATTERNS = {
   // <!-- adf:paragraph attrs='{"textAlign":"center"}' -->
-  withAttrs: /^<!--\s*adf:([a-zA-Z][a-zA-Z0-9]*)\s+attrs='({.*?})'\s*-->$/,
+  withAttrsJson: /^<!--\s*adf:([a-zA-Z][a-zA-Z0-9]*)\s+attrs='({.*?})'\s*-->$/,
+  
+  // <!-- adf:paragraph key="value" key2="value2" -->
+  withAttrs: /^<!--\s*adf:([a-zA-Z][a-zA-Z0-9]*)\s+(.+?)\s*-->$/,
   
   // <!-- adf:paragraph -->
   simple: /^<!--\s*adf:([a-zA-Z][a-zA-Z0-9]*)\s*-->$/,
@@ -33,17 +36,38 @@ const METADATA_PATTERNS = {
  * Check if a string is an ADF metadata comment
  */
 export function isAdfMetadataComment(value: string): boolean {
-  return METADATA_PATTERNS.withAttrs.test(value) || 
+  return METADATA_PATTERNS.withAttrsJson.test(value) ||
+         METADATA_PATTERNS.withAttrs.test(value) || 
          METADATA_PATTERNS.simple.test(value) ||
          METADATA_PATTERNS.closing.test(value);
+}
+
+/**
+ * Parse attributes from attribute string (key="value" key2="value2")
+ */
+function parseAttributeString(attrString: string): Record<string, any> {
+  const attrs: Record<string, any> = {};
+  
+  // Match key="value" patterns, accounting for spaces around =
+  const attrRegex = /(\w+)\s*=\s*"([^"]*)"/g;
+  let match;
+  
+  while ((match = attrRegex.exec(attrString)) !== null) {
+    const [, key, value] = match;
+    // Try to parse numeric values
+    const numericValue = Number(value);
+    attrs[key] = isNaN(numericValue) ? value : numericValue;
+  }
+  
+  return attrs;
 }
 
 /**
  * Parse ADF metadata from a comment string
  */
 export function parseAdfMetadataComment(value: string): AdfMetadata | null {
-  // Try with attributes pattern first
-  let match = METADATA_PATTERNS.withAttrs.exec(value);
+  // Try with JSON attributes pattern first (legacy format)
+  let match = METADATA_PATTERNS.withAttrsJson.exec(value);
   if (match) {
     const [, nodeType, attrsJson] = match;
     try {
@@ -55,6 +79,27 @@ export function parseAdfMetadataComment(value: string): AdfMetadata | null {
       };
     } catch (error) {
       // Invalid JSON in attributes, return simple metadata
+      return {
+        nodeType,
+        raw: value
+      };
+    }
+  }
+
+  // Try with new attribute pattern (key="value" format)
+  match = METADATA_PATTERNS.withAttrs.exec(value);
+  if (match) {
+    const [, nodeType, attrString] = match;
+    const attrs = parseAttributeString(attrString);
+    
+    if (Object.keys(attrs).length > 0) {
+      return {
+        nodeType,
+        attrs,
+        raw: value
+      };
+    } else {
+      // If no valid attributes found, treat as simple
       return {
         nodeType,
         raw: value
@@ -178,12 +223,12 @@ export function applyMetadataToAdfNode(adfNode: any, metadata: AdfMetadata[]): a
     return adfNode;
   }
 
-  // Apply attributes from metadata
+  // Apply attributes from metadata that matches the node type
   let updatedNode = { ...adfNode };
   
   for (const meta of metadata) {
-    if (meta.attrs) {
-      // Merge attributes, giving priority to metadata
+    if (meta.attrs && meta.nodeType === adfNode.type) {
+      // Only apply metadata that matches the current node type
       updatedNode.attrs = { ...updatedNode.attrs, ...meta.attrs };
     }
   }
@@ -199,22 +244,68 @@ export function generateMetadataComment(nodeType: string, attrs?: Record<string,
     return '';
   }
 
-  // Filter out standard attributes that are already in the node
-  const customAttrs = filterCustomAttributes(nodeType, attrs);
+  // For round-trip fidelity, always preserve all non-default attributes
+  // Only filter attributes that are truly defaults or not meaningful
+  const significantAttrs = filterSignificantAttributes(nodeType, attrs);
   
-  if (Object.keys(customAttrs).length === 0) {
+  if (Object.keys(significantAttrs).length === 0) {
     return '';
   }
 
   // Use attribute format instead of JSON
-  const attrsString = Object.entries(customAttrs)
+  const attrsString = Object.entries(significantAttrs)
     .map(([key, value]) => `${key}="${value}"`)
     .join(' ');
   return `<!-- adf:${nodeType} ${attrsString} -->`;
 }
 
 /**
+ * Filter out default attributes, keeping only significant ones for round-trip metadata
+ */
+function filterSignificantAttributes(nodeType: string, attrs: Record<string, any>): Record<string, any> {
+  // Define attributes that should always be filtered because they're expressed in markdown syntax
+  const alwaysFiltered: Record<string, string[]> = {
+    heading: ['level'], // Level is expressed as #, ##, ### etc.
+    panel: ['panelType'], // Panel type is expressed in fence block syntax
+    codeBlock: ['language'], // Language is expressed in fence block syntax  
+    orderedList: ['order'], // Order is expressed in markdown list syntax
+    media: ['alt'], // Alt is expressed in image alt text
+  };
+
+  // Define default values that should be filtered when at default
+  // Note: For round-trip fidelity, we preserve more attributes than strictly necessary
+  const defaultValues: Record<string, Record<string, any>> = {
+    // mediaSingle: { layout: 'center' }, // Preserve layout for round-trip fidelity
+    table: { isNumberColumnEnabled: false, layout: 'default' }
+  };
+
+  const filtered = alwaysFiltered[nodeType] || [];
+  const defaults = defaultValues[nodeType] || {};
+  const significant: Record<string, any> = {};
+
+  Object.keys(attrs).forEach(key => {
+    const value = attrs[key];
+    
+    // Always filter certain attributes for specific node types
+    if (filtered.includes(key)) {
+      return;
+    }
+    
+    // Filter attributes that are at their default value
+    if (key in defaults && defaults[key] === value) {
+      return;
+    }
+    
+    // Include all other attributes
+    significant[key] = value;
+  });
+
+  return significant;
+}
+
+/**
  * Filter out standard attributes, keeping only custom ones for metadata
+ * @deprecated Use filterSignificantAttributes instead for better round-trip support
  */
 function filterCustomAttributes(nodeType: string, attrs: Record<string, any>): Record<string, any> {
   const standardAttributes: Record<string, string[]> = {
@@ -222,7 +313,7 @@ function filterCustomAttributes(nodeType: string, attrs: Record<string, any>): R
     panel: ['panelType'],
     expand: ['title'],
     media: ['alt'], // For media, only alt is excluded from metadata (id, type, collection, width, height all go in metadata)
-    mediaSingle: [], // For mediaSingle, all attributes go in metadata
+    mediaSingle: ['layout', 'width'], // For mediaSingle, layout and width are standard attributes
     codeBlock: ['language'],
     orderedList: ['order'],
     link: ['href', 'title'],

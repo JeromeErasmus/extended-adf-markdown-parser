@@ -914,7 +914,8 @@ export class ASTBuilder {
     
     const content = this.convertMdastInlineNodes(node.children);
     
-    // If paragraph content is empty (e.g., contained only unsupported images), return null
+    // If paragraph content is completely empty, return null to filter it out
+    // This happens when all content was ignored (e.g., regular images)
     if (content.length === 0) {
       return null;
     }

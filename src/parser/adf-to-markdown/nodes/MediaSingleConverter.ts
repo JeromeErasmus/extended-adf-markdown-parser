@@ -59,7 +59,7 @@ export class MediaSingleConverter implements NodeConverter {
       
       const metadata = `<!-- adf:mediaSingle ${attrs} -->`;
       // Comment comes ABOVE the content
-      return `${metadata}\n${mediaContent}`;
+      return mediaContent ? `${metadata}\n${mediaContent}` : metadata;
     }
     
     return mediaContent;

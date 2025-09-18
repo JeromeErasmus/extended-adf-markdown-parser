@@ -130,11 +130,7 @@ describe('ASTBuilder Media Placeholders', () => {
 
       const result = astBuilder.buildADFFromMdast(mdastTree);
       
-      expect(result.content).toHaveLength(1);
-      expect(result.content[0]).toEqual({
-        type: 'paragraph',
-        content: []
-      });
+      expect(result.content).toHaveLength(0);
     });
 
     it('should handle image with no URL', () => {
@@ -151,11 +147,7 @@ describe('ASTBuilder Media Placeholders', () => {
 
       const result = astBuilder.buildADFFromMdast(mdastTree);
       
-      expect(result.content).toHaveLength(1);
-      expect(result.content[0]).toEqual({
-        type: 'paragraph',
-        content: []
-      });
+      expect(result.content).toHaveLength(0);
     });
   });
 
@@ -319,10 +311,7 @@ describe('ASTBuilder Media Placeholders', () => {
 
       const result = astBuilder.buildADFFromMdast(mdastTree);
       
-      expect(result.content[0]).toEqual({
-        type: 'paragraph',
-        content: []
-      });
+      expect(result.content).toHaveLength(0);
     });
 
     it('should handle malformed ADF media URL', () => {
@@ -341,10 +330,7 @@ describe('ASTBuilder Media Placeholders', () => {
       const result = astBuilder.buildADFFromMdast(mdastTree);
       
       // Should be ignored (no media node created)
-      expect(result.content[0]).toEqual({
-        type: 'paragraph',
-        content: []
-      });
+      expect(result.content).toHaveLength(0);
     });
 
     it('should handle image with only mediaSingle metadata', () => {

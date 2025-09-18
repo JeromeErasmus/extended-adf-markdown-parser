@@ -60,8 +60,8 @@ describe('Media Placeholders Integration', () => {
 
     it('should create mediaSingle wrapper with metadata', async () => {
       const markdown = `
-<!-- adf:media attrs='{"collection":"project-assets","width":800,"height":600}' -->
-<!-- adf:mediaSingle attrs='{"layout":"center","width":80}' -->
+<!-- adf:media collection="project-assets" width="800" height="600" -->
+<!-- adf:mediaSingle layout="center" width="80" -->
 ![Architecture Diagram](adf:media:architecture-diagram-2024)
 `.trim();
 
@@ -179,7 +179,7 @@ describe('Media Placeholders Integration', () => {
 
 Here's some introductory text.
 
-<!-- adf:mediaSingle attrs='{"layout":"center","width":60}' -->
+<!-- adf:mediaSingle layout="center" width="60" -->
 ![Diagram](adf:media:flow-diagram)
 
 And here's content after the media.
@@ -191,7 +191,7 @@ More content here.
 
       const result = await parser.parse(markdown);
       
-      expect(result.content).toHaveLength(5);
+      expect(result.content).toHaveLength(6);
       
       // Heading
       expect(result.content[0].type).toBe('heading');
@@ -221,6 +221,9 @@ More content here.
       
       // Another heading
       expect(result.content[4].type).toBe('heading');
+      
+      // Final paragraph
+      expect(result.content[5].type).toBe('paragraph');
     });
   });
 
@@ -296,12 +299,13 @@ Some text without media.
       // Convert ADF to markdown
       const markdown = await parser.stringify(originalAdf);
       
+      
       // Should contain media placeholder and metadata
       expect(markdown).toContain('![Test Media](adf:media:test-media-123)');
       expect(markdown).toContain('<!-- adf:media');
       expect(markdown).toContain('<!-- adf:mediaSingle');
       
-      // Convert back to ADF
+      // Convert back to ADF (consecutive HTML comments should now be properly separated)
       const reconstructed = await parser.parse(markdown);
       
       // Should match original structure

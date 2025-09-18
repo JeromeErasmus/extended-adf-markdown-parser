@@ -41,7 +41,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:abc-123-def)\n<!-- adf:media id="abc-123-def" type="file" -->');
+      expect(result).toBe('<!-- adf:media id="abc-123-def" type="file" -->\n![Media](adf:media:abc-123-def)');
     });
 
     it('should convert media node with all standard attributes', () => {
@@ -57,7 +57,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:image-456-ghi)\n<!-- adf:media id="image-456-ghi" type="file" collection="contentId-789" width="400" height="300" -->');
+      expect(result).toBe('<!-- adf:media id="image-456-ghi" type="file" collection="contentId-789" width="400" height="300" -->\n![Media](adf:media:image-456-ghi)');
     });
 
     it('should handle media node without id', () => {
@@ -97,7 +97,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:video-789-xyz)\n<!-- adf:media id="video-789-xyz" type="video" collection="uploads" width="800" height="600" duration="120" thumbnail="thumb-id" customProp="custom-value" -->');
+      expect(result).toBe('<!-- adf:media id="video-789-xyz" type="video" collection="uploads" width="800" height="600" duration="120" thumbnail="thumb-id" customProp="custom-value" -->\n![Media](adf:media:video-789-xyz)');
     });
 
     it('should handle media node with only id', () => {
@@ -109,7 +109,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:simple-media)\n<!-- adf:media id="simple-media" type="undefined" -->');
+      expect(result).toBe('<!-- adf:media id="simple-media" type="undefined" -->\n![Media](adf:media:simple-media)');
     });
 
     it('should handle media node with width but no height', () => {
@@ -123,7 +123,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:wide-image)\n<!-- adf:media id="wide-image" type="file" width="500" -->');
+      expect(result).toBe('<!-- adf:media id="wide-image" type="file" width="500" -->\n![Media](adf:media:wide-image)');
     });
 
     it('should handle media node with height but no width', () => {
@@ -137,7 +137,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:tall-image)\n<!-- adf:media id="tall-image" type="file" height="600" -->');
+      expect(result).toBe('<!-- adf:media id="tall-image" type="file" height="600" -->\n![Media](adf:media:tall-image)');
     });
 
     it('should handle media node with collection but no dimensions', () => {
@@ -151,7 +151,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:doc-123)\n<!-- adf:media id="doc-123" type="file" collection="shared-files" -->');
+      expect(result).toBe('<!-- adf:media id="doc-123" type="file" collection="shared-files" -->\n![Media](adf:media:doc-123)');
     });
 
     it('should handle numeric values in custom attributes', () => {
@@ -167,7 +167,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:audio-file)\n<!-- adf:media id="audio-file" type="audio" duration="180" bitrate="320" sampleRate="44100" -->');
+      expect(result).toBe('<!-- adf:media id="audio-file" type="audio" duration="180" bitrate="320" sampleRate="44100" -->\n![Media](adf:media:audio-file)');
     });
 
     it('should handle boolean values in custom attributes', () => {
@@ -182,7 +182,7 @@ describe('MediaConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('![Media](adf:media:protected-image)\n<!-- adf:media id="protected-image" type="file" isProtected="true" isPublic="false" -->');
+      expect(result).toBe('<!-- adf:media id="protected-image" type="file" isProtected="true" isPublic="false" -->\n![Media](adf:media:protected-image)');
     });
   });
 });

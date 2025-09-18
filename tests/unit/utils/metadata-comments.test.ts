@@ -339,12 +339,12 @@ describe('Metadata Comments', () => {
 
     it('should generate comment with custom attributes', () => {
       const result = generateMetadataComment('paragraph', { textAlign: 'center', id: 'custom' });
-      expect(result).toBe('<!-- adf:paragraph attrs=\'{"textAlign":"center","id":"custom"}\' -->');
+      expect(result).toBe('<!-- adf:paragraph textAlign="center" id="custom" -->');
     });
 
     it('should filter out standard attributes', () => {
       const result = generateMetadataComment('heading', { level: 2, id: 'custom' });
-      expect(result).toBe('<!-- adf:heading attrs=\'{"id":"custom"}\' -->');
+      expect(result).toBe('<!-- adf:heading id="custom" -->');
     });
 
     it('should return empty string when only standard attributes', () => {
