@@ -8,7 +8,7 @@ A bidirectional parser for converting between Atlassian Document Format (ADF) an
 - 📝 **Extended Markdown Syntax**: Support for ADF-specific elements like panels, expands, and media
 - ✅ **Full Fidelity**: Preserves all ADF attributes through metadata annotations
 - 🎯 **Type Safe**: Written in TypeScript with complete type definitions
-- 🧪 **Well Tested**: Comprehensive test suite with >90% coverage
+- 🧪 **Well Tested**: Comprehensive test suite with extensive coverage
 - 📦 **Zero Runtime Dependencies**: Lightweight and portable (uses well-established libraries)
 
 ## Installation
@@ -49,24 +49,12 @@ console.log(reconstructed); // Original ADF structure
 
 ## Extended Markdown Syntax
 
-### Panels
-```markdown
-~~~panel type=info
-This is an info panel
-~~~
-```
+This parser supports standard Markdown plus ADF-specific extensions. For complete element specifications and formatting examples, see [docs/ELEMENT-SPECIFICATIONS.md](docs/ELEMENT-SPECIFICATIONS.md).
 
-### Expands
-```markdown
-~~~expand title="Click to expand"
-Hidden content
-~~~
-```
-
-### Media
-```markdown
-![Alt text](adf://media/123)
-```
+Quick examples:
+- **Panels**: `~~~panel type=info`  
+- **Expands**: `~~~expand title="Click to expand"`
+- **Media**: `![Alt text](adf:media:id)`
 
 ## Development
 
@@ -79,13 +67,13 @@ make help
 # Install dependencies
 make install
 
-# Run all tests (704 tests across unit and integration)
+# Run all tests
 make test
 
-# Run only unit tests (643 tests)
+# Run only unit tests
 make test-unit
 
-# Run only integration tests (fixtures and end-to-end)
+# Run only integration tests
 make test-integration
 
 # Run tests with coverage
