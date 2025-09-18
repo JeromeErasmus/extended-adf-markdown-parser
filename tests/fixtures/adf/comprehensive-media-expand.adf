@@ -117,6 +117,7 @@
     },
     {
       "type": "mediaGroup",
+      "attrs": {},
       "content": [
         {
           "type": "media",
