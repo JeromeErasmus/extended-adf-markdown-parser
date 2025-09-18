@@ -37,9 +37,7 @@
           "attrs": {
             "id": "abc123",
             "type": "file",
-            "collection": "contentId-123456789",
-            "width": 800,
-            "height": 600
+            "collection": "contentId-123456789"
           }
         }
       ]
@@ -65,9 +63,7 @@
           "attrs": {
             "id": "def456",
             "type": "file",
-            "collection": "contentId-987654321",
-            "width": 400,
-            "height": 300
+            "collection": "contentId-987654321"
           }
         }
       ]
@@ -93,9 +89,7 @@
           "attrs": {
             "id": "ghi789",
             "type": "file",
-            "collection": "contentId-555666777",
-            "width": 200,
-            "height": 150
+            "collection": "contentId-555666777"
           }
         }
       ]
@@ -129,9 +123,7 @@
           "attrs": {
             "id": "group1",
             "type": "file",
-            "collection": "gallery-001",
-            "width": 300,
-            "height": 200
+            "collection": "gallery-001"
           }
         },
         {
@@ -139,9 +131,7 @@
           "attrs": {
             "id": "group2",
             "type": "file",
-            "collection": "gallery-001",
-            "width": 300,
-            "height": 200
+            "collection": "gallery-001"
           }
         },
         {
@@ -149,9 +139,7 @@
           "attrs": {
             "id": "group3",
             "type": "file",
-            "collection": "gallery-001",
-            "width": 300,
-            "height": 200
+            "collection": "gallery-001"
           }
         }
       ]
@@ -564,10 +552,7 @@
             "id": "custom789",
             "type": "file",
             "collection": "special-collection",
-            "width": 1200,
-            "height": 800,
-            "alt": "Custom image with alt text",
-            "__fileName": "example-image.png"
+            "alt": "Custom image with alt text"
           }
         }
       ]
