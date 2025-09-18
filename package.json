@@ -60,12 +60,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JeromeErasmus/extended-markdown-adf-parser"
+    "url": "https://github.com/JeromeErasmus/extended-adf-markdown-parser"
   },
   "bugs": {
-    "url": "https://github.com/JeromeErasmus/extended-markdown-adf-parser/issues"
+    "url": "https://github.com/JeromeErasmus/extended-adf-markdown-parser/issues"
   },
-  "homepage": "https://github.com/JeromeErasmus/extended-markdown-adf-parser#readme",
+  "homepage": "https://github.com/JeromeErasmus/extended-adf-markdown-parser#readme",
   "dependencies": {
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
