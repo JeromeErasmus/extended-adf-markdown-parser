@@ -1,6 +1,6 @@
 {
   "name": "extended-adf-parser",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Bidirectional parser for ADF and Extended Markdown",
   "packageManager": "yarn@4.7.0",
   "type": "module",
