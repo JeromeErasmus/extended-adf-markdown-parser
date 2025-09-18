@@ -31,6 +31,15 @@ import { TableCellConverter } from './parser/adf-to-markdown/nodes/TableCellConv
 import { ExpandConverter, NestedExpandConverter } from './parser/adf-to-markdown/nodes/ExpandConverter';
 import { BlockquoteConverter } from './parser/adf-to-markdown/nodes/BlockquoteConverter';
 import { RuleConverter } from './parser/adf-to-markdown/nodes/RuleConverter';
+// Import new node converters
+import { HardBreakConverter } from './parser/adf-to-markdown/nodes/HardBreakConverter';
+import { MentionConverter } from './parser/adf-to-markdown/nodes/MentionConverter';
+import { DateConverter } from './parser/adf-to-markdown/nodes/DateConverter';
+import { EmojiConverter } from './parser/adf-to-markdown/nodes/EmojiConverter';
+import { StatusConverter } from './parser/adf-to-markdown/nodes/StatusConverter';
+import { InlineCardConverter } from './parser/adf-to-markdown/nodes/InlineCardConverter';
+import { MediaGroupConverter } from './parser/adf-to-markdown/nodes/MediaGroupConverter';
+import { DocConverter } from './parser/adf-to-markdown/nodes/DocConverter';
 
 // Import mark converters
 import { StrongConverter } from './parser/adf-to-markdown/marks/StrongConverter';
@@ -40,6 +49,9 @@ import { LinkConverter } from './parser/adf-to-markdown/marks/LinkConverter';
 import { StrikeConverter } from './parser/adf-to-markdown/marks/StrikeConverter';
 import { UnderlineConverter } from './parser/adf-to-markdown/marks/UnderlineConverter';
 import { TextColorConverter } from './parser/adf-to-markdown/marks/TextColorConverter';
+// Import new mark converters
+import { BackgroundColorConverter } from './parser/adf-to-markdown/marks/BackgroundColorConverter';
+import { SubsupConverter } from './parser/adf-to-markdown/marks/SubsupConverter';
 
 // Export all types
 export * from './types';
@@ -144,7 +156,16 @@ export class Parser {
       new ExpandConverter(),
       new NestedExpandConverter(),
       new BlockquoteConverter(),
-      new RuleConverter()
+      new RuleConverter(),
+      // New node converters
+      new HardBreakConverter(),
+      new MentionConverter(),
+      new DateConverter(),
+      new EmojiConverter(),
+      new StatusConverter(),
+      new InlineCardConverter(),
+      new MediaGroupConverter(),
+      new DocConverter()
     ]);
     
     // Register mark converters
@@ -155,7 +176,10 @@ export class Parser {
       new LinkConverter(),
       new StrikeConverter(),
       new UnderlineConverter(),
-      new TextColorConverter()
+      new TextColorConverter(),
+      // New mark converters
+      new BackgroundColorConverter(),
+      new SubsupConverter()
     ]);
   }
   
