@@ -19,7 +19,7 @@ module.exports = {
     es2022: true
   },
   ignorePatterns: [
-    '.eslintrc.js',
+    '.eslintrc.cjs',
     'jest.config.js',
     'dist',
     'coverage',
