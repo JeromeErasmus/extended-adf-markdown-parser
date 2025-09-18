@@ -10,6 +10,12 @@ export interface ConversionOptions {
   strict?: boolean;
   preserveWhitespace?: boolean;
   validateInput?: boolean;
+  
+  // Enhanced parser options
+  enableAdfExtensions?: boolean;
+  gfm?: boolean;
+  frontmatter?: boolean;
+  maxDepth?: number;
 }
 
 export interface ValidationResult {

@@ -6,6 +6,8 @@
 
 import { Token, TokenType, ADFMetadata } from './types.js';
 import { ADFDocument, ADFNode, ADFMark } from '../../types/adf.types.js';
+import type { Root } from 'mdast';
+import type { AdfFenceNode } from '../remark/adf-from-markdown.js';
 
 export interface ASTBuildOptions {
   strict?: boolean;
@@ -655,5 +657,437 @@ export class ASTBuilder {
     }
     
     return customAttrs;
+  }
+
+  /**
+   * Build ADF document from mdast tree (for enhanced parser)
+   */
+  buildADFFromMdast(tree: Root, frontmatter?: any): ADFDocument {
+    // Extract document metadata from frontmatter
+    const documentMetadata = this.extractDocumentMetadata(frontmatter);
+    
+    // Convert mdast nodes to ADF nodes
+    const content = this.convertMdastNodesToADF(tree.children);
+
+    return {
+      version: this.options.defaultVersion!,
+      type: 'doc',
+      content
+    };
+  }
+
+  /**
+   * Build mdast tree from ADF document (for stringify)
+   */
+  buildMdastFromADF(adf: ADFDocument): Root {
+    const children = this.convertAdfNodesToMdast(adf.content);
+    
+    return {
+      type: 'root',
+      children
+    };
+  }
+
+  /**
+   * Convert mdast nodes to ADF nodes
+   */
+  private convertMdastNodesToADF(nodes: any[]): ADFNode[] {
+    const adfNodes: ADFNode[] = [];
+    
+    for (const node of nodes) {
+      const adfNode = this.convertMdastNodeToADF(node);
+      if (adfNode) {
+        adfNodes.push(adfNode);
+      }
+    }
+    
+    return adfNodes;
+  }
+
+  /**
+   * Convert single mdast node to ADF node
+   */
+  private convertMdastNodeToADF(node: any): ADFNode | null {
+    switch (node.type) {
+      case 'heading':
+        return this.convertMdastHeading(node);
+      case 'paragraph':
+        return this.convertMdastParagraph(node);
+      case 'blockquote':
+        return this.convertMdastBlockquote(node);
+      case 'code':
+        return this.convertMdastCodeBlock(node);
+      case 'list':
+        return this.convertMdastList(node);
+      case 'listItem':
+        return this.convertMdastListItem(node);
+      case 'table':
+        return this.convertMdastTable(node);
+      case 'tableRow':
+        return this.convertMdastTableRow(node);
+      case 'tableCell':
+        return this.convertMdastTableCell(node);
+      case 'thematicBreak':
+        return { type: 'rule' };
+      case 'adfFence':
+        return this.convertAdfFenceNode(node as AdfFenceNode);
+      case 'yaml':
+      case 'toml':
+        // Skip frontmatter nodes - they're handled separately
+        return null;
+      case 'text':
+        return { type: 'text', text: node.value };
+      default:
+        if (this.options.preserveUnknownNodes) {
+          return {
+            type: 'paragraph',
+            content: [{ type: 'text', text: `[Unknown node: ${node.type}]` }]
+          };
+        }
+        return null;
+    }
+  }
+
+  /**
+   * Convert ADF fence node from micromark extension
+   */
+  private convertAdfFenceNode(node: AdfFenceNode): ADFNode {
+    const { nodeType, attributes, value } = node;
+    
+    // Parse the content as markdown if it exists
+    let content: ADFNode[] = [];
+    if (value && value.trim()) {
+      // For now, create a simple paragraph with the content
+      // TODO: Parse content recursively for nested markdown
+      content = [{
+        type: 'paragraph',
+        content: [{ type: 'text', text: value.trim() }]
+      }];
+    }
+
+    // Create the appropriate ADF node based on nodeType
+    switch (nodeType) {
+      case 'panel':
+        return {
+          type: 'panel',
+          attrs: {
+            panelType: attributes.type || 'info',
+            ...this.filterAttributes(attributes, ['type'])
+          },
+          content
+        };
+      
+      case 'expand':
+        return {
+          type: 'expand',
+          attrs: {
+            ...(attributes.title && { title: attributes.title }),
+            ...this.filterAttributes(attributes, ['title'])
+          },
+          content
+        };
+      
+      case 'nestedExpand':
+        return {
+          type: 'nestedExpand',
+          attrs: {
+            ...(attributes.title && { title: attributes.title }),
+            ...this.filterAttributes(attributes, ['title'])
+          },
+          content
+        };
+      
+      case 'mediaSingle':
+        const mediaNodes = this.extractMediaFromContent(value);
+        return {
+          type: 'mediaSingle',
+          attrs: {
+            ...(attributes.layout && { layout: attributes.layout }),
+            ...(attributes.width && { width: attributes.width }),
+            ...this.filterAttributes(attributes, ['layout', 'width'])
+          },
+          content: mediaNodes.length > 0 ? mediaNodes : content
+        };
+      
+      case 'mediaGroup':
+        const groupMediaNodes = this.extractMediaFromContent(value);
+        return {
+          type: 'mediaGroup',
+          content: groupMediaNodes.length > 0 ? groupMediaNodes : content
+        };
+      
+      default:
+        // Unknown ADF node type, preserve as a generic node
+        return {
+          type: 'paragraph',
+          content: [
+            { 
+              type: 'text', 
+              text: `[ADF ${nodeType}]: ${value || ''}`
+            }
+          ]
+        };
+    }
+  }
+
+  /**
+   * Convert mdast nodes to corresponding format
+   */
+  private convertMdastHeading(node: any): ADFNode {
+    return {
+      type: 'heading',
+      attrs: { level: node.depth },
+      content: this.convertMdastInlineNodes(node.children)
+    };
+  }
+
+  private convertMdastParagraph(node: any): ADFNode {
+    return {
+      type: 'paragraph',
+      content: this.convertMdastInlineNodes(node.children)
+    };
+  }
+
+  private convertMdastBlockquote(node: any): ADFNode {
+    return {
+      type: 'blockquote',
+      content: this.convertMdastNodesToADF(node.children)
+    };
+  }
+
+  private convertMdastCodeBlock(node: any): ADFNode {
+    return {
+      type: 'codeBlock',
+      attrs: node.lang ? { language: node.lang } : {},
+      content: [{ type: 'text', text: node.value }]
+    };
+  }
+
+  private convertMdastList(node: any): ADFNode {
+    return {
+      type: node.ordered ? 'orderedList' : 'bulletList',
+      ...(node.start && node.start !== 1 && { attrs: { order: node.start } }),
+      content: this.convertMdastNodesToADF(node.children)
+    };
+  }
+
+  private convertMdastListItem(node: any): ADFNode {
+    return {
+      type: 'listItem',
+      content: this.convertMdastNodesToADF(node.children)
+    };
+  }
+
+  private convertMdastTable(node: any): ADFNode {
+    return {
+      type: 'table',
+      content: this.convertMdastNodesToADF(node.children)
+    };
+  }
+
+  private convertMdastTableRow(node: any): ADFNode {
+    return {
+      type: 'tableRow',
+      content: this.convertMdastNodesToADF(node.children)
+    };
+  }
+
+  private convertMdastTableCell(node: any): ADFNode {
+    return {
+      type: 'tableCell',
+      content: this.convertMdastNodesToADF(node.children)
+    };
+  }
+
+  /**
+   * Convert inline mdast nodes to ADF text nodes with marks
+   */
+  private convertMdastInlineNodes(nodes: any[]): ADFNode[] {
+    const adfNodes: ADFNode[] = [];
+    
+    for (const node of nodes) {
+      const adfNode = this.convertMdastInlineNode(node);
+      if (adfNode) {
+        adfNodes.push(adfNode);
+      }
+    }
+    
+    return adfNodes;
+  }
+
+  /**
+   * Convert single inline mdast node to ADF
+   */
+  private convertMdastInlineNode(node: any): ADFNode | null {
+    switch (node.type) {
+      case 'text':
+        return { type: 'text', text: node.value };
+      
+      case 'strong':
+        return this.wrapWithMark(node.children, 'strong');
+      
+      case 'emphasis':
+        return this.wrapWithMark(node.children, 'em');
+      
+      case 'inlineCode':
+        return { type: 'text', text: node.value, marks: [{ type: 'code' }] };
+      
+      case 'delete':
+        return this.wrapWithMark(node.children, 'strike');
+      
+      case 'link':
+        return this.wrapWithMark(node.children, 'link', { href: node.url, ...(node.title && { title: node.title }) });
+      
+      case 'break':
+        return { type: 'hardBreak' };
+      
+      default:
+        // Unknown inline node, treat as text
+        return { type: 'text', text: node.value || `[${node.type}]` };
+    }
+  }
+
+  /**
+   * Wrap mdast children with an ADF mark
+   */
+  private wrapWithMark(children: any[], markType: string, attrs?: any): ADFNode {
+    const childNodes = this.convertMdastInlineNodes(children);
+    
+    if (childNodes.length === 1 && childNodes[0].type === 'text') {
+      // Simple case - single text node
+      const marks = childNodes[0].marks ? [...childNodes[0].marks] : [];
+      marks.push(attrs ? { type: markType, attrs } : { type: markType });
+      
+      return {
+        ...childNodes[0],
+        marks
+      };
+    } else {
+      // Complex case - multiple children or non-text nodes
+      // For now, merge text content
+      const text = childNodes
+        .filter(node => node.type === 'text')
+        .map(node => node.text)
+        .join('');
+      
+      return {
+        type: 'text',
+        text,
+        marks: [attrs ? { type: markType, attrs } : { type: markType }]
+      };
+    }
+  }
+
+  /**
+   * Convert ADF nodes back to mdast
+   */
+  private convertAdfNodesToMdast(nodes: ADFNode[]): any[] {
+    return nodes.map(node => this.convertAdfNodeToMdast(node)).filter(Boolean);
+  }
+
+  /**
+   * Convert single ADF node back to mdast
+   */
+  private convertAdfNodeToMdast(node: ADFNode): any {
+    switch (node.type) {
+      case 'heading':
+        return {
+          type: 'heading',
+          depth: (node.attrs as any)?.level || 1,
+          children: this.convertAdfInlineToMdast(node.content || [])
+        };
+      
+      case 'paragraph':
+        return {
+          type: 'paragraph',
+          children: this.convertAdfInlineToMdast(node.content || [])
+        };
+      
+      case 'panel':
+        return {
+          type: 'adfFence',
+          nodeType: 'panel',
+          attributes: { type: (node.attrs as any)?.panelType || 'info', ...node.attrs },
+          value: this.extractContentAsText(node.content || [])
+        };
+      
+      default:
+        // Return a generic paragraph for unknown nodes
+        return {
+          type: 'paragraph',
+          children: [{ type: 'text', value: `[${node.type}]` }]
+        };
+    }
+  }
+
+  /**
+   * Convert ADF inline content to mdast
+   */
+  private convertAdfInlineToMdast(content: ADFNode[]): any[] {
+    return content.map(node => {
+      if (node.type === 'text') {
+        let result: any = { type: 'text', value: node.text };
+        
+        // Apply marks
+        if (node.marks) {
+          for (const mark of node.marks) {
+            switch (mark.type) {
+              case 'strong':
+                result = { type: 'strong', children: [result] };
+                break;
+              case 'em':
+                result = { type: 'emphasis', children: [result] };
+                break;
+              case 'code':
+                result = { type: 'inlineCode', value: node.text };
+                break;
+              case 'link':
+                result = { 
+                  type: 'link', 
+                  url: (mark.attrs as any)?.href,
+                  children: [result] 
+                };
+                break;
+            }
+          }
+        }
+        
+        return result;
+      }
+      
+      return { type: 'text', value: `[${node.type}]` };
+    });
+  }
+
+  /**
+   * Extract content as plain text
+   */
+  private extractContentAsText(content: ADFNode[]): string {
+    return content
+      .map(node => {
+        if (node.type === 'text') {
+          return node.text;
+        }
+        if (node.content) {
+          return this.extractContentAsText(node.content);
+        }
+        return '';
+      })
+      .join('');
+  }
+
+  /**
+   * Filter attributes excluding specified keys
+   */
+  private filterAttributes(attrs: Record<string, any>, excludeKeys: string[]): Record<string, any> {
+    const filtered: Record<string, any> = {};
+    
+    for (const [key, value] of Object.entries(attrs)) {
+      if (!excludeKeys.includes(key)) {
+        filtered[key] = value;
+      }
+    }
+    
+    return filtered;
   }
 }

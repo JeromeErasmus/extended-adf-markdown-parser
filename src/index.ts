@@ -65,6 +65,12 @@ export { normalizeMarkdownForComparison, expectMarkdownEqual, toMatchMarkdown } 
 
 // Export markdown parser components
 export { MarkdownParser } from './parser/markdown-to-adf/MarkdownParser.js';
+export { EnhancedMarkdownParser } from './parser/markdown-to-adf/EnhancedMarkdownParser.js';
+
+// Export enhanced parser components
+export { adfMicromarkExtension } from './parser/micromark/index.js';
+export { remarkAdf } from './parser/remark/index.js';
+export type { AdfFenceNode } from './parser/remark/index.js';
 
 /**
  * Main parser class - wraps unified/remark complexity
@@ -73,6 +79,7 @@ export class Parser {
   private remarkProcessor;
   private registry: ConverterRegistry;
   private options: ConversionOptions;
+  private enhancedParser?: EnhancedMarkdownParser;
   
   constructor(options?: ConversionOptions) {
     this.options = options || {};
@@ -85,6 +92,17 @@ export class Parser {
       
     this.registry = new ConverterRegistry();
     this.registerConverters();
+    
+    // Initialize enhanced parser if ADF extensions are enabled
+    if (options?.enableAdfExtensions) {
+      this.enhancedParser = new EnhancedMarkdownParser({
+        strict: options.strict,
+        gfm: options.gfm !== false, // Default to true
+        frontmatter: options.frontmatter !== false, // Default to true
+        adfExtensions: true,
+        maxNestingDepth: options.maxDepth || 5
+      });
+    }
   }
   
   /**
@@ -104,9 +122,14 @@ export class Parser {
   
   /**
    * Convert Extended Markdown to ADF
-   * Uses remark for parsing
+   * Uses enhanced parser if available, otherwise falls back to basic parser
    */
   markdownToAdf(markdown: string, options?: ConversionOptions): ADFDocument {
+    // Use enhanced parser if available
+    if (this.enhancedParser) {
+      return this.enhancedParser.parseSync(markdown);
+    }
+    
     try {
       // Parse markdown to mdast
       const mdast = this.remarkProcessor.parse(markdown);
@@ -119,6 +142,54 @@ export class Parser {
       // Best-effort conversion
       return this.fallbackConversion(markdown);
     }
+  }
+
+  /**
+   * Convert Extended Markdown to ADF using enhanced parser (async)
+   */
+  async markdownToAdfAsync(markdown: string, options?: ConversionOptions): Promise<ADFDocument> {
+    if (this.enhancedParser) {
+      return await this.enhancedParser.parse(markdown);
+    }
+    
+    // Fallback to sync method
+    return this.markdownToAdf(markdown, options);
+  }
+
+  /**
+   * Validate markdown using enhanced parser if available
+   */
+  async validateMarkdownAsync(markdown: string): Promise<ValidationResult & { warnings?: string[] }> {
+    if (this.enhancedParser) {
+      return await this.enhancedParser.validate(markdown);
+    }
+    
+    // Fallback to basic validation
+    return this.validateMarkdown(markdown);
+  }
+
+  /**
+   * Get parsing statistics using enhanced parser if available
+   */
+  async getStats(markdown: string): Promise<{
+    nodeCount: number;
+    adfBlockCount?: number;
+    hasGfmFeatures?: boolean;
+    hasFrontmatter?: boolean;
+    hasAdfExtensions?: boolean;
+    complexity: 'simple' | 'moderate' | 'complex';
+    processingTime?: number;
+  }> {
+    if (this.enhancedParser) {
+      return await this.enhancedParser.getStats(markdown);
+    }
+    
+    // Basic stats for fallback
+    const adf = this.markdownToAdf(markdown);
+    return {
+      nodeCount: this.countNodes(adf.content),
+      complexity: 'simple'
+    };
   }
   
   /**
@@ -233,6 +304,19 @@ export class Parser {
         }
       ]
     };
+  }
+
+  private countNodes(content: ADFNode[]): number {
+    let count = 0;
+    
+    for (const node of content) {
+      count++;
+      if (node.content && Array.isArray(node.content)) {
+        count += this.countNodes(node.content);
+      }
+    }
+    
+    return count;
   }
 }
 
