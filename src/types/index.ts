@@ -16,6 +16,14 @@ export interface ConversionOptions {
   gfm?: boolean;
   frontmatter?: boolean;
   maxDepth?: number;
+  
+  // Error recovery options
+  maxRetries?: number;
+  retryDelay?: number;
+  fallbackStrategy?: 'skip' | 'placeholder' | 'best-effort' | 'throw';
+  enableLogging?: boolean;
+  onError?: (error: Error, context: any) => void;
+  onRecovery?: (strategy: string, context: any) => void;
 }
 
 export interface ValidationResult {

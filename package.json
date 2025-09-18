@@ -13,21 +13,35 @@
     },
     "./types": {
       "types": "./dist/types/index.d.ts"
+    },
+    "./streaming": {
+      "types": "./dist/streaming.d.ts",
+      "import": "./dist/streaming.js"
+    },
+    "./performance": {
+      "types": "./dist/performance.d.ts",
+      "import": "./dist/performance.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "import": "./dist/errors.js"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/utils/test-utils.ts --format esm --dts --clean",
-    "build:watch": "tsup src/index.ts --format esm --dts --watch",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watch",
     "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
+    "bundle:analyze": "node scripts/bundle-analysis.js",
     "prepublishOnly": "yarn test && yarn build"
   },
   "keywords": [
@@ -65,6 +79,7 @@
   "devDependencies": {
     "@jest/globals": "^30.1.2",
     "@types/jest": "^30.0.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/mdast": "^4.0.4",
     "@types/node": "^24.5.0",
     "@types/unist": "^3.0.3",

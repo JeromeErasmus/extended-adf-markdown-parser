@@ -67,11 +67,41 @@ export { normalizeMarkdownForComparison, expectMarkdownEqual, toMatchMarkdown } 
 export { MarkdownParser } from './parser/markdown-to-adf/MarkdownParser.js';
 export { EnhancedMarkdownParser } from './parser/markdown-to-adf/EnhancedMarkdownParser.js';
 import { EnhancedMarkdownParser } from './parser/markdown-to-adf/EnhancedMarkdownParser.js';
+import { measureSync, measureAsync, globalPerformanceMonitor } from './performance/PerformanceMonitor.js';
+import { ErrorRecoveryManager } from './errors/ErrorRecovery.js';
 
 // Export enhanced parser components
 export { adfMicromarkExtension } from './parser/micromark/index.js';
 export { remarkAdf } from './parser/remark/index.js';
 export type { AdfFenceNode } from './parser/remark/index.js';
+
+// Export performance monitoring
+export { 
+  PerformanceMonitor, 
+  globalPerformanceMonitor, 
+  measureAsync, 
+  measureSync 
+} from './performance/PerformanceMonitor.js';
+export type { 
+  PerformanceMetrics, 
+  BenchmarkResult, 
+  PerformanceValidation 
+} from './performance/PerformanceMonitor.js';
+
+// Export streaming parser
+export { StreamingParser } from './parser/StreamingParser.js';
+export type { 
+  StreamingOptions, 
+  StreamingResult 
+} from './parser/StreamingParser.js';
+
+// Export error recovery
+export { ErrorRecoveryManager } from './errors/ErrorRecovery.js';
+export type {
+  RecoveryOptions,
+  RecoveryContext,
+  RecoveryResult
+} from './errors/ErrorRecovery.js';
 
 /**
  * Main parser class - wraps unified/remark complexity
@@ -81,6 +111,7 @@ export class Parser {
   private registry: ConverterRegistry;
   private options: ConversionOptions;
   private enhancedParser?: EnhancedMarkdownParser;
+  private errorRecovery: ErrorRecoveryManager;
   
   constructor(options?: ConversionOptions) {
     this.options = options || {};
@@ -93,6 +124,16 @@ export class Parser {
       
     this.registry = new ConverterRegistry();
     this.registerConverters();
+    
+    // Initialize error recovery manager
+    this.errorRecovery = new ErrorRecoveryManager({
+      maxRetries: options?.maxRetries || 3,
+      retryDelay: options?.retryDelay || 100,
+      fallbackStrategy: options?.fallbackStrategy || 'best-effort',
+      enableLogging: options?.enableLogging || false,
+      onError: options?.onError,
+      onRecovery: options?.onRecovery
+    });
     
     // Initialize enhanced parser if ADF extensions are enabled
     if (options?.enableAdfExtensions) {
@@ -111,14 +152,36 @@ export class Parser {
    * Direct transformation - no remark needed
    */
   adfToMarkdown(adf: ADFDocument, options?: ConversionOptions): string {
-    // Validate ADF structure
-    const validation = this.validateAdf(adf);
-    if (!validation.valid && options?.strict) {
-      throw new ValidationError('Invalid ADF', validation.errors);
+    return measureSync('adfToMarkdown', () => {
+      // Validate ADF structure
+      const validation = this.validateAdf(adf);
+      if (!validation.valid && options?.strict) {
+        throw new ValidationError('Invalid ADF', validation.errors);
+      }
+      
+      // Direct conversion using registered converters
+      return this.convertAdfToMarkdown(adf);
+    }, JSON.stringify(adf).length, this.countNodes(adf.content || []));
+  }
+
+  /**
+   * Convert ADF to Extended Markdown with error recovery
+   */
+  async adfToMarkdownWithRecovery(adf: ADFDocument, options?: ConversionOptions): Promise<string> {
+    const result = await this.errorRecovery.executeWithRecovery(
+      () => this.adfToMarkdown(adf, options),
+      {
+        operation: 'adfToMarkdown',
+        input: adf,
+        nodeType: adf.type
+      }
+    );
+
+    if (!result.success) {
+      throw result.error || new Error('ADF to Markdown conversion failed');
     }
-    
-    // Direct conversion using registered converters
-    return this.convertAdfToMarkdown(adf);
+
+    return result.data!;
   }
   
   /**
@@ -126,35 +189,77 @@ export class Parser {
    * Uses enhanced parser if available, otherwise falls back to basic parser
    */
   markdownToAdf(markdown: string, options?: ConversionOptions): ADFDocument {
-    // Use enhanced parser if available
-    if (this.enhancedParser) {
-      return this.enhancedParser.parseSync(markdown);
-    }
-    
-    try {
-      // Parse markdown to mdast
-      const mdast = this.remarkProcessor.parse(markdown);
+    return measureSync('markdownToAdf', () => {
+      // Use enhanced parser if available
+      if (this.enhancedParser) {
+        return this.enhancedParser.parseSync(markdown);
+      }
       
-      // Convert mdast to ADF
-      return this.convertMdastToAdf(mdast);
-    } catch (error) {
-      if (options?.strict) throw error;
-      
-      // Best-effort conversion
-      return this.fallbackConversion(markdown);
+      try {
+        // Parse markdown to mdast
+        const mdast = this.remarkProcessor.parse(markdown);
+        
+        // Convert mdast to ADF
+        return this.convertMdastToAdf(mdast);
+      } catch (error) {
+        if (options?.strict) throw error;
+        
+        // Best-effort conversion
+        return this.fallbackConversion(markdown);
+      }
+    }, markdown.length);
+  }
+
+  /**
+   * Convert Extended Markdown to ADF with error recovery
+   */
+  async markdownToAdfWithRecovery(markdown: string, options?: ConversionOptions): Promise<ADFDocument> {
+    const result = await this.errorRecovery.executeWithRecovery(
+      () => this.markdownToAdf(markdown, options),
+      {
+        operation: 'markdownToAdf',
+        input: markdown
+      }
+    );
+
+    if (!result.success) {
+      throw result.error || new Error('Markdown to ADF conversion failed');
     }
+
+    return result.data!;
   }
 
   /**
    * Convert Extended Markdown to ADF using enhanced parser (async)
    */
   async markdownToAdfAsync(markdown: string, options?: ConversionOptions): Promise<ADFDocument> {
-    if (this.enhancedParser) {
-      return await this.enhancedParser.parse(markdown);
+    return await measureAsync('markdownToAdfAsync', async () => {
+      if (this.enhancedParser) {
+        return await this.enhancedParser.parse(markdown);
+      }
+      
+      // Fallback to sync method
+      return this.markdownToAdf(markdown, options);
+    }, markdown.length);
+  }
+
+  /**
+   * Convert Extended Markdown to ADF using enhanced parser (async) with error recovery
+   */
+  async markdownToAdfAsyncWithRecovery(markdown: string, options?: ConversionOptions): Promise<ADFDocument> {
+    const result = await this.errorRecovery.executeWithRecovery(
+      async () => this.markdownToAdfAsync(markdown, options),
+      {
+        operation: 'markdownToAdfAsync',
+        input: markdown
+      }
+    );
+
+    if (!result.success) {
+      throw result.error || new Error('Async Markdown to ADF conversion failed');
     }
-    
-    // Fallback to sync method
-    return this.markdownToAdf(markdown, options);
+
+    return result.data!;
   }
 
   /**
@@ -162,7 +267,12 @@ export class Parser {
    */
   async validateMarkdownAsync(markdown: string): Promise<ValidationResult & { warnings?: string[] }> {
     if (this.enhancedParser) {
-      return await this.enhancedParser.validate(markdown);
+      const result = await this.enhancedParser.validate(markdown);
+      return {
+        valid: result.valid,
+        errors: result.errors.map(error => ({ message: error })),
+        warnings: result.warnings
+      };
     }
     
     // Fallback to basic validation
@@ -205,6 +315,57 @@ export class Parser {
    */
   validateMarkdown(markdown: string): ValidationResult {
     return new MarkdownValidator().validate(markdown);
+  }
+
+  /**
+   * Get performance statistics for parser operations
+   */
+  getPerformanceStats(): {
+    adfToMarkdown?: any;
+    markdownToAdf?: any;
+    markdownToAdfAsync?: any;
+  } {
+    return {
+      adfToMarkdown: globalPerformanceMonitor.getStatistics('adfToMarkdown'),
+      markdownToAdf: globalPerformanceMonitor.getStatistics('markdownToAdf'),
+      markdownToAdfAsync: globalPerformanceMonitor.getStatistics('markdownToAdfAsync')
+    };
+  }
+
+  /**
+   * Generate performance report
+   */
+  getPerformanceReport(): string {
+    return globalPerformanceMonitor.generateReport();
+  }
+
+  /**
+   * Clear performance metrics
+   */
+  clearPerformanceMetrics(): void {
+    globalPerformanceMonitor.clear();
+  }
+
+  /**
+   * Get error recovery manager instance
+   */
+  getErrorRecovery(): ErrorRecoveryManager {
+    return this.errorRecovery;
+  }
+
+  /**
+   * Test parser performance against targets
+   */
+  validatePerformanceTargets(): {
+    adfToMarkdown?: any;
+    markdownToAdf?: any;
+    markdownToAdfAsync?: any;
+  } {
+    return {
+      adfToMarkdown: globalPerformanceMonitor.validatePerformanceTargets('adfToMarkdown'),
+      markdownToAdf: globalPerformanceMonitor.validatePerformanceTargets('markdownToAdf'),
+      markdownToAdfAsync: globalPerformanceMonitor.validatePerformanceTargets('markdownToAdfAsync')
+    };
   }
   
   // Private implementation methods
