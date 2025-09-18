@@ -130,6 +130,23 @@ This parser supports standard Markdown plus ADF-specific extensions. For complet
 
 ## Development
 
+### Prerequisites
+
+This project uses [Volta](https://volta.sh/) for Node.js and Yarn version management. The required versions are automatically configured:
+
+- **Node.js**: v20.11.1
+- **Yarn**: v4.7.0
+
+If you don't have Volta installed:
+
+```bash
+# Install Volta
+curl https://get.volta.sh | bash
+
+# Volta will automatically use the correct versions when you enter the project directory
+cd extended-adf-parser
+```
+
 ### Using Makefile (Recommended)
 
 ```bash

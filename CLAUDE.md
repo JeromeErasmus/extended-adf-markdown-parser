@@ -1,5 +1,23 @@
 # Claude Development Notes
 
+## Version Management
+
+**IMPORTANT: This project uses Volta for Node.js and Yarn version management.**
+
+### Volta Configuration
+- **Node.js**: v20.11.1 (pinned via `volta.node` in package.json)
+- **Yarn**: v4.7.0 (pinned via `volta.yarn` in package.json)
+- **Automatic**: Volta automatically uses correct versions when entering project directory
+
+### Installation
+```bash
+# Install Volta (if not already installed)
+curl https://get.volta.sh | bash
+
+# Volta will automatically use the correct versions in this project
+cd extended-adf-parser
+```
+
 ## Package Manager
 
 **IMPORTANT: This project uses Yarn 4.7.0 as the package manager, NOT npm.**
@@ -9,6 +27,7 @@
 - Build scripts use yarn: `"prepublishOnly": "yarn test && yarn build"`
 - Faster dependency resolution and installation
 - Better workspace support for monorepos
+- Version managed by Volta
 
 ## Module System
 
@@ -23,13 +42,13 @@
 ### Usage Examples:
 ```javascript
 // ✅ ESM Import (works)
-import { Parser } from '@extended-adf/parser';
+import { Parser } from 'extended-adf-parser';
 
 // ✅ Dynamic Import (works in CommonJS)
-const { Parser } = await import('@extended-adf/parser');
+const { Parser } = await import('extended-adf-parser');
 
 // ❌ CommonJS require (will fail)
-const { Parser } = require('@extended-adf/parser');
+const { Parser } = require('extended-adf-parser');
 ```
 
 ### Makefile Commands (Recommended):

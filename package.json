@@ -53,7 +53,8 @@
     "jira"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.11.1",
+    "yarn": ">=4.7.0"
   },
   "author": "Jerome Erasmus",
   "license": "MIT",
@@ -93,5 +94,9 @@
     "ts-jest": "^29.4.2",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
+  },
+  "volta": {
+    "node": "20.11.1",
+    "yarn": "4.7.0"
   }
 }
