@@ -1,6 +1,8 @@
 # Extended ADF Markdown Parser
 
-A bidirectional parser for converting between Atlassian Document Format (ADF) and Extended Markdown.
+A bidirectional parser for converting between [Atlassian Document Format (ADF)](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/) and Extended Markdown.
+
+**What is ADF?** Atlassian Document Format (ADF) is a JSON-based document format used by Atlassian products like Jira and Confluence to represent rich content including text formatting, tables, panels, media, and other structured elements.
 
 ## Features
 
