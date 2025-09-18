@@ -102,8 +102,8 @@ Final paragraph.`;
       const adfValidation = adfValidator.validate(adf);
       expect(adfValidation.valid).toBe(true);
 
-      // Test with main parser instance
-      const alternativeAdf = parser.markdownToAdf(complexMarkdown);
+      // Test with alternative parser method to ensure consistency
+      const alternativeAdf = markdownParser.parse(complexMarkdown);
       expect(alternativeAdf.version).toBe(1);
       expect(alternativeAdf.content.length).toBe(adf.content.length);
     });
@@ -453,7 +453,7 @@ Final paragraph.`;
       expect(stats.tokenCount).toBeGreaterThan(10);
       expect(stats.nodeCount).toBeGreaterThan(10);
       expect(stats.complexity).toBe('complex');
-      expect(stats.hasMetadata).toBe(false);
+      expect(stats.hasMetadata).toBe(true); // Panel has type=info metadata
       expect(stats.hasFrontmatter).toBe(false);
       
       // Test document with metadata

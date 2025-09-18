@@ -631,6 +631,7 @@ export class MarkdownTokenizer {
     const patterns = [
       { type: 'inlineCode' as TokenType, start: '`', end: '`' },
       { type: 'strong' as TokenType, start: '**', end: '**' },
+      { type: 'underline' as TokenType, start: '__', end: '__' },
       { type: 'emphasis' as TokenType, start: '*', end: '*' },
       { type: 'strikethrough' as TokenType, start: '~~', end: '~~' }
     ];
@@ -642,7 +643,14 @@ export class MarkdownTokenizer {
     }
     
     while (position < text.length) {
-      let foundMatch = false;
+      // Find the earliest match among all patterns
+      let earliestMatch: {
+        pattern: typeof patterns[0];
+        startIndex: number;
+        endIndex: number;
+        content: string;
+        fullMatch: string;
+      } | null = null;
       
       for (const pattern of patterns) {
         const startIndex = text.indexOf(pattern.start, position);
@@ -651,57 +659,28 @@ export class MarkdownTokenizer {
         const endIndex = text.indexOf(pattern.end, startIndex + pattern.start.length);
         if (endIndex === -1) continue;
         
-        // Add text before the match
-        if (startIndex > position) {
-          const plainText = text.slice(position, startIndex);
-          tokens.push({
-            type: 'text',
-            content: plainText,
-            position: this.getCurrentPosition(),
-            raw: plainText
-          });
-        }
-        
         const content = text.slice(startIndex + pattern.start.length, endIndex);
-        const fullMatch = text.slice(startIndex, endIndex + pattern.end.length);
         
-        // For inline code, don't parse content recursively
-        if (pattern.type === 'inlineCode') {
-          tokens.push({
-            type: pattern.type,
-            content: content,
-            position: this.getCurrentPosition(),
-            raw: fullMatch
-          });
-        } else {
-          // For other formatting, check if content has nested formatting
-          const nestedTokens = this.parseInlineRecursive(content);
-          if (nestedTokens.length === 1 && nestedTokens[0].type === 'text') {
-            // Simple case - no nested formatting
-            tokens.push({
-              type: pattern.type,
-              content: content,
-              position: this.getCurrentPosition(),
-              raw: fullMatch
-            });
-          } else {
-            // Nested formatting - create a token with children or merge marks
-            tokens.push({
-              type: pattern.type,
-              content: content,
-              children: nestedTokens,
-              position: this.getCurrentPosition(),
-              raw: fullMatch
-            });
-          }
+        // Skip empty matches (this prevents ** from being split into two * matches)
+        if (content === '' && pattern.start === pattern.end) {
+          continue;
         }
         
-        position = endIndex + pattern.end.length;
-        foundMatch = true;
-        break;
+        // Choose the match that starts earliest (or if same start, shortest match)
+        if (!earliestMatch || startIndex < earliestMatch.startIndex || 
+            (startIndex === earliestMatch.startIndex && endIndex < earliestMatch.endIndex)) {
+          earliestMatch = {
+            pattern,
+            startIndex,
+            endIndex,
+            content,
+            fullMatch: text.slice(startIndex, endIndex + pattern.end.length)
+          };
+          
+        }
       }
       
-      if (!foundMatch) {
+      if (!earliestMatch) {
         // No more formatting found, add remaining text
         const remainingText = text.slice(position);
         if (remainingText) {
@@ -714,6 +693,50 @@ export class MarkdownTokenizer {
         }
         break;
       }
+      
+      // Add text before the match
+      if (earliestMatch.startIndex > position) {
+        const plainText = text.slice(position, earliestMatch.startIndex);
+        tokens.push({
+          type: 'text',
+          content: plainText,
+          position: this.getCurrentPosition(),
+          raw: plainText
+        });
+      }
+      
+      // For inline code, don't parse content recursively
+      if (earliestMatch.pattern.type === 'inlineCode') {
+        tokens.push({
+          type: earliestMatch.pattern.type,
+          content: earliestMatch.content,
+          position: this.getCurrentPosition(),
+          raw: earliestMatch.fullMatch
+        });
+      } else {
+        // For other formatting, check if content has nested formatting
+        const nestedTokens = this.parseInlineRecursive(earliestMatch.content);
+        if (nestedTokens.length === 1 && nestedTokens[0].type === 'text') {
+          // Simple case - no nested formatting
+          tokens.push({
+            type: earliestMatch.pattern.type,
+            content: earliestMatch.content,
+            position: this.getCurrentPosition(),
+            raw: earliestMatch.fullMatch
+          });
+        } else {
+          // Nested formatting - create a token with children or merge marks
+          tokens.push({
+            type: earliestMatch.pattern.type,
+            content: earliestMatch.content,
+            children: nestedTokens,
+            position: this.getCurrentPosition(),
+            raw: earliestMatch.fullMatch
+          });
+        }
+      }
+      
+      position = earliestMatch.endIndex + earliestMatch.pattern.end.length;
     }
     
     return tokens;

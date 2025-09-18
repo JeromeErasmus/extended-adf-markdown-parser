@@ -129,16 +129,8 @@ export class MarkdownValidator {
         if (fenceStack.length > 0 && fenceStack[fenceStack.length - 1].type === 'code') {
           // This is a closing fence
           fenceStack.pop();
-        } else if (trimmed === '```') {
-          // This is an unmatched closing fence (``` with no content after)
-          errors.push({
-            message: `Unmatched code block closing at line ${index + 1}`,
-            code: 'UNMATCHED_CODE_CLOSE',
-            path: `line:${index + 1}`,
-            line: index + 1
-          });
         } else {
-          // This is an opening fence (```javascript, etc.)
+          // This is an opening fence (```javascript, ``` plain, etc.)
           fenceStack.push({type: 'code', line: index + 1, content: line});
         }
         return;

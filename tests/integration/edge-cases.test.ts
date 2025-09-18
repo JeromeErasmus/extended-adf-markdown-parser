@@ -77,7 +77,7 @@ describe('Edge Cases and Error Handling Tests', () => {
         '####### Level 7',
         '######## Level 8',
         '############# Level 13',
-        '# '.repeat(20) + 'Too many'
+        '#'.repeat(20) + ' Too many'
       ];
 
       invalidHeadings.forEach(heading => {

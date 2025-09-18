@@ -121,9 +121,10 @@
           ]
         },
         {
-          "type": "nestedExpand",
+          "type": "expand",
           "attrs": {
-            "title": "Performance Metrics"
+            "title": "Performance Metrics",
+            "nested": true
           },
           "content": [
             {

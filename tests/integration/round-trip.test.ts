@@ -138,7 +138,7 @@ describe('Round-trip Conversion Tests', () => {
       
       // Should still convert valid parts
       const result = parser.adfToMarkdown(malformedAdf);
-      expect(result).toContain('Welcome to ADF Parser');
+      expect(result).toContain('Simple Document');
     });
 
     it('should handle missing node types gracefully', () => {

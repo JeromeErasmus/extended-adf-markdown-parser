@@ -85,14 +85,14 @@ This panel is never closed.`;
       );
     });
 
-    it('should detect unmatched code block closings', () => {
+    it('should detect unclosed code block fences', () => {
       const markdown = 'Some text\n```\nMore text';
       
       const result = validator.validate(markdown);
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          code: 'UNMATCHED_CODE_CLOSE'
+          code: 'UNCLOSED_FENCE_BLOCK'
         })
       );
     });

@@ -1,6 +1,7 @@
-# Welcome to ADF Parser
+# Simple Document
 
-This is a **simple example** of an ADF document with basic formatting.
+This is a simple document with basic markdown features.
 
 - First item
 - Second item with *italic text*
+- Third item

@@ -244,6 +244,7 @@ describe('ADF Fixtures Integration Tests', () => {
         
         const validation = parser.validateAdf(adf);
         
+        
         expect(validation.valid).toBe(true);
         expect(validation.errors).toHaveLength(0);
       });

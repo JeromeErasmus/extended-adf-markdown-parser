@@ -471,6 +471,7 @@ export class ASTBuilder {
       case 'emphasis': 
       case 'strikethrough':
       case 'inlineCode':
+      case 'underline':
         return this.convertFormattingToken(token);
         
       case 'link':
@@ -520,6 +521,7 @@ export class ASTBuilder {
       case 'emphasis': return 'em';
       case 'strikethrough': return 'strike';
       case 'inlineCode': return 'code';
+      case 'underline': return 'underline';
       default: return 'unknown';
     }
   }

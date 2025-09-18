@@ -2,25 +2,29 @@
 
 ## Media Single Elements
 
-![Media](abc123 "contentId-123456789")
+![Media](https://example.com/media/abc123 "contentId-123456789")
 
 Image above demonstrates basic media single with center layout.
 
-![Media](def456 "contentId-987654321")
+![Media](https://example.com/media/def456 "contentId-987654321")
 
 This media is aligned to the start with 50% width. Text wraps around it naturally when the content is long enough to demonstrate the text wrapping behavior.
 
-![Media](ghi789 "contentId-555666777")
+![Media](https://example.com/media/ghi789 "contentId-555666777")
 
 Right-aligned media with 30% width creates interesting layout possibilities.
 
 ## Media Group
 
-![Media](group1 "gallery-001") ![Media](group2 "gallery-001") ![Media](group3 "gallery-001")
+![Media](https://example.com/gallery/group1 "gallery-001") ![Media](https://example.com/gallery/group2 "gallery-001") ![Media](https://example.com/gallery/group3 "gallery-001")
 
 Media groups allow multiple images to be displayed together in a gallery format.
 
 ## Basic Expand Element
+
+~~~expand title="Click to expand this section"
+This content is hidden by default and revealed when the expand element is clicked. It can contain **rich formatting** and [links](https://example.com).
+~~~
 
 <details>
 <summary>Click to expand this section</summary>
@@ -78,7 +82,7 @@ Content after the nested expand continues in the parent expand.
 
 ## Media with Custom Attributes
 
-![Custom image with alt text](custom789 "special-collection")
+![Custom image with alt text](https://example.com/special/custom789 "special-collection")
 
 Full-width media with custom attributes and alt text for accessibility.
 

@@ -10,7 +10,7 @@
       "content": [
         {
           "type": "text",
-          "text": "Welcome to ADF Parser"
+          "text": "Simple Document"
         }
       ]
     },
@@ -19,20 +19,7 @@
       "content": [
         {
           "type": "text",
-          "text": "This is a "
-        },
-        {
-          "type": "text",
-          "text": "simple example",
-          "marks": [
-            {
-              "type": "strong"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": " of an ADF document with basic formatting."
+          "text": "This is a simple document with basic markdown features."
         }
       ]
     },
@@ -71,6 +58,20 @@
                       "type": "em"
                     }
                   ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Third item"
                 }
               ]
             }

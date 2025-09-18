@@ -185,11 +185,11 @@ Another paragraph.
     // Simulate what would happen if someone edited the fixture file with extra whitespace
     const modifiedExpected = `
       
-# Welcome to ADF Parser
+# Simple Document
 
 
 
-This is a **simple example** of an ADF document with basic formatting.
+This is a simple document with basic markdown features.
 
 
 
@@ -197,6 +197,8 @@ This is a **simple example** of an ADF document with basic formatting.
 - First item
 
 - Second item with *italic text*
+
+- Third item
 
       `;
     

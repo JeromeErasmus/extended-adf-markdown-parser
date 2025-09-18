@@ -14,6 +14,10 @@ Regular paragraph with multiple sentences. This demonstrates basic text content 
 
 Paragraph with custom attributes.
 
+~~~panel type=info
+This is a proper ADF-specific panel element using the correct fence syntax.
+~~~
+
 ```javascript
 function example() {
   console.log('Hello, world!');
@@ -72,3 +76,7 @@ Plain code block without language specification
 > ℹ️ **Info**
 >
 > Panel with custom attributes beyond panelType.
+
+---
+
+Final section after horizontal rule.

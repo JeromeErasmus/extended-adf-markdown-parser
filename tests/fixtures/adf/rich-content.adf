@@ -15,6 +15,41 @@
       ]
     },
     {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "This document demonstrates "
+        },
+        {
+          "type": "text",
+          "text": "rich content",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " formatting capabilities with various "
+        },
+        {
+          "type": "text",
+          "text": "ADF-specific",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": " features."
+        }
+      ]
+    },
+    {
       "type": "panel",
       "attrs": {
         "panelType": "info"
