@@ -16,8 +16,6 @@ A bidirectional parser for converting between Atlassian Document Format (ADF) an
 - **Type Safe**: Written in TypeScript with complete type definitions  
   Full TypeScript support with comprehensive type definitions for all ADF nodes, ensuring compile-time safety and excellent IDE support.
 
-- **Well Tested**: Comprehensive test suite with extensive coverage  
-  Over 960 tests covering all ADF elements, edge cases, and real-world scenarios with fixtures from actual Atlassian documents.
 
 - **Zero Runtime Dependencies**: Lightweight and portable (uses well-established libraries)  
   Built on proven libraries like unified/remark ecosystem, with no additional runtime dependencies for your applications.
