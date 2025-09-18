@@ -1,6 +1,6 @@
 {
   "name": "@extended-adf/parser",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bidirectional parser for ADF and Extended Markdown",
   "packageManager": "yarn@4.7.0",
   "type": "module",
@@ -39,7 +39,7 @@
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "test:watch": "node --experimental-vm-modules node_modules/.bin/jest --watch",
     "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
-    "lint": "eslint . --ext .ts",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "bundle:analyze": "node scripts/bundle-analysis.js",
     "prepublishOnly": "yarn test && yarn build"
