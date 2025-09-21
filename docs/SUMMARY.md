@@ -2,16 +2,16 @@
 
 ## Getting Started
 * [Introduction](../README.md)
-* [Installation Guide](installation.md)
-* [Quick Start Guide](quick-start.md)
+* [Installation Guide](./installation.md)
+* [Quick Start Guide](./quick-start.md)
 
 ## Installation Help
-* [Installation Verification](installation-verification.md)
-* [Advanced Installation](installation-advanced.md)
-* [Installation Troubleshooting](installation-troubleshooting.md)
+* [Installation Verification](./installation-verification.md)
+* [Advanced Installation](./installation-advanced.md)
+* [Installation Troubleshooting](./installation-troubleshooting.md)
 
 ## Documentation
-* [Element Specifications](element-specifications.md)
+* [Element Specifications](./element-specifications.md)
 
 ## Core Elements
 * [Metadata Comments](specifications/element-specifications-metadata-comments.md)
