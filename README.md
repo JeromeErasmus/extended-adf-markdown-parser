@@ -18,8 +18,8 @@ A bidirectional parser for converting between [Atlassian Document Format (ADF)](
 - **Bidirectional Conversion**: Convert ADF to Extended Markdown and back  
   Seamlessly transform content between Atlassian Document Format and Extended Markdown with complete round-trip fidelity.
 
-- **Extended Markdown Syntax**: Support for ADF-specific elements like panels, expands, and media  
-  Beyond standard Markdown, includes ADF extensions such as info panels, expandable sections, and media placeholders.
+- **Extended Markdown Syntax**: Support for ADF-specific elements like `panels`, `expands`, and `media`  
+  Beyond standard Markdown, includes ADF extensions such as `info panels`, `expandable sections`, and `media placeholders`.
 
 - **Full Fidelity**: Preserves all ADF attributes through metadata annotations  
   Custom attributes and styling information are maintained using HTML comment metadata, ensuring no data loss during conversion.
@@ -28,10 +28,10 @@ A bidirectional parser for converting between [Atlassian Document Format (ADF)](
   Full TypeScript support with comprehensive type definitions for all ADF nodes, ensuring compile-time safety and excellent IDE support.
 
 - **Comprehensive Test Coverage**: 100% test coverage with 288 tests across 26 test suites  
-  Thoroughly tested with complete coverage of 16 node converters and 7 mark converters, ensuring reliability and robustness.
+  Thoroughly tested with complete coverage of 16 node converters and 7 mark converters.
 
 - **Zero Runtime Dependencies**: Lightweight and portable (uses well-established libraries)  
-  Built on proven libraries like unified/remark ecosystem, with no additional runtime dependencies for your applications.
+  Built on proven libraries like `unified/remark` ecosystem, with no additional runtime dependencies for your applications.
 
 ## Supported Elements
 
