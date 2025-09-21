@@ -10,9 +10,6 @@
 * [Advanced Installation](./installation-advanced.md)
 * [Installation Troubleshooting](./installation-troubleshooting.md)
 
-## Documentation
-* [Element Specifications](./element-specifications.md)
-
 ## Core Elements
 * [Metadata Comments](specifications/element-specifications-metadata-comments.md)
 * [Headings](specifications/element-specifications-headings.md)
