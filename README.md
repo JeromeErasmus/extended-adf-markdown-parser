@@ -20,6 +20,8 @@ A bidirectional parser for converting between [Atlassian Document Format (ADF)](
 - **Type Safe**: Written in TypeScript with complete type definitions  
   Full TypeScript support with comprehensive type definitions for all ADF nodes, ensuring compile-time safety and excellent IDE support.
 
+- **Comprehensive Test Coverage**: 100% test coverage with 288 tests across 26 test suites  
+  Thoroughly tested with complete coverage of 16 node converters and 7 mark converters, ensuring reliability and robustness.
 
 - **Zero Runtime Dependencies**: Lightweight and portable (uses well-established libraries)  
   Built on proven libraries like unified/remark ecosystem, with no additional runtime dependencies for your applications.
