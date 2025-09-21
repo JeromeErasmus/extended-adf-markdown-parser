@@ -265,7 +265,7 @@ const converter = registry.getNodeConverter('paragraph');
 ## Next Steps
 
 - 📖 **[Full Documentation](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser)** - Complete API reference and guides
-- 📋 **[Element Specifications](./ELEMENT-SPECIFICATIONS.md)** - Detailed syntax for all supported elements
+- 📋 **[Element Specifications](./element-specifications.md)** - Detailed syntax for all supported elements
 - 🔧 **[Advanced Configuration](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser/configuration)** - Parser options and customization
 - 🧪 **[Examples Repository](https://github.com/JeromeErasmus/extended-markdown-adf-parser/tree/main/examples)** - Real-world usage examples
 
