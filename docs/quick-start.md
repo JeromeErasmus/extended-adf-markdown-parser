@@ -4,11 +4,19 @@ Get up and running with the Extended Markdown ADF Parser in minutes.
 
 ## Installation
 
+### Quick Installation
+
 ```bash
 npm install extended-markdown-adf-parser
 # or
 yarn add extended-markdown-adf-parser
 ```
+
+**Need more help?** For detailed installation instructions, see:
+- **[Installation Guide](./installation.md)** - Complete installation instructions and prerequisites
+- **[Installation Verification](./installation-verification.md)** - Test that everything is working correctly
+- **[Advanced Installation](./installation-advanced.md)** - Framework integration and environment-specific setup
+- **[Installation Troubleshooting](./installation-troubleshooting.md)** - Common issues and solutions
 
 ## Basic Usage
 

@@ -31,58 +31,58 @@ This parser provides bidirectional conversion support between Markdown and ADF. 
 | Element Type | ADF Node | Description | Markdown → ADF | ADF → Markdown |
 |--------------|----------|-------------|:--------------:|:--------------:|
 | **DOCUMENT STRUCTURE** |
-| Document | `doc` | Root document container | ✅ | ✅ |
-| Paragraph | `paragraph` | Text paragraphs with attributes | ✅ | ✅ |
-| Hard Break | `hardBreak` | Explicit line breaks | ✅ | ✅ |
-| Text | `text` | Raw text content | ✅ | ✅ |
+| Document | `doc` | Root document container | ✓ | ✓ |
+| Paragraph | `paragraph` | Text paragraphs with attributes | ✓ | ✓ |
+| Hard Break | `hardBreak` | Explicit line breaks | ✓ | ✓ |
+| Text | `text` | Raw text content | ✓ | ✓ |
 | **HEADINGS** |
-| Heading L1 | `heading` | Level 1 heading | ✅ | ✅ |
-| Heading L2 | `heading` | Level 2 heading | ✅ | ✅ |
-| Heading L3 | `heading` | Level 3 heading | ✅ | ✅ |
-| Heading L4 | `heading` | Level 4 heading | ✅ | ✅ |
-| Heading L5 | `heading` | Level 5 heading | ✅ | ✅ |
-| Heading L6 | `heading` | Level 6 heading | ✅ | ✅ |
+| Heading L1 | `heading` | Level 1 heading | ✓ | ✓ |
+| Heading L2 | `heading` | Level 2 heading | ✓ | ✓ |
+| Heading L3 | `heading` | Level 3 heading | ✓ | ✓ |
+| Heading L4 | `heading` | Level 4 heading | ✓ | ✓ |
+| Heading L5 | `heading` | Level 5 heading | ✓ | ✓ |
+| Heading L6 | `heading` | Level 6 heading | ✓ | ✓ |
 | **TEXT FORMATTING** |
-| Bold | `mark:strong` | Bold text formatting | ✅ | ✅ |
-| Italic | `mark:em` | Italic text formatting | ✅ | ✅ |
-| Inline Code | `mark:code` | Inline code spans | ✅ | ✅ |
-| Strikethrough | `mark:strike` | Crossed out text | ✅ | ✅ |
-| Underline | `mark:underline` | Underlined text | ✅ | ✅ |
-| Text Color | `mark:textColor` | Custom text colors | ✅ | ✅ |
-| Background Color | `mark:backgroundColor` | Text background colors | ✅ | ✅ |
-| Link | `mark:link` | Hyperlinks with titles | ✅ | ✅ |
-| Subscript/Superscript | `mark:subsup` | Sub/superscript text | ✅ | ✅ |
+| Bold | `mark:strong` | Bold text formatting | ✓ | ✓ |
+| Italic | `mark:em` | Italic text formatting | ✓ | ✓ |
+| Inline Code | `mark:code` | Inline code spans | ✓ | ✓ |
+| Strikethrough | `mark:strike` | Crossed out text | ✓ | ✓ |
+| Underline | `mark:underline` | Underlined text | ✓ | ✓ |
+| Text Color | `mark:textColor` | Custom text colors | ✓ | ✓ |
+| Background Color | `mark:backgroundColor` | Text background colors | ✓ | ✓ |
+| Link | `mark:link` | Hyperlinks with titles | ✓ | ✓ |
+| Subscript/Superscript | `mark:subsup` | Sub/superscript text | ✓ | ✓ |
 | **LISTS** |
-| Bullet List | `bulletList` | Unordered lists | ✅ | ✅ |
-| Ordered List | `orderedList` | Numbered lists | ✅ | ✅ |
-| List Item | `listItem` | Individual list items | ✅ | ✅ |
+| Bullet List | `bulletList` | Unordered lists | ✓ | ✓ |
+| Ordered List | `orderedList` | Numbered lists | ✓ | ✓ |
+| List Item | `listItem` | Individual list items | ✓ | ✓ |
 | **TABLES** |
-| Table | `table` | Complete table structures | ✅ | ✅ |
-| Table Row | `tableRow` | Individual table rows | ✅ | ✅ |
-| Table Header | `tableHeader` | Table header cells | ✅ | ✅ |
-| Table Cell | `tableCell` | Regular table cells | ✅ | ✅ |
+| Table | `table` | Complete table structures | ✓ | ✓ |
+| Table Row | `tableRow` | Individual table rows | ✓ | ✓ |
+| Table Header | `tableHeader` | Table header cells | ✓ | ✓ |
+| Table Cell | `tableCell` | Regular table cells | ✓ | ✓ |
 | **QUOTES & CODE** |
-| Blockquote | `blockquote` | Quote blocks with nesting | ✅ | ✅ |
-| Code Block | `codeBlock` | Fenced code blocks | ✅ | ✅ |
-| Horizontal Rule | `rule` | Document dividers | ✅ | ✅ |
+| Blockquote | `blockquote` | Quote blocks with nesting | ✓ | ✓ |
+| Code Block | `codeBlock` | Fenced code blocks | ✓ | ✓ |
+| Horizontal Rule | `rule` | Document dividers | ✓ | ✓ |
 | **ADF PANELS** |
-| Info Panel | `panel` | Information panels | ✅ | ✅ |
-| Warning Panel | `panel` | Warning panels | ✅ | ✅ |
-| Error Panel | `panel` | Error panels | ✅ | ✅ |
-| Success Panel | `panel` | Success panels | ✅ | ✅ |
-| Note Panel | `panel` | Note panels | ✅ | ✅ |
+| Info Panel | `panel` | Information panels | ✓ | ✓ |
+| Warning Panel | `panel` | Warning panels | ✓ | ✓ |
+| Error Panel | `panel` | Error panels | ✓ | ✓ |
+| Success Panel | `panel` | Success panels | ✓ | ✓ |
+| Note Panel | `panel` | Note panels | ✓ | ✓ |
 | **MEDIA ELEMENTS** |
-| Media | `media` | Individual media items | ✅ | ✅ |
-| Media Single | `mediaSingle` | Single media with layout | ✅ | ✅ |
-| Media Group | `mediaGroup` | Multiple media grouped | ✅ | ✅ |
+| Media | `media` | Individual media items | ✓ | ✓ |
+| Media Single | `mediaSingle` | Single media with layout | ✓ | ✓ |
+| Media Group | `mediaGroup` | Multiple media grouped | ✓ | ✓ |
 | **INTERACTIVE ELEMENTS** |
-| Expand | `expand` | Collapsible content sections | ✅ | ✅ |
-| Inline Card | `inlineCard` | Embedded link previews | ✅ | ✅ |
+| Expand | `expand` | Collapsible content sections | ✓ | ✓ |
+| Inline Card | `inlineCard` | Embedded link previews | ✓ | ✓ |
 | **SOCIAL ELEMENTS** |
-| Mention | `mention` | User mentions | ✅ | ✅ |
-| Emoji | `emoji` | Emoji characters | ✅ | ✅ |
-| Date | `date` | Date stamps | ✅ | ✅ |
-| Status | `status` | Status indicators | ✅ | ✅ |
+| Mention | `mention` | User mentions | ✓ | ✓ |
+| Emoji | `emoji` | Emoji characters | ✓ | ✓ |
+| Date | `date` | Date stamps | ✓ | ✓ |
+| Status | `status` | Status indicators | ✓ | ✓ |
 
 ## Installation
 
@@ -191,7 +191,7 @@ console.log('Reconstructed Markdown:', reconstructedMarkdown);
 
 
 
-### 📋 Extended Markdown Syntax
+### Extended Markdown Syntax
 
 #### Metadata Comments
 Apply custom attributes to any element:
