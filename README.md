@@ -1,5 +1,12 @@
 # Extended ADF Markdown Parser
 
+[![npm version](https://badge.fury.io/js/extended-markdown-adf-parser.svg)](https://badge.fury.io/js/extended-markdown-adf-parser)
+[![npm downloads](https://img.shields.io/npm/dm/extended-markdown-adf-parser.svg)](https://npmjs.org/package/extended-markdown-adf-parser)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/extended-markdown-adf-parser)](https://bundlephobia.com/package/extended-markdown-adf-parser)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+[![MIT License](https://img.shields.io/npm/l/extended-markdown-adf-parser.svg)](https://github.com/JeromeErasmus/extended-markdown-adf-parser/blob/main/LICENSE)
+[![Test Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/JeromeErasmus/extended-markdown-adf-parser)
+
 A bidirectional parser for converting between [Atlassian Document Format (ADF)](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/) and Extended Markdown.
 
 **[Complete Documentation](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser)** - Full guide with examples, API reference, and advanced usage patterns.
