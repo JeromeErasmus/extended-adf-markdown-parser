@@ -1,0 +1,40 @@
+# GitBook configuration
+root: ./
+
+# Structure
+structure:
+  readme: README.md
+  summary: docs/SUMMARY.md
+
+# Ignore patterns - exclude everything not explicitly included in SUMMARY.md
+ignore:
+  - tests/**
+  - tests/
+  - src/
+  - dist/
+  - node_modules/
+  - coverage/
+  - "*.log"
+  - .DS_Store
+  - tsconfig*.json
+  - jest.config.js
+  - tsup.config.ts
+  - Makefile
+  - scripts/
+  - debug-*.mjs
+  - test-*.mjs
+  - package.json
+  - package-lock.json
+  - yarn.lock
+  - pnpm-lock.yaml
+  - LICENSE
+  - ai/
+  - CLAUDE*.md
+  - examples/
+  - .github/
+  - .vscode/
+  - .idea/
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "*.tmp"
+  - "*.temp"
