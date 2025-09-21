@@ -152,5 +152,5 @@ Each element specification includes:
 
 - Browse individual element specifications for detailed syntax
 - See [Quick Start Guide](./quick-start.md) for getting started
-- Review [Installation Guide](./installation.md) for setup instructions
+- Review [Installation Guide](./installation-guide.md) for setup instructions
 - Check the main [README](../README.md) for supported elements overview

@@ -2,7 +2,7 @@
 
 ## Getting Started
 * [Introduction](../README.md)
-* [Installation Guide](./installation.md)
+* [Installation Guide](./installation-guide.md)
 * [Quick Start Guide](./quick-start.md)
 
 ## Installation Help

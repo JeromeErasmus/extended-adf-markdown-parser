@@ -13,7 +13,7 @@ yarn add extended-markdown-adf-parser
 ```
 
 **Need more help?** For detailed installation instructions, see:
-- **[Installation Guide](./installation.md)** - Complete installation instructions and prerequisites
+- **[Installation Guide](./installation-guide.md)** - Complete installation instructions and prerequisites
 - **[Installation Verification](./installation-verification.md)** - Test that everything is working correctly
 - **[Advanced Installation](./installation-advanced.md)** - Framework integration and environment-specific setup
 - **[Installation Troubleshooting](./installation-troubleshooting.md)** - Common issues and solutions
