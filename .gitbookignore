@@ -1,0 +1,30 @@
+# GitBook ignore file
+# Ignore test directories and files
+tests/
+src/__tests__/
+
+# Ignore build and development files
+dist/
+node_modules/
+*.log
+.DS_Store
+
+# Ignore configuration files
+tsconfig*.json
+jest.config.js
+tsup.config.ts
+Makefile
+
+# Ignore development scripts
+scripts/
+debug-*.mjs
+test-*.mjs
+
+# Ignore package files
+package.json
+yarn.lock
+LICENSE
+
+# Ignore AI and temporary files
+ai/
+CLAUDE*.md

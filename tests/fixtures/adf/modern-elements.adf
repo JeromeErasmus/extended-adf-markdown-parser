@@ -1,0 +1,265 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Modern ADF Elements Showcase "
+        },
+        {
+          "type": "emoji",
+          "attrs": {
+            "shortName": ":rocket:",
+            "text": "🚀"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "This document demonstrates various modern ADF elements including dates, emojis, mentions, and status indicators."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Date and Time Elements"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Meeting scheduled for "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1672531200000"
+          }
+        },
+        {
+          "type": "text",
+          "text": " at 10:00 AM. Please add this to your calendar "
+        },
+        {
+          "type": "emoji",
+          "attrs": {
+            "shortName": ":calendar:",
+            "text": "📅"
+          }
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Team Mentions and Status"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "user-123-abc",
+            "text": "@Sarah Johnson",
+            "userType": "DEFAULT"
+          }
+        },
+        {
+          "type": "text",
+          "text": " is currently "
+        },
+        {
+          "type": "status",
+          "attrs": {
+            "localId": "status-001",
+            "text": "In Progress",
+            "color": "blue"
+          }
+        },
+        {
+          "type": "text",
+          "text": " on the design phase, while "
+        },
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "user-456-def",
+            "text": "@Mike Chen",
+            "userType": "DEFAULT"
+          }
+        },
+        {
+          "type": "text",
+          "text": " has marked his tasks as "
+        },
+        {
+          "type": "status",
+          "attrs": {
+            "localId": "status-002",
+            "text": "Complete",
+            "color": "green"
+          }
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Inline Cards and Links"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Check out our latest documentation: "
+        },
+        {
+          "type": "inlineCard",
+          "attrs": {
+            "url": "https://atlassian.com/software/jira"
+          }
+        },
+        {
+          "type": "text",
+          "text": " and our team wiki: "
+        },
+        {
+          "type": "inlineCard",
+          "attrs": {
+            "url": "https://confluence.atlassian.com"
+          }
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Emoji Reactions "
+        },
+        {
+          "type": "emoji",
+          "attrs": {
+            "shortName": ":thumbsup:",
+            "text": "👍"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Great work on the sprint! "
+        },
+        {
+          "type": "emoji",
+          "attrs": {
+            "shortName": ":clapping_hands:",
+            "text": "👏"
+          }
+        },
+        {
+          "type": "text",
+          "text": " The team delivered excellent results "
+        },
+        {
+          "type": "emoji",
+          "attrs": {
+            "shortName": ":fire:",
+            "text": "🔥"
+          }
+        },
+        {
+          "type": "text",
+          "text": " and we're ready for the next challenge "
+        },
+        {
+          "type": "emoji",
+          "attrs": {
+            "shortName": ":muscle:",
+            "text": "💪"
+          }
+        }
+      ]
+    },
+    {
+      "type": "rule",
+      "attrs": {}
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Next sprint planning meeting: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1672617600000"
+          }
+        },
+        {
+          "type": "hardBreak"
+        },
+        {
+          "type": "text",
+          "text": "Status: "
+        },
+        {
+          "type": "status",
+          "attrs": {
+            "localId": "status-003",
+            "text": "Scheduled",
+            "color": "yellow"
+          }
+        }
+      ]
+    }
+  ]
+}

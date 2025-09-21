@@ -264,13 +264,13 @@ const converter = registry.getNodeConverter('paragraph');
 
 ## Next Steps
 
-- 📖 **[Full Documentation](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser)** - Complete API reference and guides
-- 📋 **[Element Specifications](./element-specifications.md)** - Detailed syntax for all supported elements
-- 🔧 **[Advanced Configuration](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser/configuration)** - Parser options and customization
-- 🧪 **[Examples Repository](https://github.com/JeromeErasmus/extended-markdown-adf-parser/tree/main/examples)** - Real-world usage examples
+- **[Full Documentation](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser)** - Complete API reference and guides
+- **[Element Specifications](./element-specifications.md)** - Detailed syntax for all supported elements
+- **[Advanced Configuration](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser/configuration)** - Parser options and customization
+- **[Examples Repository](https://github.com/JeromeErasmus/extended-markdown-adf-parser/tree/main/examples)** - Real-world usage examples
 
 ## Need Help?
 
-- 🐛 **[Report Issues](https://github.com/JeromeErasmus/extended-markdown-adf-parser/issues)**
-- 💬 **[Discussions](https://github.com/JeromeErasmus/extended-markdown-adf-parser/discussions)**
-- 📧 **[Contact](mailto:jerome.erasmus@gmail.com)**
+- **[Report Issues](https://github.com/JeromeErasmus/extended-markdown-adf-parser/issues)**
+- **[Discussions](https://github.com/JeromeErasmus/extended-markdown-adf-parser/discussions)**
+- **[Contact](mailto:jerome.erasmus@gmail.com)**

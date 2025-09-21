@@ -1,0 +1,428 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Q4 Project Workflow Documentation"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Last updated: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1703116800000"
+          }
+        },
+        {
+          "type": "text",
+          "text": " by "
+        },
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "admin-user-001",
+            "text": "@Project Manager",
+            "userType": "DEFAULT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "info"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This document outlines our development workflow with automated status tracking and team collaboration features."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Team Status Overview"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "attrs": {
+        "isNumberColumnEnabled": false,
+        "layout": "default"
+      },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableHeader",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Team Member"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Current Status"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Next Review"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "mention",
+                      "attrs": {
+                        "id": "dev-001",
+                        "text": "@Alice Developer",
+                        "userType": "DEFAULT"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "status",
+                      "attrs": {
+                        "localId": "alice-status",
+                        "text": "Code Review",
+                        "color": "purple"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "date",
+                      "attrs": {
+                        "timestamp": "1703203200000"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "mention",
+                      "attrs": {
+                        "id": "dev-002",
+                        "text": "@Bob Engineer",
+                        "userType": "DEFAULT"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "status",
+                      "attrs": {
+                        "localId": "bob-status",
+                        "text": "Testing",
+                        "color": "yellow"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "date",
+                      "attrs": {
+                        "timestamp": "1703289600000"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Development Guidelines"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "attrs": {},
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Code must be reviewed by "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "lead-dev-001",
+                    "text": "@Tech Lead",
+                    "userType": "DEFAULT"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " before merging "
+                },
+                {
+                  "type": "emoji",
+                  "attrs": {
+                    "shortName": ":white_check_mark:",
+                    "text": "✅"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "All features must have tests with "
+                },
+                {
+                  "type": "status",
+                  "attrs": {
+                    "localId": "test-status",
+                    "text": "95%+ Coverage",
+                    "color": "green"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Deploy to staging every "
+                },
+                {
+                  "type": "date",
+                  "attrs": {
+                    "timestamp": "1703462400000"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " (Friday)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "expand",
+      "attrs": {
+        "title": "Emergency Contact Procedures"
+      },
+      "content": [
+        {
+          "type": "panel",
+          "attrs": {
+            "panelType": "warning"
+          },
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "For production issues, immediately contact: "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "oncall-eng-001",
+                    "text": "@On-Call Engineer",
+                    "userType": "DEFAULT"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " or "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "devops-001",
+                    "text": "@DevOps Team",
+                    "userType": "DEFAULT"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "codeBlock",
+          "attrs": {
+            "language": "bash"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "# Emergency rollback procedure\ngit checkout main\ngit revert HEAD~1\ndocker build -t app:rollback .\nkubectl set image deployment/app app=app:rollback"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "\"Quality is not an act, it is a habit.\" - Aristotle "
+            },
+            {
+              "type": "emoji",
+              "attrs": {
+                "shortName": ":star:",
+                "text": "⭐"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

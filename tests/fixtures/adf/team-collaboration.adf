@@ -1,0 +1,641 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Team Collaboration Hub "
+        },
+        {
+          "type": "emoji",
+          "attrs": {
+            "shortName": ":handshake:",
+            "text": "🤝"
+          }
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "success"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Welcome to our team collaboration space! This page demonstrates various ADF elements for team communication and project coordination."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Quick Status Updates"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "pm-sarah-001",
+            "text": "@Sarah Wilson",
+            "userType": "DEFAULT"
+          }
+        },
+        {
+          "type": "text",
+          "text": " has updated the project timeline "
+        },
+        {
+          "type": "status",
+          "attrs": {
+            "localId": "timeline-status",
+            "text": "On Track",
+            "color": "green"
+          }
+        },
+        {
+          "type": "text",
+          "text": " for Q1 deliverables. Next milestone review is scheduled for "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1705276800000"
+          }
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "dev-marcus-002",
+            "text": "@Marcus Chen",
+            "userType": "DEFAULT"
+          }
+        },
+        {
+          "type": "text",
+          "text": " completed the API integration work and marked it as "
+        },
+        {
+          "type": "status",
+          "attrs": {
+            "localId": "api-status",
+            "text": "Ready for QA",
+            "color": "yellow"
+          }
+        },
+        {
+          "type": "text",
+          "text": ". Please coordinate with "
+        },
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "qa-lead-003",
+            "text": "@QA Team",
+            "userType": "DEFAULT"
+          }
+        },
+        {
+          "type": "text",
+          "text": " for testing."
+        }
+      ]
+    },
+    {
+      "type": "rule",
+      "attrs": {}
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Team Action Items"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "attrs": {},
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Design team to finalize UI mockups by "
+                },
+                {
+                  "type": "date",
+                  "attrs": {
+                    "timestamp": "1704672000000"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " "
+                },
+                {
+                  "type": "status",
+                  "attrs": {
+                    "localId": "design-status",
+                    "text": "In Progress",
+                    "color": "blue"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Backend deployment to staging environment "
+                },
+                {
+                  "type": "status",
+                  "attrs": {
+                    "localId": "deploy-status",
+                    "text": "Blocked",
+                    "color": "red"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " - waiting for infrastructure approval"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Documentation updates for API endpoints "
+                },
+                {
+                  "type": "status",
+                  "attrs": {
+                    "localId": "docs-status",
+                    "text": "Complete",
+                    "color": "green"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " "
+                },
+                {
+                  "type": "emoji",
+                  "attrs": {
+                    "shortName": ":white_check_mark:",
+                    "text": "✅"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Important Announcements"
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "attrs": {
+        "panelType": "warning"
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Security audit scheduled for "
+            },
+            {
+              "type": "date",
+              "attrs": {
+                "timestamp": "1704844800000"
+              }
+            },
+            {
+              "type": "text",
+              "text": ". All team members must complete security training by "
+            },
+            {
+              "type": "date",
+              "attrs": {
+                "timestamp": "1704758400000"
+              }
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Code Review Assignments"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "attrs": {
+        "isNumberColumnEnabled": false,
+        "layout": "default"
+      },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableHeader",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Pull Request"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Author"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Reviewer"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Status"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "feat/user-authentication"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "mention",
+                      "attrs": {
+                        "id": "dev-alice-004",
+                        "text": "@Alice Rodriguez",
+                        "userType": "DEFAULT"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "mention",
+                      "attrs": {
+                        "id": "senior-dev-005",
+                        "text": "@Senior Dev",
+                        "userType": "DEFAULT"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "status",
+                      "attrs": {
+                        "localId": "review-status-1",
+                        "text": "Approved",
+                        "color": "green"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "fix/database-optimization"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "mention",
+                      "attrs": {
+                        "id": "dev-james-006",
+                        "text": "@James Park",
+                        "userType": "DEFAULT"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "mention",
+                      "attrs": {
+                        "id": "dev-marcus-002",
+                        "text": "@Marcus Chen",
+                        "userType": "DEFAULT"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "attrs": {},
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "status",
+                      "attrs": {
+                        "localId": "review-status-2",
+                        "text": "Changes Requested",
+                        "color": "yellow"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Quick Links & Resources"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Project Dashboard: "
+        },
+        {
+          "type": "inlineCard",
+          "attrs": {
+            "url": "https://company.atlassian.net/jira/software/projects/PROJ/boards/1"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Team Wiki: "
+        },
+        {
+          "type": "inlineCard",
+          "attrs": {
+            "url": "https://company.atlassian.net/wiki/spaces/TEAM/overview"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Code Repository: "
+        },
+        {
+          "type": "inlineCard",
+          "attrs": {
+            "url": "https://github.com/company/project"
+          }
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "\"Great teams don't happen by accident. They are built through deliberate communication and shared commitment to excellence.\" "
+            },
+            {
+              "type": "emoji",
+              "attrs": {
+                "shortName": ":trophy:",
+                "text": "🏆"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Last updated: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1703203200000"
+          }
+        },
+        {
+          "type": "text",
+          "text": " by "
+        },
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "pm-sarah-001",
+            "text": "@Sarah Wilson",
+            "userType": "DEFAULT"
+          }
+        }
+      ]
+    }
+  ]
+}

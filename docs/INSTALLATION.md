@@ -10,6 +10,23 @@ Complete installation instructions for the Extended Markdown ADF Parser across d
 - **npm**: Version 8.0.0 or higher (comes with Node.js)
 - **Yarn**: Version 4.7.0 or higher (optional, but recommended)
 
+### Development Prerequisites
+
+This project uses [Volta](https://volta.sh/) for Node.js and Yarn version management. The required versions are automatically configured:
+
+- **Node.js**: v20.11.1
+- **Yarn**: v4.7.0
+
+If you don't have Volta installed:
+
+```bash
+# Install Volta
+curl https://get.volta.sh | bash
+
+# Volta will automatically use the correct versions when you enter the project directory
+cd extended-markdown-adf-parser
+```
+
 Check your current versions:
 ```bash
 node --version

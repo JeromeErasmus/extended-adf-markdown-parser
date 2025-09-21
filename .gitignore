@@ -67,3 +67,5 @@ confluence-downloads/
 # Test samples folder (exclude from git)
 test/samples/
 test/samples/**/*
+
+CLAUDE.md
