@@ -142,10 +142,10 @@ Update your tsconfig.json:
 **Solution:** Use dynamic imports consistently:
 ```javascript
 // Instead of mixing require and import
-const parser = require('extended-markdown-adf-parser'); // ❌
+const parser = require('extended-markdown-adf-parser'); // Wrong
 
 // Use dynamic import
-const { Parser } = await import('extended-markdown-adf-parser'); // ✅
+const { Parser } = await import('extended-markdown-adf-parser'); // Correct
 ```
 
 #### Jest Testing Issues
