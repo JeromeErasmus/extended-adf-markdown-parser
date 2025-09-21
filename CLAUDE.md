@@ -15,7 +15,7 @@
 curl https://get.volta.sh | bash
 
 # Volta will automatically use the correct versions in this project
-cd extended-adf-parser
+cd extended-markdown-adf-parser
 ```
 
 ## Package Manager
@@ -42,13 +42,13 @@ cd extended-adf-parser
 ### Usage Examples:
 ```javascript
 // ✅ ESM Import (works)
-import { Parser } from 'extended-adf-parser';
+import { Parser } from 'extended-markdown-adf-parser';
 
 // ✅ Dynamic Import (works in CommonJS)
-const { Parser } = await import('extended-adf-parser');
+const { Parser } = await import('extended-markdown-adf-parser');
 
 // ❌ CommonJS require (will fail)
-const { Parser } = require('extended-adf-parser');
+const { Parser } = require('extended-markdown-adf-parser');
 ```
 
 ### Makefile Commands (Recommended):
