@@ -886,7 +886,7 @@ export class ASTBuilder {
     };
   }
 
-  private convertMdastParagraph(node: any): ADFNode {
+  private convertMdastParagraph(node: any): ADFNode | null {
     // Check if this paragraph contains only a single image that's an ADF media placeholder
     if (node.children && node.children.length === 1 && node.children[0].type === 'image') {
       const imageNode = node.children[0];

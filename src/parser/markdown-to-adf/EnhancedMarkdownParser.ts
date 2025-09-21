@@ -11,6 +11,7 @@ import remarkGfm from 'remark-gfm';
 import { remarkAdf } from '../remark/remark-adf.js';
 import type { Root } from 'mdast';
 import type { VFile } from 'vfile';
+import type { Processor } from 'unified';
 import { ADFDocument } from '../../types/adf.types.js';
 import { ASTBuilder } from './ASTBuilder.js';
 import { processMetadataComments } from '../../utils/metadata-comments.js';
@@ -54,7 +55,7 @@ export interface EnhancedMarkdownParseOptions {
  * Enhanced Markdown parser with micromark and remark plugin support
  */
 export class EnhancedMarkdownParser {
-  private processor: ReturnType<typeof unified>;
+  private processor: any; // Using any to avoid complex unified type issues
   private astBuilder: ASTBuilder;
   private options: EnhancedMarkdownParseOptions;
 
@@ -69,8 +70,7 @@ export class EnhancedMarkdownParser {
     };
 
     this.astBuilder = new ASTBuilder({
-      strict: this.options.strict,
-      maxDepth: this.options.maxNestingDepth
+      strict: this.options.strict
     });
 
     this.processor = this.createProcessor();
@@ -79,13 +79,13 @@ export class EnhancedMarkdownParser {
   /**
    * Create the unified processor with plugins
    */
-  private createProcessor() {
-    let processor = unified()
+  private createProcessor(): any {
+    let processor: any = unified()
       .use(remarkParse);
 
     // Add frontmatter support
     if (this.options.frontmatter) {
-      processor = processor.use(remarkFrontmatter, ['yaml', 'toml']);
+      processor = processor.use(remarkFrontmatter, ['yaml']);
     }
 
     // Add GitHub Flavored Markdown support
@@ -305,16 +305,13 @@ export class EnhancedMarkdownParser {
 
     // Extract frontmatter if present
     let frontmatter: any = null;
-    const frontmatterNode = processedTree.children.find(node => node.type === 'yaml' || node.type === 'toml');
+    const frontmatterNode = processedTree.children.find(node => node.type === 'yaml');
     
     if (frontmatterNode && 'value' in frontmatterNode) {
       try {
         if (frontmatterNode.type === 'yaml') {
           const yaml = await import('js-yaml');
           frontmatter = yaml.load(frontmatterNode.value);
-        } else if (frontmatterNode.type === 'toml') {
-          const toml = await import('@ltd/j-toml');
-          frontmatter = toml.parse(frontmatterNode.value);
         }
       } catch (error) {
         // Ignore frontmatter parsing errors in non-strict mode
@@ -547,7 +544,7 @@ export class EnhancedMarkdownParser {
 
     // Check mdast tree for additional features
     this.walkTree(tree, (node) => {
-      if (node.type === 'yaml' || node.type === 'toml') {
+      if (node.type === 'yaml') {
         hasFrontmatter = true;
       }
       

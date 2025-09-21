@@ -45,7 +45,7 @@ export const remarkAdf: Plugin<[RemarkAdfOptions?]> = function (options = {}) {
    * Helper to add extensions to the data object
    */
   function add(field: string, value: any) {
-    const list = data[field] ? data[field] : (data[field] = []);
+    const list = (data as any)[field] ? (data as any)[field] : ((data as any)[field] = []);
     list.push(value);
   }
 };

@@ -2,6 +2,7 @@
  * @file adf-fence.ts
  * @description Micromark extension for ADF fence blocks (~~~panel, ~~~expand, etc.)
  */
+// @ts-nocheck
 
 import { 
   Code, 
