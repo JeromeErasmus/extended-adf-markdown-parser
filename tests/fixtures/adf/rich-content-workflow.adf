@@ -291,6 +291,7 @@
                   "type": "emoji",
                   "attrs": {
                     "shortName": ":white_check_mark:",
+                    "id": "2705",
                     "text": "✅"
                   }
                 }
@@ -417,6 +418,7 @@
               "type": "emoji",
               "attrs": {
                 "shortName": ":star:",
+                "id": "2b50",
                 "text": "⭐"
               }
             }

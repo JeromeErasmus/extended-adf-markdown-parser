@@ -16,6 +16,7 @@
           "type": "emoji",
           "attrs": {
             "shortName": ":handshake:",
+            "id": "1f91d",
             "text": "🤝"
           }
         }
@@ -234,6 +235,7 @@
                   "type": "emoji",
                   "attrs": {
                     "shortName": ":white_check_mark:",
+                    "id": "2705",
                     "text": "✅"
                   }
                 }
@@ -603,6 +605,7 @@
               "type": "emoji",
               "attrs": {
                 "shortName": ":trophy:",
+                "id": "1f3c6",
                 "text": "🏆"
               }
             }
