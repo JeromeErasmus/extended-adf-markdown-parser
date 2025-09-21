@@ -1,0 +1,276 @@
+# Quick Start Guide
+
+Get up and running with the Extended Markdown ADF Parser in minutes.
+
+## Installation
+
+```bash
+npm install extended-markdown-adf-parser
+# or
+yarn add extended-markdown-adf-parser
+```
+
+## Basic Usage
+
+### 1. Import the Parser
+
+```typescript
+import { Parser } from 'extended-markdown-adf-parser';
+
+// Create a parser instance
+const parser = new Parser();
+```
+
+### 2. Convert ADF to Markdown
+
+```typescript
+// Example ADF document
+const adf = {
+  type: 'doc',
+  version: 1,
+  content: [
+    {
+      type: 'heading',
+      attrs: { level: 1 },
+      content: [{ type: 'text', text: 'Welcome to ADF Parser' }]
+    },
+    {
+      type: 'paragraph',
+      content: [
+        { type: 'text', text: 'This is ' },
+        { type: 'text', text: 'bold text', marks: [{ type: 'strong' }] },
+        { type: 'text', text: ' and this is ' },
+        { type: 'text', text: 'italic text', marks: [{ type: 'em' }] },
+        { type: 'text', text: '.' }
+      ]
+    }
+  ]
+};
+
+// Convert to markdown
+const markdown = parser.adfToMarkdown(adf);
+console.log(markdown);
+// Output:
+// # Welcome to ADF Parser
+// 
+// This is **bold text** and this is *italic text*.
+```
+
+### 3. Convert Markdown to ADF
+
+```typescript
+const markdown = `# My Document
+
+This is a paragraph with **bold** and *italic* text.
+
+## Features List
+
+- Feature 1
+- Feature 2
+- Feature 3
+
+\`\`\`javascript
+console.log("Hello World!");
+\`\`\``;
+
+// Convert to ADF
+const adf = parser.markdownToAdf(markdown);
+console.log(JSON.stringify(adf, null, 2));
+```
+
+## Working with ADF Extensions
+
+The parser supports ADF-specific elements like panels, expand sections, and media through extended markdown syntax.
+
+### Panels
+
+```typescript
+const markdownWithPanel = `
+~~~panel type=info title="Important Information"
+This is an information panel with **formatted content**.
+
+- List items work too
+- Multiple paragraphs supported
+~~~
+`;
+
+const adf = parser.markdownToAdf(markdownWithPanel);
+const backToMarkdown = parser.adfToMarkdown(adf);
+```
+
+### Expand Sections
+
+```typescript
+const markdownWithExpand = `
+~~~expand title="Click to expand" expanded=true
+This content is inside an expandable section.
+
+## Nested content works
+- Including lists
+- And other elements
+~~~
+`;
+
+const adf = parser.markdownToAdf(markdownWithExpand);
+```
+
+### Media Elements
+
+```typescript
+const markdownWithMedia = `
+~~~mediaSingle layout=center width=80
+![Alt text](media:123456789)
+~~~
+`;
+
+const adf = parser.markdownToAdf(markdownWithMedia);
+```
+
+## Advanced Features
+
+### Custom Attributes with Metadata Comments
+
+Add custom attributes to any element using metadata comments:
+
+```typescript
+const extendedMarkdown = `
+<!-- adf:paragraph textAlign="center" -->
+This paragraph will be centered in ADF.
+
+<!-- adf:heading id="custom-heading" -->
+# Heading with Custom ID
+
+<!-- adf:panel backgroundColor="#e6f7ff" borderColor="#1890ff" -->
+~~~panel type=info
+Custom styled panel with background and border colors.
+~~~
+`;
+
+const adf = parser.markdownToAdf(extendedMarkdown);
+```
+
+### Frontmatter Support
+
+```typescript
+const markdownWithFrontmatter = `---
+title: "My Document"
+author: "John Doe"
+tags: [markdown, adf, parser]
+---
+
+# Document Title
+
+Content goes here...`;
+
+const adf = parser.markdownToAdf(markdownWithFrontmatter);
+// Frontmatter is preserved in the ADF document metadata
+```
+
+### Parser Options
+
+```typescript
+const parser = new Parser({
+  enableAdfExtensions: true,  // Enable ADF fence blocks (default: true)
+  preserveUnknownNodes: true, // Keep unknown ADF nodes (default: true)
+  strictMode: false          // Strict parsing mode (default: false)
+});
+```
+
+## Round-Trip Conversion
+
+The parser maintains full fidelity for round-trip conversions:
+
+```typescript
+// Start with ADF
+const originalAdf = { /* your ADF document */ };
+
+// Convert to markdown and back
+const markdown = parser.adfToMarkdown(originalAdf);
+const reconstructedAdf = parser.markdownToAdf(markdown);
+
+// reconstructedAdf should be identical to originalAdf
+```
+
+## Error Handling
+
+```typescript
+try {
+  const adf = parser.markdownToAdf(invalidMarkdown);
+} catch (error) {
+  console.error('Parsing failed:', error.message);
+}
+
+// Or use validation
+import { MarkdownValidator, AdfValidator } from 'extended-markdown-adf-parser';
+
+const markdownValidator = new MarkdownValidator();
+const adfValidator = new AdfValidator();
+
+// Validate markdown before parsing
+const markdownIssues = markdownValidator.validate(markdown);
+if (markdownIssues.errors.length > 0) {
+  console.log('Markdown validation errors:', markdownIssues.errors);
+}
+
+// Validate ADF before processing
+const isValidAdf = adfValidator.isValidAdf(adfDocument);
+if (!isValidAdf) {
+  console.log('Invalid ADF document');
+}
+```
+
+## Common Patterns
+
+### Processing Multiple Documents
+
+```typescript
+const documents = [markdown1, markdown2, markdown3];
+
+const adfDocuments = documents.map(md => {
+  try {
+    return parser.markdownToAdf(md);
+  } catch (error) {
+    console.error('Failed to parse:', error.message);
+    return null;
+  }
+}).filter(Boolean);
+```
+
+### Working with Large Documents
+
+```typescript
+// For large documents, consider using streaming
+import { StreamingParser } from 'extended-markdown-adf-parser/streaming';
+
+const streamingParser = new StreamingParser({
+  chunkSize: 1000,
+  enableValidation: true
+});
+
+const result = await streamingParser.parseAsync(largeMarkdownString);
+```
+
+### Custom Node Processing
+
+```typescript
+// Access internal converters for custom processing
+import { ConverterRegistry } from 'extended-markdown-adf-parser';
+
+const registry = new ConverterRegistry();
+const converter = registry.getNodeConverter('paragraph');
+
+// Custom processing logic here
+```
+
+## Next Steps
+
+- 📖 **[Full Documentation](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser)** - Complete API reference and guides
+- 📋 **[Element Specifications](./ELEMENT-SPECIFICATIONS.md)** - Detailed syntax for all supported elements
+- 🔧 **[Advanced Configuration](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser/configuration)** - Parser options and customization
+- 🧪 **[Examples Repository](https://github.com/JeromeErasmus/extended-markdown-adf-parser/tree/main/examples)** - Real-world usage examples
+
+## Need Help?
+
+- 🐛 **[Report Issues](https://github.com/JeromeErasmus/extended-markdown-adf-parser/issues)**
+- 💬 **[Discussions](https://github.com/JeromeErasmus/extended-markdown-adf-parser/discussions)**
+- 📧 **[Contact](mailto:jerome.erasmus@gmail.com)**

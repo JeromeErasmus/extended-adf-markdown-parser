@@ -29,12 +29,6 @@ Metadata comments allow you to specify custom ADF attributes that aren't express
 Content here
 ```
 
-### Alternative JSON Format (Legacy)
-```markdown
-<!-- adf:nodeType attrs='{"attributeName":"value"}' -->
-Content here
-```
-
 ### Examples
 ```markdown
 <!-- adf:paragraph textAlign="center" backgroundColor="#f0f0f0" -->
