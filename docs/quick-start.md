@@ -272,10 +272,29 @@ const converter = registry.getNodeConverter('paragraph');
 
 ## Next Steps
 
+### Documentation Structure
 - **[Full Documentation](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser)** - Complete API reference and guides
-- **[Element Specifications](./element-specifications.md)** - Detailed syntax for all supported elements
-- **[Advanced Configuration](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser/configuration)** - Parser options and customization
-- **[Examples Repository](https://github.com/JeromeErasmus/extended-markdown-adf-parser/tree/main/examples)** - Real-world usage examples
+
+### Core Elements
+- **[Metadata Comments](./specifications/element-specifications-metadata-comments.md)** - Custom attribute system for any element
+- **[Headings](./specifications/element-specifications-headings.md)** - Document hierarchy (H1-H6)
+- **[Paragraphs](./specifications/element-specifications-paragraphs.md)** - Basic text blocks with styling options
+
+### Text Formatting
+- **[Bold](./specifications/element-specifications-bold.md)** - Strong emphasis text formatting
+- **[Italic](./specifications/element-specifications-italic.md)** - Emphasis text formatting
+- **[Links](./specifications/element-specifications-links.md)** - Navigation and references
+
+### ADF Extensions
+- **[Panels](./specifications/element-specifications-panels.md)** - Semantic content containers (info, warning, error, success, note)
+- **[Expand Sections](./specifications/element-specifications-expand-sections.md)** - Collapsible content areas
+
+### Media Elements
+- **[Media Single](./specifications/element-specifications-media-single.md)** - Single media with layout control
+- **[Media Group](./specifications/element-specifications-media-group.md)** - Multiple media collections
+
+### Advanced Features
+- **[Frontmatter](./specifications/element-specifications-frontmatter.md)** - YAML metadata headers
 
 ## Need Help?
 
