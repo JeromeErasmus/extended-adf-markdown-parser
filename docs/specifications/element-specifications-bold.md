@@ -99,7 +99,6 @@ This is **bold text** in a sentence.
 
 ### Bold with Links
 ```markdown
-Visit our **[documentation](https://example.com)** for more details.
 ```
 
 ### Bold in Tables

@@ -108,7 +108,6 @@ Contact us at <support@example.com>
 
 ### Reference Style Links
 ```markdown
-For more information, see [our documentation][docs] and [API reference][api].
 
 We also recommend reading [this guide][guide].
 
@@ -172,7 +171,6 @@ Download resources:
 
 ### Formatted Link Text
 ```markdown
-Visit our [**official documentation**](https://docs.example.com) for detailed information.
 
 Need help? Contact our [*support team*](mailto:support@example.com).
 

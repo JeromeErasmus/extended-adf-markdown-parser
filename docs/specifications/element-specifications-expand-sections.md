@@ -132,7 +132,6 @@ function toggleExpand(element) {
 }
 ```
 
-For more examples, visit our [documentation](https://example.com).
 ~~~
 ```
 

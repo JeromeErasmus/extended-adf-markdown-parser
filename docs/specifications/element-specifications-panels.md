@@ -53,7 +53,6 @@ function validate(input) {
 }
 ```
 
-For more information, see [our guide](https://example.com).
 ~~~
 ```
 
