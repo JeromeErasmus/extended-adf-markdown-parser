@@ -248,7 +248,7 @@ const adfDocuments = documents.map(md => {
 
 ```typescript
 // For large documents, consider using streaming
-import { StreamingParser } from 'extended-markdown-adf-parser/streaming';
+import { StreamingParser } from 'extended-markdown-adf-parser';
 
 const streamingParser = new StreamingParser({
   chunkSize: 1000,
@@ -271,9 +271,6 @@ const converter = registry.getNodeConverter('paragraph');
 ```
 
 ## Next Steps
-
-### Documentation Structure
-- **[Full Documentation](https://jeromeerasmus.gitbook.io/extended-markdown-adf-parser)** - Complete API reference and guides
 
 ### Core Elements
 - **[Metadata Comments](./specifications/element-specifications-metadata-comments.md)** - Custom attribute system for any element
@@ -299,5 +296,4 @@ const converter = registry.getNodeConverter('paragraph');
 ## Need Help?
 
 - **[Report Issues](https://github.com/JeromeErasmus/extended-markdown-adf-parser/issues)**
-- **[Discussions](https://github.com/JeromeErasmus/extended-markdown-adf-parser/discussions)**
 - **[Contact](mailto:jerome.erasmus@gmail.com)**

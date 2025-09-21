@@ -39,7 +39,7 @@ mv script.js script.mjs
 
 **Solution:** Use the streaming parser:
 ```javascript
-import { StreamingParser } from 'extended-markdown-adf-parser/streaming';
+import { StreamingParser } from 'extended-markdown-adf-parser';
 
 const streamingParser = new StreamingParser({
   chunkSize: 1000
@@ -180,7 +180,7 @@ node --max-old-space-size=4096 your-script.js
 #### Use Streaming Parser
 
 ```javascript
-import { StreamingParser } from 'extended-markdown-adf-parser/streaming';
+import { StreamingParser } from 'extended-markdown-adf-parser';
 
 const streamingParser = new StreamingParser({
   chunkSize: 500,
