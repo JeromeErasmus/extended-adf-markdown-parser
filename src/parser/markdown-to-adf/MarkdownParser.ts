@@ -8,6 +8,10 @@ import { MarkdownTokenizer } from './MarkdownTokenizer.js';
 import { TokenizeOptions } from './types.js';
 import { ASTBuilder, ASTBuildOptions } from './ASTBuilder.js';
 import { ADFDocument } from '../../types/adf.types.js';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import { processMetadataComments } from '../../utils/metadata-comments.js';
+import type { Root } from 'mdast';
 
 export interface MarkdownParseOptions {
   tokenizer?: TokenizeOptions;
@@ -30,14 +34,22 @@ export class MarkdownParser {
    */
   parse(markdown: string): ADFDocument {
     try {
-      // Step 1: Tokenize the markdown
+      // Step 1: Check if markdown contains metadata comments
+      const hasMetadataComments = this.hasMetadataComments(markdown);
+
+      if (hasMetadataComments) {
+        // Use mdast-based processing for metadata comment support
+        return this.parseWithMetadataComments(markdown);
+      }
+
+      // Step 2: Tokenize the markdown (original fast path)
       const tokens = this.tokenizer.tokenize(markdown);
 
-      // Step 2: Extract frontmatter if present
+      // Step 3: Extract frontmatter if present
       const frontmatterToken = tokens.find(token => token.type === 'frontmatter');
       const frontmatter = frontmatterToken?.content;
 
-      // Step 3: Build ADF from tokens
+      // Step 4: Build ADF from tokens
       const adf = this.astBuilder.buildADF(tokens, frontmatter);
 
       return adf;
@@ -163,5 +175,59 @@ export class MarkdownParser {
     }
     
     return count;
+  }
+
+  /**
+   * Check if markdown contains ADF metadata comments
+   */
+  private hasMetadataComments(markdown: string): boolean {
+    // Look for ADF metadata comment patterns
+    return /<!--\s*adf:[a-zA-Z][a-zA-Z0-9]*\s+/.test(markdown);
+  }
+
+  /**
+   * Parse markdown with metadata comments using mdast-based processing
+   * This provides the same metadata comment support as the Enhanced Parser
+   */
+  private parseWithMetadataComments(markdown: string): ADFDocument {
+    try {
+      // Parse markdown to mdast using unified
+      const processor = unified().use(remarkParse);
+      const tree = processor.parse(markdown) as Root;
+      
+      // Process metadata comments using the same utility as Enhanced Parser
+      const processedTree = processMetadataComments(tree);
+      
+      // Extract frontmatter if present
+      let frontmatter: any = null;
+      const frontmatterNode = processedTree.children.find(node => node.type === 'yaml');
+      
+      if (frontmatterNode && 'value' in frontmatterNode) {
+        try {
+          // Simple frontmatter parsing - for full YAML support, we'd import js-yaml
+          const yamlContent = frontmatterNode.value as string;
+          if (yamlContent.trim().startsWith('{')) {
+            frontmatter = JSON.parse(yamlContent);
+          }
+        } catch {
+          // Ignore frontmatter parsing errors in basic parser
+        }
+      }
+      
+      // Use ASTBuilder's mdast conversion method
+      return this.astBuilder.buildADFFromMdast(processedTree, frontmatter);
+      
+    } catch (error) {
+      if (this.options.astBuilder?.strict) {
+        throw new Error(`Metadata comment parsing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
+      
+      // Fallback to token-based parsing without metadata comments
+      const tokens = this.tokenizer.tokenize(markdown);
+      const frontmatterToken = tokens.find(token => token.type === 'frontmatter');
+      const frontmatter = frontmatterToken?.content;
+      
+      return this.astBuilder.buildADF(tokens, frontmatter);
+    }
   }
 }

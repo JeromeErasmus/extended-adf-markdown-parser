@@ -13,10 +13,10 @@ The library provides two parser implementations optimized for different use case
 ### Basic MarkdownParser
 
 Use the basic `MarkdownParser` when you need:
-- **High Performance**: Synchronous operation with minimal overhead
-- **Simple Conversion**: Basic markdown → ADF conversion without advanced features
+- **High Performance**: Synchronous operation with minimal overhead for simple documents
+- **Simple Conversion**: Basic markdown → ADF conversion with automatic metadata comment detection
 - **Lightweight Processing**: Memory-efficient parsing for large volumes
-- **No Metadata Comments**: When you don't need custom ADF attributes
+- **Smart Processing**: Automatically switches to enhanced processing when metadata comments are detected
 
 ```typescript
 import { MarkdownParser } from 'extended-markdown-adf-parser';
@@ -34,11 +34,11 @@ const adf = parser.parse(markdown);
 ### Enhanced MarkdownParser
 
 Use the `EnhancedMarkdownParser` when you need:
-- **Metadata Comments Support**: Custom ADF attributes via `<!-- adf:element attrs='{}' -->` 
 - **Bidirectional Conversion**: Full ADF → Markdown → ADF round-trip fidelity
 - **GitHub Flavored Markdown**: Tables, strikethrough, task lists, autolinks
 - **YAML Frontmatter**: Document metadata headers
-- **Advanced Features**: Media placeholders, complex attribute preservation
+- **Advanced Features**: Async/sync support, complex attribute preservation
+- **Always Enhanced Processing**: Consistent enhanced processing regardless of content
 
 ```typescript
 import { EnhancedMarkdownParser } from 'extended-markdown-adf-parser';
@@ -64,15 +64,20 @@ const reconstructedMarkdown = await parser.stringify(adf);
 
 | Feature | Basic Parser | Enhanced Parser |
 |---------|:------------:|:---------------:|
-| **Performance** | ⚡ Fastest | 🔄 Good |
-| **Memory Usage** | 💚 Minimal | 🟡 Moderate |
+| **Performance** | ⚡ Fastest* | 🔄 Good |
+| **Memory Usage** | 💚 Minimal* | 🟡 Moderate |
 | **Async/Sync** | ✅ Sync only | ✅ Both |
-| **Metadata Comments** | ❌ No | ✅ Yes |
+| **Metadata Comments** | ✅ Yes | ✅ Yes |
 | **Bidirectional** | ❌ Markdown→ADF only | ✅ Full round-trip |
 | **GitHub Flavored MD** | ❌ Basic | ✅ Complete |
 | **YAML Frontmatter** | ❌ No | ✅ Yes |
-| **ADF Extensions** | ✅ Panels, Expands | ✅ All features |
-| **Custom Attributes** | ❌ No | ✅ Via metadata |
+| **ADF Extensions** | ✅ All ADF blocks | ✅ All ADF blocks |
+| **Custom Attributes** | ✅ Via metadata | ✅ Via metadata |
+
+**Performance Notes:**
+- *Basic Parser maintains fast performance for documents without metadata comments
+- *When metadata comments are detected, Basic Parser automatically uses enhanced processing (similar performance to Enhanced Parser)
+- *Memory usage remains minimal for simple documents, moderate when metadata comments are present
 
 ## Configuration Options
 
