@@ -36,7 +36,7 @@ dist/
 {
   "type": "module",
   "dependencies": {
-    "extended-markdown-adf-parser": "^1.0.7"
+    "extended-markdown-adf-parser": "^1.1.0"
   }
 }
 ```
@@ -55,7 +55,7 @@ import { PerformanceMonitor } from 'extended-markdown-adf-parser/performance';
 ```json
 {
   "dependencies": {
-    "extended-markdown-adf-parser": "^1.0.7"
+    "extended-markdown-adf-parser": "^1.1.0"
   }
 }
 ```

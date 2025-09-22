@@ -156,8 +156,8 @@ npm update extended-markdown-adf-parser
 yarn upgrade extended-markdown-adf-parser
 
 # Update to specific version
-npm install extended-markdown-adf-parser@1.0.4
-yarn add extended-markdown-adf-parser@1.0.4
+npm install extended-markdown-adf-parser@1.1.0
+yarn add extended-markdown-adf-parser@1.1.0
 ```
 
 ### Version Compatibility

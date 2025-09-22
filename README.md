@@ -24,11 +24,14 @@ A bidirectional parser for converting between [Atlassian Document Format (ADF)](
 - **Full Fidelity**: Preserves all ADF attributes through metadata annotations  
   Custom attributes and styling information are maintained using HTML comment metadata, ensuring no data loss during conversion.
 
+- **Dual Module Support**: Works with both CommonJS and ES Modules automatically  
+  Supports `import { Parser } from 'pkg'` and `const { Parser } = require('pkg')` with automatic format selection for optimal bundling.
+
 - **Type Safe**: Written in TypeScript with complete type definitions  
   Full TypeScript support with comprehensive type definitions for all ADF nodes, ensuring compile-time safety and excellent IDE support.
 
-- **Comprehensive Test Coverage**: 100% test coverage with 288 tests across 26 test suites  
-  Thoroughly tested with complete coverage of 16 node converters and 7 mark converters.
+- **Comprehensive Test Coverage**: 100% test coverage with 67 tests across multiple test suites  
+  Thoroughly tested with complete coverage including dual module compatibility and enhanced error handling.
 
 - **Zero Runtime Dependencies**: Lightweight and portable (uses well-established libraries)  
   Built on proven libraries like `unified/remark` ecosystem, with no additional runtime dependencies for your applications.

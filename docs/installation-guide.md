@@ -65,7 +65,7 @@ This package includes full TypeScript definitions. No additional `@types` packag
 npm install extended-markdown-adf-parser
 
 # Install a specific version
-npm install extended-markdown-adf-parser@1.0.4
+npm install extended-markdown-adf-parser@1.1.0
 
 # Install as a development dependency
 npm install --save-dev extended-markdown-adf-parser
@@ -78,7 +78,7 @@ npm install --save-dev extended-markdown-adf-parser
 yarn add extended-markdown-adf-parser
 
 # Install a specific version
-yarn add extended-markdown-adf-parser@1.0.4
+yarn add extended-markdown-adf-parser@1.1.0
 
 # Install as a development dependency
 yarn add --dev extended-markdown-adf-parser
@@ -91,7 +91,7 @@ yarn add --dev extended-markdown-adf-parser
 pnpm add extended-markdown-adf-parser
 
 # Install a specific version
-pnpm add extended-markdown-adf-parser@1.0.4
+pnpm add extended-markdown-adf-parser@1.1.0
 
 # Install as a development dependency
 pnpm add --save-dev extended-markdown-adf-parser
