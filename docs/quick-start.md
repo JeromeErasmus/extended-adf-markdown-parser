@@ -204,6 +204,12 @@ const parser = new Parser({
 });
 ```
 
+## Parser Selection
+
+The library provides two parser implementations optimized for different use cases. For detailed guidance on choosing between them, see:
+
+**→ [Markdown to ADF Conversion Guide](./markdown-to-adf.md)** - Complete parser comparison, configuration options, and migration strategies
+
 ## Round-Trip Conversion
 
 The parser maintains full fidelity for round-trip conversions:
@@ -221,31 +227,7 @@ const reconstructedAdf = parser.markdownToAdf(markdown);
 
 ## Error Handling
 
-```typescript
-try {
-  const adf = parser.markdownToAdf(invalidMarkdown);
-} catch (error) {
-  console.error('Parsing failed:', error.message);
-}
-
-// Or use validation
-import { MarkdownValidator, AdfValidator } from 'extended-markdown-adf-parser';
-
-const markdownValidator = new MarkdownValidator();
-const adfValidator = new AdfValidator();
-
-// Validate markdown before parsing
-const markdownIssues = markdownValidator.validate(markdown);
-if (markdownIssues.errors.length > 0) {
-  console.log('Markdown validation errors:', markdownIssues.errors);
-}
-
-// Validate ADF before processing
-const isValidAdf = adfValidator.isValidAdf(adfDocument);
-if (!isValidAdf) {
-  console.log('Invalid ADF document');
-}
-```
+For comprehensive error handling patterns, validation, and troubleshooting, see **[Error Handling Guide](./error-handling.md)**.
 
 ## Common Patterns
 

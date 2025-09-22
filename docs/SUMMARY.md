@@ -10,6 +10,11 @@
 * [Advanced Installation](./installation-advanced.md)
 * [Installation Troubleshooting](./installation-troubleshooting.md)
 
+## Conversion Guides
+* [Markdown to ADF](./markdown-to-adf.md)
+* [ADF to Markdown](./adf-to-markdown.md)
+* [Error Handling](./error-handling.md)
+
 ## Core Elements
 * [Metadata Comments](specifications/element-specifications-metadata-comments.md)
 * [Headings](specifications/element-specifications-headings.md)
