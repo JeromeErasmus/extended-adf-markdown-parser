@@ -109,7 +109,7 @@ This panel has custom styling from metadata comments.
 
       const result = await parser.parse(markdown);
       
-      // Current behavior: fence block content is treated as plain text (markdown not parsed)
+      // Enhanced behavior: fence block content is now properly parsed as markdown
       expect(result.content[0]).toEqual({
         type: 'panel',
         attrs: { 
@@ -123,7 +123,30 @@ This panel has custom styling from metadata comments.
             content: [
               { 
                 type: 'text', 
-                text: 'This panel has custom styling from metadata comments.\n\n**Bold text** and *italic text* inside.' 
+                text: 'This panel has custom styling from metadata comments.' 
+              }
+            ]
+          },
+          {
+            type: 'paragraph',
+            content: [
+              { 
+                type: 'text', 
+                text: 'Bold text',
+                marks: [{ type: 'strong' }]
+              },
+              { 
+                type: 'text', 
+                text: ' and ' 
+              },
+              { 
+                type: 'text', 
+                text: 'italic text',
+                marks: [{ type: 'em' }] 
+              },
+              { 
+                type: 'text', 
+                text: ' inside.' 
               }
             ]
           }
