@@ -424,20 +424,6 @@ const adf = {
 <!-- adf:table isNumberColumnEnabled="false" layout="wide" attrs='{"customData":"value"}' -->
 ```
 
-
-## Performance
-
-ADF to Markdown conversion is consistently fast with linear memory usage:
-
-| Document Size | Conversion Time | Memory Usage |
-|---------------|:---------------:|:------------:|
-| Small (< 100 nodes) | < 1ms | ~50KB |
-| Medium (< 1000 nodes) | < 5ms | ~150KB |
-| Large (< 10000 nodes) | < 50ms | ~500KB |
-
-Parser instances are reusable for optimal performance in batch operations.
-
-
 ## Next Steps
 
 - **[Markdown to ADF](./markdown-to-adf.md)** - Convert markdown to ADF format
