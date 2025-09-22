@@ -142,7 +142,14 @@ export function parseAdfMetadataComment(value: string): AdfMetadata | null {
  * Find the target node that a metadata comment should be associated with
  */
 export function findMetadataTarget(parent: Parent, commentIndex: number): Node | null {
-  // Strategy 1: Next sibling that's not an HTML comment (most common case - comments come before content)
+  // Strategy 1: For inline comments within content nodes (heading, paragraph, etc.)
+  // If the parent is a content node (not root or other structural nodes), 
+  // the comment is likely meant for the parent itself
+  if (parent.type === 'heading' || parent.type === 'paragraph' || parent.type === 'tableCell' || parent.type === 'tableHeader') {
+    return parent as Node;
+  }
+  
+  // Strategy 2: Next sibling that's not an HTML comment (most common case - comments come before content)
   for (let i = commentIndex + 1; i < parent.children.length; i++) {
     const candidate = parent.children[i] as Node;
     if (candidate.type !== 'html' || !isAdfMetadataComment((candidate as any).value)) {
@@ -150,7 +157,7 @@ export function findMetadataTarget(parent: Parent, commentIndex: number): Node |
     }
   }
   
-  // Strategy 2: Previous sibling that's not an HTML comment (fallback for trailing comments)
+  // Strategy 3: Previous sibling that's not an HTML comment (fallback for trailing comments)
   for (let i = commentIndex - 1; i >= 0; i--) {
     const candidate = parent.children[i] as Node;
     if (candidate.type !== 'html' || !isAdfMetadataComment((candidate as any).value)) {
@@ -158,7 +165,7 @@ export function findMetadataTarget(parent: Parent, commentIndex: number): Node |
     }
   }
   
-  // Strategy 3: Parent node (for block-level metadata)
+  // Strategy 4: Parent node (for block-level metadata)
   if (parent.type !== 'root') {
     return parent as Node;
   }
@@ -230,13 +237,32 @@ export function applyMetadataToAdfNode(adfNode: any, metadata: AdfMetadata[]): a
     return adfNode;
   }
 
+  // Define mapping between metadata nodeType and ADF node type
+  const nodeTypeMapping: Record<string, string> = {
+    'cell': 'tableCell',
+    'header': 'tableHeader',
+    'heading': 'heading',
+    'paragraph': 'paragraph',
+    'panel': 'panel',
+    'expand': 'expand'
+  };
+
   // Apply attributes from metadata that matches the node type
   let updatedNode = { ...adfNode };
   
   for (const meta of metadata) {
-    if (meta.attrs && meta.nodeType === adfNode.type) {
-      // Only apply metadata that matches the current node type
-      updatedNode.attrs = { ...updatedNode.attrs, ...meta.attrs };
+    if (meta.attrs) {
+      // Special handling for cell metadata - applies to both tableCell and tableHeader
+      if (meta.nodeType === 'cell' && (adfNode.type === 'tableCell' || adfNode.type === 'tableHeader')) {
+        updatedNode.attrs = { ...updatedNode.attrs, ...meta.attrs };
+      } else {
+        // Check direct match first, then mapped match
+        const expectedAdfType = nodeTypeMapping[meta.nodeType] || meta.nodeType;
+        if (meta.nodeType === adfNode.type || expectedAdfType === adfNode.type) {
+          // Apply metadata that matches the current node type (direct or mapped)
+          updatedNode.attrs = { ...updatedNode.attrs, ...meta.attrs };
+        }
+      }
     }
   }
 

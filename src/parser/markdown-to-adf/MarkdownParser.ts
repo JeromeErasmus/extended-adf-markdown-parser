@@ -10,6 +10,8 @@ import { ASTBuilder, ASTBuildOptions } from './ASTBuilder.js';
 import { ADFDocument } from '../../types/adf.types.js';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import { remarkAdf } from '../remark/remark-adf.js';
 import { processMetadataComments } from '../../utils/metadata-comments.js';
 import type { Root } from 'mdast';
 
@@ -191,12 +193,23 @@ export class MarkdownParser {
    */
   private parseWithMetadataComments(markdown: string): ADFDocument {
     try {
-      // Parse markdown to mdast using unified
-      const processor = unified().use(remarkParse);
-      const tree = processor.parse(markdown) as Root;
+      // Preprocess to fix consecutive HTML comments (same as Enhanced Parser)
+      const preprocessedMarkdown = this.preprocessConsecutiveHtmlComments(markdown);
+      
+      // Parse markdown to mdast using unified with GFM support for tables and ADF extensions
+      const processor = unified()
+        .use(remarkParse)
+        .use(remarkGfm) // Add GFM support for proper table parsing
+        .use(remarkAdf, { strict: this.options.astBuilder?.strict || false }); // Add ADF fence block support
+      
+      const tree = processor.parse(preprocessedMarkdown);
+      const transformedTree = processor.runSync(tree) as Root; // Run plugins to transform code blocks to adfFence
       
       // Process metadata comments using the same utility as Enhanced Parser
-      const processedTree = processMetadataComments(tree);
+      let processedTree = processMetadataComments(transformedTree);
+      
+      // Post-process ADF fence blocks (same as Enhanced Parser)
+      processedTree = this.postProcessAdfFenceBlocks(processedTree);
       
       // Extract frontmatter if present
       let frontmatter: any = null;
@@ -229,5 +242,89 @@ export class MarkdownParser {
       
       return this.astBuilder.buildADF(tokens, frontmatter);
     }
+  }
+
+  /**
+   * Preprocess to fix consecutive HTML comments
+   * Same method as used in EnhancedMarkdownParser
+   */
+  private preprocessConsecutiveHtmlComments(markdown: string): string {
+    // Replace consecutive HTML comments with line breaks between them
+    let processed = markdown.replace(/-->\s*<!--/g, '-->\n<!--');
+    
+    // Also ensure HTML comments are separated from following content
+    processed = processed.replace(/(-->)([^\s\n])/g, '$1\n$2');
+    
+    return processed;
+  }
+
+  /**
+   * Post-process mdast tree to convert code blocks with ADF languages to ADF fence nodes
+   * Same method as used in EnhancedMarkdownParser
+   */
+  private postProcessAdfFenceBlocks(tree: Root): Root {
+    const adfBlockTypes = new Set(['panel', 'expand', 'nestedExpand', 'mediaSingle', 'mediaGroup']);
+    
+    const processedTree = JSON.parse(JSON.stringify(tree)); // Deep clone
+    
+    const processNode = (node: any): void => {
+      if (node.type === 'code' && node.lang && adfBlockTypes.has(node.lang)) {
+        // Convert code block to adfFence node
+        const attributes = this.parseAdfLanguageString(node.lang, node.meta || '');
+        
+        node.type = 'adfFence';
+        node.nodeType = node.lang;
+        node.attributes = attributes;
+        node.value = node.value;
+        
+        // Remove code block properties
+        delete node.lang;
+        delete node.meta;
+      }
+      
+      if (node.children) {
+        node.children.forEach(processNode);
+      }
+    };
+    
+    processedTree.children.forEach(processNode);
+    
+    return processedTree;
+  }
+
+  /**
+   * Parse ADF language string with attributes like "panel type=info title=Test"
+   * Same method as used in EnhancedMarkdownParser
+   */
+  private parseAdfLanguageString(lang: string, meta: string): Record<string, any> {
+    const attributes: Record<string, any> = {};
+    
+    // Combine lang and meta for parsing
+    const fullString = `${lang} ${meta}`.trim();
+    
+    // Simple key=value parser
+    const pairs = fullString.match(/(\w+)=([^"'\s]+|"[^"]*"|'[^']*')/g) || [];
+    
+    for (const pair of pairs) {
+      const [, key, value] = pair.match(/(\w+)=([^"'\s]+|"[^"]*"|'[^']*')/) || [];
+      if (key && value && key !== lang) { // Skip the language itself
+        let parsedValue: any = value;
+        
+        // Remove quotes if present
+        if ((parsedValue.startsWith('"') && parsedValue.endsWith('"')) ||
+            (parsedValue.startsWith("'") && parsedValue.endsWith("'"))) {
+          parsedValue = parsedValue.slice(1, -1);
+        }
+        
+        // Try to parse as number or boolean
+        if (parsedValue === 'true') parsedValue = true;
+        else if (parsedValue === 'false') parsedValue = false;
+        else if (!isNaN(Number(parsedValue)) && parsedValue !== '') parsedValue = Number(parsedValue);
+        
+        attributes[key] = parsedValue;
+      }
+    }
+    
+    return attributes;
   }
 }

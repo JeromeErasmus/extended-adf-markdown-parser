@@ -957,9 +957,30 @@ export class ASTBuilder {
   }
 
   private convertMdastTable(node: any): ADFNode {
+    const rows = [];
+    
+    for (let i = 0; i < node.children.length; i++) {
+      const rowNode = node.children[i];
+      const isFirstRow = i === 0;
+      
+      if (rowNode.type === 'tableRow') {
+        const cells = [];
+        for (const cellNode of rowNode.children) {
+          if (cellNode.type === 'tableCell') {
+            cells.push(this.convertMdastTableCell(cellNode, isFirstRow));
+          }
+        }
+        
+        rows.push({
+          type: 'tableRow',
+          content: cells
+        });
+      }
+    }
+    
     return {
       type: 'table',
-      content: this.convertMdastNodesToADF(node.children)
+      content: rows
     };
   }
 
@@ -970,11 +991,19 @@ export class ASTBuilder {
     };
   }
 
-  private convertMdastTableCell(node: any): ADFNode {
-    return {
-      type: 'tableCell',
+  private convertMdastTableCell(node: any, isHeader = false): ADFNode {
+    const adfNode: ADFNode = {
+      type: isHeader ? 'tableHeader' : 'tableCell',
       content: this.convertMdastNodesToADF(node.children)
     };
+
+    // Apply metadata if available
+    if (node.data?.adfMetadata) {
+      const metadata = Array.isArray(node.data.adfMetadata) ? node.data.adfMetadata : [node.data.adfMetadata];
+      return applyMetadataToAdfNode(adfNode, metadata);
+    }
+
+    return adfNode;
   }
 
   /**
@@ -1047,9 +1076,11 @@ export class ASTBuilder {
     const adfNodes: ADFNode[] = [];
     
     for (const node of nodes) {
-      const adfNode = this.convertMdastInlineNode(node);
-      if (adfNode) {
-        adfNodes.push(adfNode);
+      const result = this.convertMdastInlineNode(node);
+      if (Array.isArray(result)) {
+        adfNodes.push(...result);
+      } else if (result) {
+        adfNodes.push(result);
       }
     }
     
@@ -1059,7 +1090,7 @@ export class ASTBuilder {
   /**
    * Convert single inline mdast node to ADF
    */
-  private convertMdastInlineNode(node: any): ADFNode | null {
+  private convertMdastInlineNode(node: any): ADFNode | ADFNode[] | null {
     switch (node.type) {
       case 'text':
         return { type: 'text', text: node.value };
@@ -1094,32 +1125,22 @@ export class ASTBuilder {
   /**
    * Wrap mdast children with an ADF mark
    */
-  private wrapWithMark(children: any[], markType: string, attrs?: any): ADFNode {
+  private wrapWithMark(children: any[], markType: string, attrs?: any): ADFNode[] {
     const childNodes = this.convertMdastInlineNodes(children);
+    const mark = attrs ? { type: markType, attrs } : { type: markType };
     
-    if (childNodes.length === 1 && childNodes[0].type === 'text') {
-      // Simple case - single text node
-      const marks = childNodes[0].marks ? [...childNodes[0].marks] : [];
-      marks.push(attrs ? { type: markType, attrs } : { type: markType });
-      
-      return {
-        ...childNodes[0],
-        marks
-      };
-    } else {
-      // Complex case - multiple children or non-text nodes
-      // For now, merge text content
-      const text = childNodes
-        .filter(node => node.type === 'text')
-        .map(node => node.text)
-        .join('');
-      
-      return {
-        type: 'text',
-        text,
-        marks: [attrs ? { type: markType, attrs } : { type: markType }]
-      };
-    }
+    // Apply the mark to all text nodes
+    return childNodes.map(node => {
+      if (node.type === 'text') {
+        const marks = node.marks ? [...node.marks] : [];
+        marks.push(mark);
+        return {
+          ...node,
+          marks
+        };
+      }
+      return node;
+    });
   }
 
   /**
