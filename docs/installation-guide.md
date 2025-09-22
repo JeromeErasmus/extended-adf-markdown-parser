@@ -34,12 +34,27 @@ npm --version
 yarn --version  # if using Yarn
 ```
 
+### Module System Support
+
+This package supports both **CommonJS** and **ES Modules (ESM)** for maximum compatibility across different Node.js environments and build systems.
+
+#### ES Modules (Recommended)
+- **Node.js**: Version 18.0.0 or higher with ES modules enabled
+- Supports tree-shaking for optimal bundle sizes
+- Native `import`/`export` syntax
+
+#### CommonJS 
+- **Node.js**: Version 16.0.0 or higher
+- Traditional `require()`/`module.exports` syntax
+- Full backward compatibility
+
 ### TypeScript Support
 
 This package includes full TypeScript definitions. No additional `@types` packages are required.
 
 - **TypeScript**: Version 4.5.0 or higher (if using TypeScript)
-- **ESM Support**: This package is ESM-only and requires Node.js 18+ with ES modules
+- Complete type definitions for all exports
+- Full IntelliSense support in VS Code and other editors
 
 ## Package Installation
 

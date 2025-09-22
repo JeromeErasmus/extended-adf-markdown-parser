@@ -2,25 +2,58 @@
 
 Common issues and solutions when installing and using the Extended Markdown ADF Parser.
 
-## Common Issues
+## Module System Issues
 
 ### "Cannot use import statement outside a module"
 
-**Solution 1:** Add `"type": "module"` to package.json
+This package supports both CommonJS and ES Modules. Choose the approach that works for your environment:
+
+**Solution 1:** Use CommonJS (Easiest)
+```javascript
+const { Parser } = require('extended-markdown-adf-parser');
+```
+
+**Solution 2:** Enable ES Modules in package.json
 ```json
 {
   "type": "module"
 }
 ```
-
-**Solution 2:** Use dynamic import in CommonJS
+Then use:
 ```javascript
-const { Parser } = await import('extended-markdown-adf-parser');
+import { Parser } from 'extended-markdown-adf-parser';
 ```
 
 **Solution 3:** Use .mjs file extension
 ```bash
 mv script.js script.mjs
+```
+
+**Solution 4:** Use dynamic import in CommonJS
+```javascript
+const { Parser } = await import('extended-markdown-adf-parser');
+```
+
+### "require() of ES modules is not supported"
+
+This error occurs when trying to use `require()` on an ES module. Since this package supports both formats, use the appropriate import method:
+
+**Solution:**
+```javascript
+// Instead of: const { Parser } = require('extended-markdown-adf-parser/index.mjs'); // ❌
+const { Parser } = require('extended-markdown-adf-parser'); // ✅
+```
+
+### Mixed Module Systems
+
+If you're mixing CommonJS and ES Modules in the same project:
+
+```javascript
+// In CommonJS files (.js with no "type": "module")
+const { Parser } = require('extended-markdown-adf-parser');
+
+// In ES Module files (.mjs or .js with "type": "module")
+import { Parser } from 'extended-markdown-adf-parser';
 ```
 
 ### "Module not found" in TypeScript

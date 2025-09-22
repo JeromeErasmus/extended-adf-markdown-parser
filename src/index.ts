@@ -115,36 +115,50 @@ export class Parser {
   private errorRecovery: ErrorRecoveryManager;
   
   constructor(options?: ConversionOptions) {
-    this.options = options || {};
-    
-    // Initialize remark with our custom plugins
-    this.remarkProcessor = unified()
-      .use(remarkParse)
-      // TODO: Add custom ADF plugin here
-      .use(remarkStringify);
+    try {
+      this.options = options || {};
       
-    this.registry = new ConverterRegistry();
-    this.registerConverters();
-    
-    // Initialize error recovery manager
-    this.errorRecovery = new ErrorRecoveryManager({
-      maxRetries: options?.maxRetries || 3,
-      retryDelay: options?.retryDelay || 100,
-      fallbackStrategy: options?.fallbackStrategy || 'best-effort',
-      enableLogging: options?.enableLogging || false,
-      onError: options?.onError,
-      onRecovery: options?.onRecovery
-    });
-    
-    // Initialize enhanced parser if ADF extensions are enabled
-    if (options?.enableAdfExtensions) {
-      this.enhancedParser = new EnhancedMarkdownParser({
-        strict: options.strict,
-        gfm: options.gfm !== false, // Default to true
-        frontmatter: options.frontmatter !== false, // Default to true
-        adfExtensions: true,
-        maxNestingDepth: options.maxDepth || 5
+      // Initialize remark with our custom plugins
+      this.remarkProcessor = unified()
+        .use(remarkParse)
+        // TODO: Add custom ADF plugin here
+        .use(remarkStringify);
+        
+      this.registry = new ConverterRegistry();
+      this.registerConverters();
+      
+      // Initialize error recovery manager
+      this.errorRecovery = new ErrorRecoveryManager({
+        maxRetries: options?.maxRetries || 3,
+        retryDelay: options?.retryDelay || 100,
+        fallbackStrategy: options?.fallbackStrategy || 'best-effort',
+        enableLogging: options?.enableLogging || false,
+        onError: options?.onError,
+        onRecovery: options?.onRecovery
       });
+      
+      // Initialize enhanced parser if ADF extensions are enabled
+      if (options?.enableAdfExtensions) {
+        try {
+          this.enhancedParser = new EnhancedMarkdownParser({
+            strict: options.strict,
+            gfm: options.gfm !== false, // Default to true
+            frontmatter: options.frontmatter !== false, // Default to true
+            adfExtensions: true,
+            maxNestingDepth: options.maxDepth || 5
+          });
+        } catch (error) {
+          if (options?.strict) {
+            throw new ParserError('Failed to initialize enhanced parser', 'INIT_ERROR');
+          }
+          // Continue without enhanced parser in non-strict mode
+          if (options?.enableLogging) {
+            console.warn('Enhanced parser initialization failed, continuing with basic parser:', error);
+          }
+        }
+      }
+    } catch {
+      throw new ParserError('Failed to initialize Parser', 'INIT_ERROR');
     }
   }
   
@@ -153,11 +167,26 @@ export class Parser {
    * Direct transformation - no remark needed
    */
   adfToMarkdown(adf: ADFDocument, options?: ConversionOptions): string {
+    if (!adf || typeof adf !== 'object') {
+      if (options?.strict) {
+        throw new ParserError('Invalid ADF document: must be a non-null object', 'INVALID_INPUT');
+      }
+      // Graceful fallback for non-strict mode
+      return '';
+    }
+
+    if (adf.type !== 'doc') {
+      if (options?.strict) {
+        throw new ParserError('Invalid ADF document: root node must be of type "doc"', 'INVALID_INPUT');
+      }
+      // Graceful fallback: try to convert anyway
+    }
+
     return measureSync('adfToMarkdown', () => {
       // Validate ADF structure
       const validation = this.validateAdf(adf);
       if (!validation.valid && options?.strict) {
-        throw new ValidationError('Invalid ADF', validation.errors);
+        throw new ValidationError('Invalid ADF structure', validation.errors);
       }
       
       // Direct conversion using registered converters
@@ -182,7 +211,7 @@ export class Parser {
       throw result.error || new Error('ADF to Markdown conversion failed');
     }
 
-    return result.data!;
+    return result.data as string;
   }
   
   /**
@@ -190,10 +219,38 @@ export class Parser {
    * Uses enhanced parser if available, otherwise falls back to basic parser
    */
   markdownToAdf(markdown: string, options?: ConversionOptions): ADFDocument {
+    if (!markdown || typeof markdown !== 'string') {
+      if (options?.strict) {
+        throw new ParserError('Invalid markdown input: must be a non-empty string', 'INVALID_INPUT');
+      }
+      // Graceful fallback for non-strict mode
+      return {
+        version: 1,
+        type: 'doc',
+        content: []
+      };
+    }
+
+    if (markdown.trim().length === 0) {
+      // Return empty ADF document for empty markdown
+      return {
+        version: 1,
+        type: 'doc',
+        content: []
+      };
+    }
+
     return measureSync('markdownToAdf', () => {
       // Use enhanced parser if available
       if (this.enhancedParser) {
-        return this.enhancedParser.parseSync(markdown);
+        try {
+          return this.enhancedParser.parseSync(markdown);
+        } catch {
+          if (options?.strict) {
+            throw new ParserError('Enhanced parser failed to convert markdown', 'CONVERSION_ERROR');
+          }
+          // Fall back to basic parser
+        }
       }
       
       try {
@@ -202,10 +259,12 @@ export class Parser {
         
         // Convert mdast to ADF
         return this.convertMdastToAdf(mdast);
-      } catch (error) {
-        if (options?.strict) throw error;
+      } catch {
+        if (options?.strict) {
+          throw new ParserError('Failed to convert markdown to ADF', 'CONVERSION_ERROR');
+        }
         
-        // Best-effort conversion
+        // Best-effort conversion as last resort
         return this.fallbackConversion(markdown);
       }
     }, markdown.length);
@@ -227,7 +286,7 @@ export class Parser {
       throw result.error || new Error('Markdown to ADF conversion failed');
     }
 
-    return result.data!;
+    return result.data as ADFDocument;
   }
 
   /**
@@ -260,7 +319,7 @@ export class Parser {
       throw result.error || new Error('Async Markdown to ADF conversion failed');
     }
 
-    return result.data!;
+    return result.data as ADFDocument;
   }
 
   /**
@@ -321,11 +380,7 @@ export class Parser {
   /**
    * Get performance statistics for parser operations
    */
-  getPerformanceStats(): {
-    adfToMarkdown?: any;
-    markdownToAdf?: any;
-    markdownToAdfAsync?: any;
-  } {
+  getPerformanceStats() {
     return {
       adfToMarkdown: globalPerformanceMonitor.getStatistics('adfToMarkdown'),
       markdownToAdf: globalPerformanceMonitor.getStatistics('markdownToAdf'),
@@ -357,11 +412,7 @@ export class Parser {
   /**
    * Test parser performance against targets
    */
-  validatePerformanceTargets(): {
-    adfToMarkdown?: any;
-    markdownToAdf?: any;
-    markdownToAdfAsync?: any;
-  } {
+  validatePerformanceTargets() {
     return {
       adfToMarkdown: globalPerformanceMonitor.validatePerformanceTargets('adfToMarkdown'),
       markdownToAdf: globalPerformanceMonitor.validatePerformanceTargets('markdownToAdf'),
@@ -420,9 +471,18 @@ export class Parser {
   private convertAdfToMarkdown(adf: ADFDocument): string {
     const context: ConversionContext = {
       convertChildren: (nodes: ADFNode[]) => {
+        if (!Array.isArray(nodes)) return '';
         return nodes.map(node => {
-          const converter = this.registry.getNodeConverter(node.type);
-          return converter.toMarkdown(node, context);
+          try {
+            const converter = this.registry.getNodeConverter(node.type);
+            return converter.toMarkdown(node, context);
+          } catch (error: unknown) {
+            // Graceful degradation for unknown node types
+            if (this.options.enableLogging) {
+              console.warn(`Failed to convert node type "${node.type}":`, error);
+            }
+            return '';
+          }
         }).join('');
       },
       depth: 0,
@@ -432,16 +492,29 @@ export class Parser {
       }
     };
     
+    // Handle missing or invalid content array
+    if (!adf.content || !Array.isArray(adf.content)) {
+      return '';
+    }
+    
     // For the top-level document, we need to join block elements with double newlines
-    const content = (adf.content || []).map(node => {
-      const converter = this.registry.getNodeConverter(node.type);
-      return converter.toMarkdown(node, context);
+    const content = adf.content.map(node => {
+      try {
+        const converter = this.registry.getNodeConverter(node.type);
+        return converter.toMarkdown(node, context);
+      } catch (error: unknown) {
+        // Graceful degradation for unknown node types
+        if (this.options.enableLogging) {
+          console.warn(`Failed to convert node type "${node.type}":`, error);
+        }
+        return '';
+      }
     }).filter(content => content.length > 0).join('\n\n');
     
     return content;
   }
   
-  private convertMdastToAdf(mdast: any): ADFDocument {
+  private convertMdastToAdf(_mdast: any): ADFDocument {
     // TODO: Implement mdast to ADF conversion
     return {
       version: 1,

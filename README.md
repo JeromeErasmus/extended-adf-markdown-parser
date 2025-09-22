@@ -101,12 +101,32 @@ npm install extended-markdown-adf-parser
 yarn add extended-markdown-adf-parser
 ```
 
+## Module Support
+
+This package supports both **CommonJS** and **ES Modules (ESM)** for maximum compatibility:
+
+### ES Modules (Recommended)
+```javascript
+import { Parser } from 'extended-markdown-adf-parser';
+```
+
+### CommonJS
+```javascript
+const { Parser } = require('extended-markdown-adf-parser');
+```
+
+### TypeScript
+```typescript
+import { Parser, type ADFDocument, type ConversionOptions } from 'extended-markdown-adf-parser';
+```
+
 ## Usage
 
 ### Simple Example
 
 ```typescript
 import { Parser } from 'extended-markdown-adf-parser';
+// or: const { Parser } = require('extended-markdown-adf-parser');
 
 const parser = new Parser();
 

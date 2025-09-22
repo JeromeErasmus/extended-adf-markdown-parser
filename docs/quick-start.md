@@ -22,11 +22,31 @@ yarn add extended-markdown-adf-parser
 
 ### 1. Import the Parser
 
+#### ES Modules (Recommended)
 ```typescript
 import { Parser } from 'extended-markdown-adf-parser';
 
 // Create a parser instance
 const parser = new Parser();
+```
+
+#### CommonJS
+```javascript
+const { Parser } = require('extended-markdown-adf-parser');
+
+// Create a parser instance
+const parser = new Parser();
+```
+
+#### TypeScript with Type Imports
+```typescript
+import { Parser, type ADFDocument, type ConversionOptions } from 'extended-markdown-adf-parser';
+
+// Create a parser instance with options
+const parser = new Parser({
+  strict: false,
+  enableAdfExtensions: true
+});
 ```
 
 ### 2. Convert ADF to Markdown

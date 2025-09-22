@@ -1,63 +1,142 @@
 # Installation Verification
 
-This guide helps you verify that the Extended Markdown ADF Parser is properly installed and working correctly.
+This guide helps you verify that the Extended Markdown ADF Parser is properly installed and working correctly with both CommonJS and ES Modules.
 
-## Basic Import Test
+## Module System Support Test
 
-Create a test file to verify the installation:
+This package supports both CommonJS and ES Modules automatically. Test the approach that matches your environment:
 
-**test-installation.js** (CommonJS environments):
+### CommonJS Test
+
+**test-commonjs.js**:
 ```javascript
-// For CommonJS environments, use dynamic import
-(async () => {
-  const { Parser } = await import('extended-markdown-adf-parser');
-  const parser = new Parser();
-  console.log('Installation successful!');
-  console.log('Parser version:', parser.version || 'Unknown');
-})();
-```
-
-**test-installation.mjs** (ES Modules):
-```javascript
-import { Parser } from 'extended-markdown-adf-parser';
+const { Parser } = require('extended-markdown-adf-parser');
 
 const parser = new Parser();
-console.log('Installation successful!');
+console.log('✅ CommonJS installation successful!');
 
 // Quick functionality test
 const markdown = '# Hello World\n\nThis is a **test** document.';
 const adf = parser.markdownToAdf(markdown);
 const backToMarkdown = parser.adfToMarkdown(adf);
 
-console.log('Basic conversion working!');
+console.log('✅ CommonJS conversion working!');
 console.log('Original:', markdown);
 console.log('Round-trip result:', backToMarkdown);
+
+// Test modular imports
+const { StreamingParser } = require('extended-markdown-adf-parser/streaming');
+console.log('✅ CommonJS modular imports working!');
 ```
 
-**test-installation.ts** (TypeScript):
-```typescript
-import { Parser, type AdfDocument } from 'extended-markdown-adf-parser';
+### ES Modules Test
+
+**test-esm.mjs** (or use .js with "type": "module" in package.json):
+```javascript
+import { Parser } from 'extended-markdown-adf-parser';
 
 const parser = new Parser();
-console.log('TypeScript installation successful!');
+console.log('✅ ESM installation successful!');
+
+// Quick functionality test
+const markdown = '# Hello World\n\nThis is a **test** document.';
+const adf = parser.markdownToAdf(markdown);
+const backToMarkdown = parser.adfToMarkdown(adf);
+
+console.log('✅ ESM conversion working!');
+console.log('Original:', markdown);
+console.log('Round-trip result:', backToMarkdown);
+
+// Test modular imports
+import { StreamingParser } from 'extended-markdown-adf-parser/streaming';
+console.log('✅ ESM modular imports working!');
+```
+
+### TypeScript Test
+
+**test-typescript.ts**:
+```typescript
+// Test both import styles
+import { Parser, type ADFDocument, type ConversionOptions } from 'extended-markdown-adf-parser';
+
+const parser = new Parser();
+console.log('✅ TypeScript installation successful!');
 
 // Type checking works
 const markdown: string = '# Hello World';
-const adf: AdfDocument = parser.markdownToAdf(markdown);
-console.log('TypeScript types working!');
+const options: ConversionOptions = { strict: false };
+const adf: ADFDocument = parser.markdownToAdf(markdown, options);
+console.log('✅ TypeScript types working!');
+
+// Test modular imports with types
+import { StreamingParser, type StreamingOptions } from 'extended-markdown-adf-parser/streaming';
+const streamingOptions: StreamingOptions = { chunkSize: 1000 };
+console.log('✅ TypeScript modular imports and types working!');
 ```
 
-## Run the Test
+### Mixed Environment Test
+
+**test-mixed.js** (CommonJS file that tests both approaches):
+```javascript
+// Test CommonJS approach
+const { Parser: CommonJSParser } = require('extended-markdown-adf-parser');
+console.log('✅ CommonJS require() working!');
+
+// Test dynamic ESM import from CommonJS
+async function testESMImport() {
+  const { Parser: ESMParser } = await import('extended-markdown-adf-parser');
+  console.log('✅ Dynamic ESM import from CommonJS working!');
+  
+  // Both should work the same way
+  const cjsParser = new CommonJSParser();
+  const esmParser = new ESMParser();
+  
+  const testMarkdown = '# Test';
+  const cjsResult = cjsParser.markdownToAdf(testMarkdown);
+  const esmResult = esmParser.markdownToAdf(testMarkdown);
+  
+  console.log('✅ Both module systems produce identical results!');
+  console.log('Results match:', JSON.stringify(cjsResult) === JSON.stringify(esmResult));
+}
+
+testESMImport().catch(console.error);
+```
+
+## Run the Tests
+
+Choose the test that matches your environment:
 
 ```bash
-# For CommonJS
-node test-installation.js
+# Test CommonJS support
+node test-commonjs.js
 
-# For ES Modules
-node test-installation.mjs
+# Test ES Modules support  
+node test-esm.mjs
 
-# For TypeScript (requires ts-node)
-npx ts-node test-installation.ts
+# Test TypeScript support (requires ts-node or tsc)
+npx ts-node test-typescript.ts
+# or compile first:
+# npx tsc test-typescript.ts && node test-typescript.js
+
+# Test mixed environment (CommonJS + dynamic ESM import)
+node test-mixed.js
+```
+
+## Expected Output
+
+All tests should produce output similar to:
+
+```
+✅ [Module System] installation successful!
+✅ [Module System] conversion working!
+Original: # Hello World
+
+This is a **test** document.
+Round-trip result: # Hello World
+
+This is a **test** document.
+✅ [Module System] modular imports working!
+```
 ```
 
 ## Version Management

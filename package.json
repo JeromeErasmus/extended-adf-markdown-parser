@@ -9,22 +9,30 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./types": {
       "types": "./dist/types/index.d.ts"
     },
     "./streaming": {
       "types": "./dist/streaming.d.ts",
-      "import": "./dist/streaming.js"
+      "import": "./dist/streaming.mjs",
+      "require": "./dist/streaming.js",
+      "default": "./dist/streaming.js"
     },
     "./performance": {
       "types": "./dist/performance.d.ts",
-      "import": "./dist/performance.js"
+      "import": "./dist/performance.mjs",
+      "require": "./dist/performance.js",
+      "default": "./dist/performance.js"
     },
     "./errors": {
       "types": "./dist/errors.d.ts",
-      "import": "./dist/errors.js"
+      "import": "./dist/errors.mjs",
+      "require": "./dist/errors.js",
+      "default": "./dist/errors.js"
     }
   },
   "sideEffects": false,
