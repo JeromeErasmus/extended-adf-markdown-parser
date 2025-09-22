@@ -584,22 +584,117 @@ export class ASTBuilder {
   }
 
   private parseInlineMarkdown(content: string): ADFNode[] {
-    // Simplified inline parsing - this could be enhanced with a proper inline parser
-    const nodes: ADFNode[] = [];
-    
     // Handle special placeholder URLs like {media:123}, {user:456}
     content = this.expandPlaceholderURLs(content);
     
-    // For now, create a simple text node
-    // TODO: Enhance with proper inline mark parsing (bold, italic, links, etc.)
-    if (content.trim()) {
-      nodes.push({
-        type: 'text',
-        text: content
-      });
-    }
+    // Parse inline markdown content with proper mark support
+    return this.parseInlineMarksRecursively(content);
+  }
+
+  private parseInlineMarksRecursively(content: string): ADFNode[] {
+    if (!content) return [];
     
-    return nodes;
+    const nodes: ADFNode[] = [];
+    
+    // Patterns for inline formatting (order matters for precedence)
+    const patterns = [
+      // Links: [text](url)
+      { 
+        regex: /\[([^\]]+)\]\(([^)]+)\)/,
+        type: 'link',
+        process: (match: RegExpMatchArray, before: string, after: string) => {
+          const [fullMatch, linkText, href] = match;
+          return {
+            before,
+            node: {
+              type: 'text',
+              text: linkText,
+              marks: [{ type: 'link', attrs: { href } }]
+            },
+            after
+          };
+        }
+      },
+      // Bold: **text**
+      {
+        regex: /\*\*([^*]+)\*\*/,
+        type: 'strong',
+        process: (match: RegExpMatchArray, before: string, after: string) => {
+          const [fullMatch, boldText] = match;
+          return {
+            before,
+            node: {
+              type: 'text',
+              text: boldText,
+              marks: [{ type: 'strong' }]
+            },
+            after
+          };
+        }
+      },
+      // Italic: *text* (but not **text**)
+      {
+        regex: /(?<!\*)\*([^*]+)\*(?!\*)/,
+        type: 'em',
+        process: (match: RegExpMatchArray, before: string, after: string) => {
+          const [fullMatch, italicText] = match;
+          return {
+            before,
+            node: {
+              type: 'text',
+              text: italicText,
+              marks: [{ type: 'em' }]
+            },
+            after
+          };
+        }
+      },
+      // Inline code: `text`
+      {
+        regex: /`([^`]+)`/,
+        type: 'code',
+        process: (match: RegExpMatchArray, before: string, after: string) => {
+          const [fullMatch, codeText] = match;
+          return {
+            before,
+            node: {
+              type: 'text',
+              text: codeText,
+              marks: [{ type: 'code' }]
+            },
+            after
+          };
+        }
+      }
+    ];
+
+    // Find the first matching pattern
+    let firstMatch: { match: RegExpMatchArray; pattern: any; index: number } | null = null;
+    for (const pattern of patterns) {
+      const match = content.match(pattern.regex);
+      if (match && match.index !== undefined) {
+        if (!firstMatch || match.index < firstMatch.index) {
+          firstMatch = { match, pattern, index: match.index };
+        }
+      }
+    }
+
+    if (!firstMatch) {
+      // No formatting found, return plain text
+      return content.trim() ? [{ type: 'text', text: content }] : [];
+    }
+
+    const { match, pattern } = firstMatch;
+    const before = content.substring(0, match.index!);
+    const after = content.substring(match.index! + match[0].length);
+
+    const result = pattern.process(match, before, after);
+
+    // Recursively process before and after sections
+    const beforeNodes = result.before ? this.parseInlineMarksRecursively(result.before) : [];
+    const afterNodes = result.after ? this.parseInlineMarksRecursively(result.after) : [];
+
+    return [...beforeNodes, result.node, ...afterNodes];
   }
 
   private expandPlaceholderURLs(content: string): string {
@@ -692,7 +787,7 @@ export class ASTBuilder {
   /**
    * Convert mdast nodes to ADF nodes
    */
-  private convertMdastNodesToADF(nodes: any[]): ADFNode[] {
+  public convertMdastNodesToADF(nodes: any[]): ADFNode[] {
     const adfNodes: ADFNode[] = [];
     
     for (const node of nodes) {
@@ -799,11 +894,17 @@ export class ASTBuilder {
   private convertAdfFenceNode(node: AdfFenceNode): ADFNode {
     const { nodeType, attributes, value } = node;
     
-    // Parse the content as markdown if it exists
+    // Parse the content - prioritize children over value
     let content: ADFNode[] = [];
-    if (value && value.trim()) {
-      // For now, create a simple paragraph with the content
-      // TODO: Parse content recursively for nested markdown
+    
+    // Check if we have parsed children (from enhanced processing)
+    if ('children' in node && Array.isArray(node.children) && node.children.length > 0) {
+      // Convert children mdast nodes to ADF nodes
+      content = node.children
+        .map(child => this.convertMdastNodeToADF(child))
+        .filter((adfNode): adfNode is ADFNode => adfNode !== null);
+    } else if (value && value.trim()) {
+      // Fallback to raw value (legacy behavior)
       content = [{
         type: 'paragraph',
         content: [{ type: 'text', text: value.trim() }]

@@ -390,7 +390,14 @@ export class EnhancedMarkdownParser {
         node.type = 'adfFence';
         node.nodeType = node.lang;
         node.attributes = attributes;
-        node.value = node.value;
+        
+        // Parse the content as markdown instead of keeping raw value
+        if (node.value && node.value.trim()) {
+          node.children = this.parseInlineContentToMdast(node.value);
+          delete node.value; // Remove raw value since we now have parsed children
+        } else {
+          node.value = node.value;
+        }
         
         // Remove code block properties
         delete node.lang;
@@ -405,6 +412,36 @@ export class EnhancedMarkdownParser {
     processedTree.children.forEach(processNode);
     
     return processedTree;
+  }
+
+  /**
+   * Parse content as markdown and return mdast nodes
+   */
+  private parseInlineContentToMdast(content: string): any[] {
+    try {
+      // Create a temporary processor without ADF extensions to avoid infinite recursion
+      const tempProcessor = unified()
+        .use(remarkParse)
+        .use(remarkGfm);
+      
+      const tree = tempProcessor.parse(content);
+      const processedTree = tempProcessor.runSync(tree) as Root;
+      
+      return processedTree.children;
+    } catch (error) {
+      // Fallback to single paragraph with text content
+      return [
+        {
+          type: 'paragraph',
+          children: [
+            {
+              type: 'text',
+              value: content
+            }
+          ]
+        }
+      ];
+    }
   }
 
   /**

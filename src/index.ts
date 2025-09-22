@@ -12,6 +12,7 @@ import { AdfValidator } from './validators/AdfValidator';
 import { MarkdownValidator } from './validators/MarkdownValidator';
 import { ParserError, ValidationError } from './errors';
 import { ConverterRegistry } from './parser/ConverterRegistry';
+import { ASTBuilder } from './parser/markdown-to-adf/ASTBuilder';
 
 // Import node converters
 import { ParagraphConverter } from './parser/adf-to-markdown/nodes/ParagraphConverter';
@@ -514,13 +515,35 @@ export class Parser {
     return content;
   }
   
-  private convertMdastToAdf(_mdast: any): ADFDocument {
-    // TODO: Implement mdast to ADF conversion
-    return {
-      version: 1,
-      type: 'doc',
-      content: []
-    };
+  private convertMdastToAdf(mdast: any): ADFDocument {
+    // Use ASTBuilder to convert mdast to ADF
+    const builder = new ASTBuilder({
+      strict: this.options.strict || false,
+      preserveUnknownNodes: true,
+      defaultVersion: 1
+    });
+
+    try {
+      // Convert mdast tree to ADF using the same logic as EnhancedParser
+      const content = builder.convertMdastNodesToADF(mdast.children);
+      
+      return {
+        version: 1,
+        type: 'doc',
+        content
+      };
+    } catch (error) {
+      if (this.options.strict) {
+        throw new ParserError('Failed to convert mdast to ADF', 'CONVERSION_ERROR');
+      }
+      
+      // Fallback to empty document
+      return {
+        version: 1,
+        type: 'doc',
+        content: []
+      };
+    }
   }
   
   private fallbackConversion(markdown: string): ADFDocument {

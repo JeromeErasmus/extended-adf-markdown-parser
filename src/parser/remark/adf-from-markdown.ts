@@ -14,6 +14,7 @@ export interface AdfFenceNode {
   nodeType: string;
   attributes: Record<string, any>;
   value: string;
+  children?: any[]; // Optional parsed children for enhanced processing
   data?: {
     hName?: string;
     hProperties?: Record<string, any>;
