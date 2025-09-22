@@ -266,3 +266,32 @@ npm ls --depth=0
 # Verify package integrity
 npm audit
 ```
+
+## Recent TypeScript Improvements (v1.2.1+)
+
+If you were experiencing TypeScript compilation errors with earlier versions, these issues have been resolved in recent updates:
+
+### Fixed Type Issues
+
+- **MediaNode `alt` property**: The `MediaNode` interface now properly includes the optional `alt` attribute
+- **ValidationError `line` property**: The `ValidationError` interface now includes the optional `line` property for better error reporting
+- **Metadata comments**: Fixed `Data` interface extension for ADF metadata handling
+- **AJV validator types**: Improved type safety for schema validation functions
+
+### Upgrading from Earlier Versions
+
+If you're upgrading from versions prior to 1.2.1 and experiencing TypeScript errors:
+
+```bash
+# Update to the latest version
+npm update extended-markdown-adf-parser
+
+# Clear TypeScript cache if using tsc
+rm -rf node_modules/.cache
+npx tsc --build --clean
+
+# Rebuild your project
+npm run build
+```
+
+These fixes ensure full TypeScript compatibility without any compilation errors.

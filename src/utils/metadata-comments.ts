@@ -6,6 +6,13 @@
 import type { Node, Parent, Root } from 'mdast';
 import { visit } from 'unist-util-visit';
 
+// Extend mdast Node interface to include our custom data properties
+declare module 'mdast' {
+  interface Data {
+    adfMetadata?: AdfMetadata[];
+  }
+}
+
 /**
  * Interface for parsed ADF metadata from comments
  */
@@ -137,7 +144,7 @@ export function parseAdfMetadataComment(value: string): AdfMetadata | null {
 export function findMetadataTarget(parent: Parent, commentIndex: number): Node | null {
   // Strategy 1: Next sibling that's not an HTML comment (most common case - comments come before content)
   for (let i = commentIndex + 1; i < parent.children.length; i++) {
-    const candidate = parent.children[i];
+    const candidate = parent.children[i] as Node;
     if (candidate.type !== 'html' || !isAdfMetadataComment((candidate as any).value)) {
       return candidate;
     }
@@ -145,7 +152,7 @@ export function findMetadataTarget(parent: Parent, commentIndex: number): Node |
   
   // Strategy 2: Previous sibling that's not an HTML comment (fallback for trailing comments)
   for (let i = commentIndex - 1; i >= 0; i--) {
-    const candidate = parent.children[i];
+    const candidate = parent.children[i] as Node;
     if (candidate.type !== 'html' || !isAdfMetadataComment((candidate as any).value)) {
       return candidate;
     }

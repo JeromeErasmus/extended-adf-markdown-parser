@@ -2,14 +2,14 @@
  * @file ADF document validator
  */
 
-import Ajv from 'ajv';
+import Ajv, { ValidateFunction } from 'ajv';
 import addFormats from 'ajv-formats';
 import type { ADFDocument, ValidationResult } from '../types';
 import adfSchema from './schemas/adf-schema.json';
 
 export class AdfValidator {
   private ajv: Ajv;
-  private validateAdf: (data: unknown) => boolean;
+  private validateAdf: ValidateFunction;
   
   constructor() {
     this.ajv = new Ajv({
@@ -31,11 +31,9 @@ export class AdfValidator {
     
     if (!isValid) {
       const errors = (this.validateAdf.errors || []).map(error => ({
-        message: `${error.instancePath || 'root'} ${error.message}`,
+        message: `${error.instancePath || 'root'} ${error.message || 'Validation error'}`,
         code: 'SCHEMA_VALIDATION_ERROR',
-        path: error.instancePath,
-        data: error.data,
-        schemaPath: error.schemaPath
+        path: error.instancePath
       }));
       
       return {

@@ -84,6 +84,7 @@ export interface MediaNode extends ADFNode {
     collection?: string;
     width?: number;
     height?: number;
+    alt?: string;
   };
 }
 
