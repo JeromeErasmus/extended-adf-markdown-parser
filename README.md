@@ -321,14 +321,6 @@ npm test -- --testNamePattern="Integration"
 npm test -- --testNamePattern="Unit"
 ```
 
-### Test Results Summary
-- ✅ **399 tests passing** across all categories
-- ✅ **100% code coverage** maintained
-- ✅ **All ADF node types** covered in fixtures
-- ✅ **Performance validated** (sub-2ms parsing)
-- ✅ **Memory efficient** (tested with 1000+ documents)
-- ✅ **Error resilience** (17 malformed input types)
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

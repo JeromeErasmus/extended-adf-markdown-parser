@@ -64,15 +64,15 @@ const reconstructedMarkdown = await parser.stringify(adf);
 
 | Feature | Basic Parser | Enhanced Parser |
 |---------|:------------:|:---------------:|
-| **Performance** | ⚡ Fastest* | 🔄 Good |
-| **Memory Usage** | 💚 Minimal* | 🟡 Moderate |
-| **Async/Sync** | ✅ Sync only | ✅ Both |
-| **Metadata Comments** | ✅ Yes | ✅ Yes |
-| **Bidirectional** | ❌ Markdown→ADF only | ✅ Full round-trip |
-| **GitHub Flavored MD** | ❌ Basic | ✅ Complete |
-| **YAML Frontmatter** | ❌ No | ✅ Yes |
-| **ADF Extensions** | ✅ All ADF blocks | ✅ All ADF blocks |
-| **Custom Attributes** | ✅ Via metadata | ✅ Via metadata |
+| **Performance** | Fastest* | Good |
+| **Memory Usage** | Minimal* | Moderate |
+| **Async/Sync** | Sync only | Both |
+| **Metadata Comments** | Yes | Yes |
+| **Bidirectional** | Markdown→ADF only | Full round-trip |
+| **GitHub Flavored MD** | Basic | Complete |
+| **YAML Frontmatter** | No | Yes |
+| **ADF Extensions** | All ADF blocks | All ADF blocks |
+| **Custom Attributes** | Via metadata | Via metadata |
 
 **Performance Notes:**
 - *Basic Parser maintains fast performance for documents without metadata comments
