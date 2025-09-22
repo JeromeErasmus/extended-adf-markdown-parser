@@ -4,27 +4,7 @@ Convert Atlassian Document Format (ADF) to Extended Markdown with full fidelity 
 
 ## Overview
 
-ADF to Markdown conversion uses a unified converter system with 41 specialized converters to transform ADF node structures into Extended Markdown syntax. Unlike Markdown to ADF conversion (which has two parser types), ADF to Markdown uses a single, efficient converter architecture.
-
-## Architecture
-
-```
-Main Parser (src/index.ts)
-├── adfToMarkdown() method
-├── adfToMarkdownWithRecovery() method  
-└── Converter Registry System:
-    ├── Node Converters (32 types)
-    │   ├── PanelConverter → ~~~panel type=info~~~
-    │   ├── HeadingConverter → # Heading
-    │   ├── TableConverter → | Table | Format |
-    │   ├── MediaSingleConverter → ![alt](adf:media:id)
-    │   └── ... (28 more specialized converters)
-    └── Mark Converters (9 types)
-        ├── StrongConverter → **bold text**
-        ├── LinkConverter → [text](url)
-        ├── TextColorConverter → <mark style="color:#ff0000">text</mark>
-        └── ... (6 more formatting converters)
-```
+ADF to Markdown conversion uses a unified converter system with specialized converters to transform ADF node structures into Extended Markdown syntax. Unlike Markdown to ADF conversion (which has two parser types), ADF to Markdown uses a single, efficient converter architecture.
 
 ## Basic Usage
 
