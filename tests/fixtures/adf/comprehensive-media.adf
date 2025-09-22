@@ -1,0 +1,3131 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Comprehensive Media Elements Testing"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Basic Media References"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Standard Media Elements"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Company logo",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:logo-2023"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Product screenshot",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:app-interface-v2"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "User avatar",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:profile-pic-john"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "System architecture diagram",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:architecture-overview"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media with Dimensions"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media width=\"800\" height=\"600\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "High resolution application screenshot",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:desktop-app-full"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media width=\"400\" height=\"300\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Thumbnail preview of dashboard",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:dashboard-thumbnail"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media width=\"200\" height=\"150\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Small profile image",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:profile-small"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media with Collections"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Project Assets Collection"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media collection=\"ProjectAssets\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "System architecture diagram",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:system-architecture"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media collection=\"ProjectAssets\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Database schema visualization",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:db-schema"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media collection=\"ProjectAssets\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "API endpoint documentation",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:api-docs-diagram"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "User Uploads Collection"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media collection=\"UserUploads\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Meeting whiteboard photo",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:brainstorm-session-2023"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media collection=\"UserUploads\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Team photo from conference",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:team-conference-2023"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media collection=\"UserUploads\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Office space layout",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:office-floor-plan"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Document Attachments"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "PDF Documents"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "User manual PDF",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:user-manual-v2-pdf"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Technical specification document",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:tech-spec-2023-pdf"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Quarterly business report",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:q4-report-2023-pdf"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Spreadsheets and Data"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Financial spreadsheet",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:budget-2023-xlsx"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Project timeline Gantt chart",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:project-timeline-xlsx"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "User analytics data",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:analytics-report-csv"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Presentations"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Project kickoff slides",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:kickoff-presentation-pptx"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Architecture overview presentation",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:system-overview-slides"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Quarterly review presentation",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:q1-review-2023-pptx"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media with Custom Attributes"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media collection=\"MediaServicesSample\" occurrenceKey=\"occurrence-key-123\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Document preview with metadata",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:document-789"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media width=\"500\" height=\"300\" collection=\"Screenshots\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Application feature screenshot",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:feature-demo-screenshot"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media type=\"external\" width=\"600\" height=\"400\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "External reference image",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:external-graphic-url"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Video Media Elements"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Training Videos"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Onboarding training video thumbnail",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:onboarding-video-2023"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Product feature demo recording",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:feature-walkthrough-v2"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Team meeting recording",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:all-hands-march-2023"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Tutorial Content"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Git workflow tutorial video",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:git-tutorial-basics"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "API integration walkthrough",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:api-integration-demo"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Debugging techniques video",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:debugging-masterclass"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media in Documentation Context"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Step-by-Step Guides"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Follow these steps to configure the application:"
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Open the settings panel",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": " !"
+                },
+                {
+                  "type": "text",
+                  "text": "Settings panel interface",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:settings-screen"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Navigate to the preferences tab",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": " !"
+                },
+                {
+                  "type": "text",
+                  "text": "Preferences tab view",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:preferences-view"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Configure your options",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": " !"
+                },
+                {
+                  "type": "text",
+                  "text": "Configuration options screen",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:config-options"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Save your configuration",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": " !"
+                },
+                {
+                  "type": "text",
+                  "text": "Save confirmation dialog",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:save-dialog"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Feature Documentation"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Dashboard Overview"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "The main dashboard provides a comprehensive view of your application:"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Main dashboard layout",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:dashboard-main-view"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Figure 1: Main dashboard showing key metrics and navigation",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Key components visible in the dashboard:"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Navigation sidebar",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " (left): Quick access to all features"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Metrics panel",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " (top): Real-time performance indicators  "
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Content area",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " (center): Primary workspace"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Activity feed",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " (right): Recent updates and notifications"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Dashboard navigation detail",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:dashboard-nav-detail"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Figure 2: Detailed view of the navigation sidebar",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "API Documentation with Visuals"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Authentication Flow"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "The authentication process follows this sequence:"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Authentication flow diagram",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:auth-flow-diagram"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Authentication sequence showing user, client, and server interactions",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Database Schema"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Our data model is structured as follows:"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Entity relationship diagram",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:database-erd"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Complete database schema with relationships",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media Galleries"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Project Screenshots Collection"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "User Interface Screenshots:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Login screen interface",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:login-ui-v3"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "Dashboard main view",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:dashboard-main-v3"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "  \n!"
+        },
+        {
+          "type": "text",
+          "text": "User profile settings page",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:profile-settings-v3"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "Reports and analytics section",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:reports-analytics-v3"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "Admin panel interface",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:admin-panel-v3"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Before and After Comparisons"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "UI Redesign Progress:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Old dashboard design",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:dashboard-old-design"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Previous dashboard layout (v1.0)",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "New dashboard design",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:dashboard-new-design"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Redesigned dashboard with improved UX (v2.0)",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Performance Improvements:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Performance before optimization",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:performance-before"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "System performance metrics before optimization",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Performance after optimization",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:performance-after"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Improved performance metrics after recent updates",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media with Captions and Context"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "System Architecture"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Complete system overview",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:system-architecture-complete"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Figure 1: Complete system architecture showing all microservices, databases, and external integrations",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "The architecture consists of:"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Frontend React application"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "API Gateway for request routing"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Microservices for business logic"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "PostgreSQL for primary data storage"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Redis for caching and sessions"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "External payment and email services"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Network topology diagram",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:network-topology"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Figure 2: Network infrastructure and security zones",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Performance Metrics"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Application performance dashboard",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:performance-metrics-q1"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Figure 3: Application performance metrics for Q1 2023",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Key performance indicators:"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Response Time",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": ": Average 150ms (target: <200ms)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Uptime",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": ": 99.9% (SLA: 99.5%)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Error Rate",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": ": 0.1% (target: <0.5%)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Throughput",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": ": 10K requests/minute (peak capacity)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media in Lists and Tables"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Required Documentation"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "The following documents must be submitted:"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "!"
+                },
+                {
+                  "type": "text",
+                  "text": "Identity verification",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:id-document-template"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "!"
+                },
+                {
+                  "type": "text",
+                  "text": "Proof of address",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:address-proof-template"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "!"
+                },
+                {
+                  "type": "text",
+                  "text": "Bank statement sample",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:bank-statement-template"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "!"
+                },
+                {
+                  "type": "text",
+                  "text": "Business license",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "media:business-license-sample"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Feature Comparison"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "attrs": {
+        "isNumberColumnEnabled": false,
+        "layout": "default"
+      },
+      "content": [
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableHeader",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Feature"
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Basic Plan"
+                }
+              ]
+            },
+            {
+              "type": "tableHeader",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Premium Plan"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Dashboard"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "![Basic dashboard](media:dashboard-basic)"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "![Premium dashboard](media:dashboard-premium)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Reports"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "![Basic reports](media:reports-basic)"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "![Advanced reports](media:reports-advanced)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Storage"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "1GB"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Unlimited"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tableRow",
+          "content": [
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Support"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Email only"
+                }
+              ]
+            },
+            {
+              "type": "tableCell",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "![24/7 support](media:support-premium)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Error Handling and Fallbacks"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Missing Media References"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Image may not be available",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:missing-image-404"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Note: This image may not be available in all environments",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Placeholder for deleted content",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:deleted-content-placeholder"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Content has been removed or is no longer accessible",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "External Media with Fallbacks"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media type=\"external\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "External CDN image",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:external-cdn-image"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "<!-- adf:media type=\"link\" -->\n!"
+        },
+        {
+          "type": "text",
+          "text": "Shared document reference",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:shared-document-link"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media Types and Formats"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Images"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "PNG format image",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:screenshot.png"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "JPEG photograph",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:team-photo.jpg"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "GIF animation",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:loading-animation.gif"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "SVG vector graphic",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:icon-set.svg"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Documents"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Word document",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:project-proposal.docx"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "PowerPoint presentation",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:client-presentation.pptx"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "Excel spreadsheet",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:financial-model.xlsx"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "PDF report",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:annual-report.pdf"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Archive Files"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "ZIP archive",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:source-code-backup.zip"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n!"
+        },
+        {
+          "type": "text",
+          "text": "TAR compressed file",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:database-dump.tar.gz"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Media with Complex Context"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Bug Report Documentation"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Issue #456: Login Timeout Problem"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Problem Description:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\nUsers are experiencing timeout issues during the login process."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Error screenshot",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:login-timeout-error"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Screenshot showing the timeout error message",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Browser Console Output:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Console error log",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:console-error-login"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "JavaScript console showing the network timeout error",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Network Activity:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Network inspection",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:network-tab-timeout"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "DevTools network tab showing failed authentication request",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Solution Implemented:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Code diff screenshot",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:login-fix-diff"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Code changes made to resolve the timeout issue",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Release Notes with Media"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 4
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Version 2.1.0 Release Notes"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "New Features:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Dark mode toggle",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:dark-mode-feature"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "New dark mode option in user preferences",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Advanced search interface",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:advanced-search-ui"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Enhanced search with filters and sorting options",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "UI Improvements:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Before and after comparison",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:ui-improvements-comparison"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Side-by-side comparison of old vs new interface",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Performance Enhancements:",
+          "marks": [
+            {
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "!"
+        },
+        {
+          "type": "text",
+          "text": "Performance benchmark results",
+          "marks": [
+            {
+              "type": "link",
+              "attrs": {
+                "href": "media:performance-benchmarks-v21"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "\n"
+        },
+        {
+          "type": "text",
+          "text": "Benchmark results showing 40% improvement in load times",
+          "marks": [
+            {
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

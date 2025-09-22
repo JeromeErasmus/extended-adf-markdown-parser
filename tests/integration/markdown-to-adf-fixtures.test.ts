@@ -238,7 +238,13 @@ describe('Markdown to ADF Fixtures Tests', () => {
         'comprehensive-blocks.md',
         'comprehensive-lists.md',
         'comprehensive-tables.md',
-        'comprehensive-media-expand.md'
+        'comprehensive-media-expand.md',
+        'comprehensive-advanced-features.md',
+        'comprehensive-expand-sections.md',
+        'comprehensive-media.md',
+        'comprehensive-mentions-and-social.md',
+        'comprehensive-panels.md',
+        'comprehensive-status-and-dates.md'
       ];
 
       for (const file of fixtureFiles) {
