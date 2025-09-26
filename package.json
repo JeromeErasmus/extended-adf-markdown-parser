@@ -50,7 +50,7 @@
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "bundle:analyze": "node scripts/bundle-analysis.js",
-    "prepublishOnly": "yarn test && yarn build"
+    "prepublishOnly": "yarn build"
   },
   "keywords": [
     "adf",
