@@ -8,13 +8,12 @@ import { adfFence } from './adf-fence.js';
 
 /**
  * Micromark extension that adds support for ADF fence blocks
- * Temporarily disabled due to splice buffer issues - will implement post-processing approach
+ * Using post-processing approach due to splice buffer issues with tokenizer
  */
 export function adfMicromarkExtension(): Extension {
   return {
     flow: {
-      // Temporarily disable the ADF fence tokenizer to fix buffer issues
-      // 126: adfFence  // Register for '~' character (tilde)
+      // Using post-processing approach instead of tokenizer to avoid splice buffer issues
     }
   };
 }
