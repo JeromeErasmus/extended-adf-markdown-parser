@@ -21,7 +21,10 @@ A bidirectional parser for converting between [Atlassian Document Format (ADF)](
   Seamlessly transform content between Atlassian Document Format and Extended Markdown with complete round-trip fidelity.
 
 - **Extended Markdown Syntax**: Support for ADF-specific elements like `panels`, `expands`, and `media`  
-  Beyond standard Markdown, includes ADF extensions such as `info panels`, `expandable sections`, and `media placeholders`.
+  Beyond standard Markdown, includes ADF extensions such as `info panels`, `expandable sections`, and `media placeholders` with full nested structure support.
+
+- **Advanced Nested Processing** ✨ _New in v2.2.0_: Multi-pass parsing for complex nested ADF structures  
+  Comprehensive nested ADF fence block processing enables complex document hierarchies with panels containing media, expandable sections with sub-panels, and unlimited nesting depth.
 
 - **Full Fidelity**: Preserves all ADF attributes through metadata annotations  
   Custom attributes and styling information are maintained using HTML comment metadata, ensuring no data loss during conversion.
@@ -257,6 +260,33 @@ Collapsible content that starts expanded.
 ![Image 2](media:id-2)
 ~~~
 ```
+
+#### Nested ADF Fence Blocks ✨ _New in v2.2.0_
+ADF fence blocks can now be nested within each other, enabling complex document structures:
+
+```markdown
+~~~expand title="Project Overview"
+
+~~~panel type=warning title="Important Notice"
+Please review the requirements before proceeding.
+~~~
+
+~~~mediaSingle layout=wide
+![Architecture Diagram](media:diagram-123)
+~~~
+
+~~~panel type=success title="Status"
+All tests passing ✅
+~~~
+
+~~~
+```
+
+**Supported nested patterns:**
+- `~~~expand` containing panels, media, and other expandable sections
+- `~~~panel` with nested media blocks and sub-panels  
+- Complex multi-level nesting with full content parsing
+- All ADF fence types: `panel`, `expand`, `nestedExpand`, `mediaSingle`, `mediaGroup`
 
 #### Media References
 ```markdown

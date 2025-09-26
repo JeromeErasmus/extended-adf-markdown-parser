@@ -32,8 +32,9 @@ const adf2 = await parser.markdownToAdfAsync(markdown);
 
 **Features Included:**
 - ✅ GitHub Flavored Markdown (tables, strikethrough, task lists)
-- ✅ YAML Frontmatter support
+- ✅ YAML Frontmatter support  
 - ✅ ADF Fence blocks (`~~~panel`, `~~~expand`, etc.)
+- ✅ **Nested ADF Fence blocks** ✨ _New in v2.2.0_ - Complex hierarchical structures
 - ✅ Social elements (`{user:mention}`, `:emoji:`, `{status:text}`)
 - ✅ Sync/async support
 - ✅ Error recovery
@@ -193,6 +194,58 @@ Autolink: https://example.com
 const parser = new Parser({ gfm: true });
 const adf = await parser.markdownToAdfAsync(gfmMarkdown);
 ```
+
+### Nested ADF Fence Blocks ✨ _New in v2.2.0_
+
+Create complex document structures with nested ADF fence blocks:
+
+```typescript
+const nestedMarkdown = `
+~~~expand title="Project Documentation"
+
+~~~panel type=warning title="Prerequisites"
+Before starting, ensure you have:
+- Node.js 18+ installed
+- Access to the development environment
+~~~
+
+~~~mediaSingle layout=wide
+![System Architecture](media:architecture-diagram-id)
+~~~
+
+~~~panel type=success title="Success Criteria"  
+Project is complete when all tests pass ✅
+
+~~~panel type=info title="Testing Notes"
+Run the full test suite with \`npm test\`
+~~~
+
+~~~
+
+~~~
+`;
+
+const parser = new Parser();
+const adf = parser.markdownToAdf(nestedMarkdown);
+
+// Result: Properly nested ADF structure with:
+// - expand containing all child elements
+// - panels nested within the expand
+// - mediaSingle properly positioned
+// - nested panels within panels
+```
+
+**Supported Nested Patterns:**
+- `~~~expand` containing panels, media, and other expandable sections  
+- `~~~panel` with nested media blocks and sub-panels
+- Complex multi-level nesting with unlimited depth
+- All ADF fence types: `panel`, `expand`, `nestedExpand`, `mediaSingle`, `mediaGroup`
+
+**Technical Implementation:**
+- Multi-pass processing ensures all nested structures are detected
+- Automatic content parsing within fence blocks preserves formatting
+- Works across all parser interfaces (Parser, EnhancedMarkdownParser, Engine)
+- Performance optimized with early termination conditions
 
 ## Performance
 
