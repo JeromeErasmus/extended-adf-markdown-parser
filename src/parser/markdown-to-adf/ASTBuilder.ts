@@ -1900,17 +1900,97 @@ export class ASTBuilder {
   }
 
   /**
-   * Parse a single block of content (paragraph or list)
+   * Parse a single block of content (paragraph, list, table, heading, blockquote, codeBlock, rule)
    */
   private parseBlockContent(blockContent: string): ADFNode | null {
     if (!blockContent.trim()) return null;
 
-    // Check if this is a list
     const lines = blockContent.split('\n');
-    const isListBlock = lines.some(line => /^\s*[-*+]\s/.test(line));
+    const trimmed = blockContent.trim();
+    
+    // Check for different block types in priority order
+    
+    // 1. Horizontal rule
+    if (/^\s*[-*_]\s*[-*_]\s*[-*_]\s*$/.test(trimmed) || /^\s*---+\s*$/.test(trimmed)) {
+      return { type: 'rule' };
+    }
+    
+    // 2. Heading
+    const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)$/);
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      const content = headingMatch[2];
+      return {
+        type: 'heading',
+        attrs: { level: Math.min(Math.max(level, 1), 6) },
+        content: this.parseInlineContentWithSocialElements(content)
+      };
+    }
+    
+    // 3. Code block (fenced)
+    if (trimmed.startsWith('```') && trimmed.endsWith('```')) {
+      const codeLines = lines.slice(1, -1); // Remove fence lines
+      const firstLine = lines[0];
+      const languageMatch = firstLine.match(/^```(\w+)?/);
+      const language = languageMatch?.[1];
+      
+      const attrs: any = {};
+      if (language) attrs.language = language;
+      
+      return {
+        type: 'codeBlock',
+        ...(Object.keys(attrs).length > 0 ? { attrs } : {}),
+        content: [{ type: 'text', text: codeLines.join('\n') }]
+      };
+    }
+    
+    // 4. Blockquote
+    const isBlockquote = lines.every(line => 
+      line.trim() === '' || line.match(/^\s*>\s?/)
+    );
+    if (isBlockquote && lines.some(line => line.match(/^\s*>\s?/))) {
+      const quotedContent = lines
+        .map(line => line.replace(/^\s*>\s?/, ''))
+        .join('\n')
+        .trim();
+      
+      return {
+        type: 'blockquote',
+        content: [{
+          type: 'paragraph',
+          content: this.parseInlineContentWithSocialElements(quotedContent)
+        }]
+      };
+    }
+    
+    // 5. Ordered list
+    const isOrderedList = lines.some(line => /^\s*\d+\.\s/.test(line));
+    if (isOrderedList) {
+      const listItems: ADFNode[] = [];
+      
+      for (const line of lines) {
+        const listMatch = line.match(/^\s*\d+\.\s+(.+)$/);
+        if (listMatch) {
+          const itemContent = this.parseInlineContentWithSocialElements(listMatch[1]);
+          listItems.push({
+            type: 'listItem',
+            content: [{
+              type: 'paragraph',
+              content: itemContent
+            }]
+          });
+        }
+      }
 
-    if (isListBlock) {
-      // Parse as bullet list
+      return {
+        type: 'orderedList',
+        content: listItems
+      };
+    }
+    
+    // 6. Bullet list
+    const isBulletList = lines.some(line => /^\s*[-*+]\s/.test(line));
+    if (isBulletList) {
       const listItems: ADFNode[] = [];
       
       for (const line of lines) {
@@ -1931,12 +2011,64 @@ export class ASTBuilder {
         type: 'bulletList',
         content: listItems
       };
-    } else {
-      // Parse as paragraph
-      return {
-        type: 'paragraph',
-        content: this.parseInlineContentWithSocialElements(blockContent)
-      };
     }
+    
+    // 7. Table
+    const isTableBlock = lines.some(line => /^\s*\|.*\|\s*$/.test(line));
+    if (isTableBlock) {
+      return this.parseTableFromLines(lines);
+    }
+    
+    // 8. Default: paragraph
+    return {
+      type: 'paragraph',
+      content: this.parseInlineContentWithSocialElements(blockContent)
+    };
+  }
+
+  /**
+   * Parse table from lines of markdown
+   */
+  private parseTableFromLines(lines: string[]): ADFNode {
+    const tableRows: ADFNode[] = [];
+    let headerProcessed = false;
+
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      
+      // Skip separator lines (e.g., |---|---|
+      if (/^\|\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|$/.test(trimmedLine)) {
+        headerProcessed = true;
+        continue;
+      }
+
+      // Process table rows
+      if (/^\|.*\|$/.test(trimmedLine)) {
+        const cells = trimmedLine
+          .slice(1, -1) // Remove leading and trailing |
+          .split('|')
+          .map(cell => cell.trim());
+
+        const isHeader = !headerProcessed;
+        const cellNodes: ADFNode[] = cells.map(cellContent => ({
+          type: isHeader ? 'tableHeader' : 'tableCell',
+          content: this.parseInlineContentWithSocialElements(cellContent)
+        }));
+
+        tableRows.push({
+          type: 'tableRow',
+          content: cellNodes
+        });
+      }
+    }
+
+    return {
+      type: 'table',
+      attrs: {
+        isNumberColumnEnabled: false,
+        layout: 'default'
+      },
+      content: tableRows
+    };
   }
 }
