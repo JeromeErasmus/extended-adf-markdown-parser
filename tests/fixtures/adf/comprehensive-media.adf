@@ -39,86 +39,81 @@
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center"
+      },
       "content": [
         {
-          "type": "text",
-          "text": "!"
-        },
-        {
-          "type": "text",
-          "text": "Company logo",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:logo-2023"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "logo-2023",
+            "type": "file",
+            "collection": "company-assets",
+            "alt": "Company logo",
+            "width": 200,
+            "height": 100
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 75
+      },
       "content": [
         {
-          "type": "text",
-          "text": "!"
-        },
-        {
-          "type": "text",
-          "text": "Product screenshot",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:app-interface-v2"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "app-interface-v2",
+            "type": "file",
+            "collection": "product-screenshots",
+            "alt": "Product screenshot",
+            "width": 800,
+            "height": 600
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "align-start",
+        "width": 30
+      },
       "content": [
         {
-          "type": "text",
-          "text": "!"
-        },
-        {
-          "type": "text",
-          "text": "User avatar",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:profile-pic-john"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "profile-pic-john",
+            "type": "file",
+            "collection": "user-avatars",
+            "alt": "User avatar",
+            "width": 64,
+            "height": 64
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 100
+      },
       "content": [
         {
-          "type": "text",
-          "text": "!"
-        },
-        {
-          "type": "text",
-          "text": "System architecture diagram",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:architecture-overview"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "architecture-overview",
+            "type": "file",
+            "collection": "technical-diagrams",
+            "alt": "System architecture diagram",
+            "width": 1200,
+            "height": 800
+          }
         }
       ]
     },
@@ -135,65 +130,62 @@
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 90
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media width=\"800\" height=\"600\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "High resolution application screenshot",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:desktop-app-full"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "desktop-app-full",
+            "type": "file",
+            "collection": "product-screenshots",
+            "alt": "High resolution application screenshot",
+            "width": 800,
+            "height": 600
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "align-start",
+        "width": 50
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media width=\"400\" height=\"300\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "Thumbnail preview of dashboard",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:dashboard-thumbnail"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "dashboard-thumbnail",
+            "type": "file",
+            "collection": "product-screenshots",
+            "alt": "Thumbnail preview of dashboard",
+            "width": 400,
+            "height": 300
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "align-start",
+        "width": 25
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media width=\"200\" height=\"150\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "Small profile image",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:profile-small"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "profile-small",
+            "type": "file",
+            "collection": "user-avatars",
+            "alt": "Small profile image",
+            "width": 200,
+            "height": 150
+          }
         }
       ]
     },
@@ -222,65 +214,62 @@
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 85
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media collection=\"ProjectAssets\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "System architecture diagram",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:system-architecture"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "system-architecture",
+            "type": "file",
+            "collection": "ProjectAssets",
+            "alt": "System architecture diagram",
+            "width": 1000,
+            "height": 700
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 70
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media collection=\"ProjectAssets\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "Database schema visualization",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:db-schema"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "db-schema",
+            "type": "file",
+            "collection": "ProjectAssets",
+            "alt": "Database schema visualization",
+            "width": 900,
+            "height": 600
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 80
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media collection=\"ProjectAssets\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "API endpoint documentation",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:api-docs-diagram"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "api-docs-diagram",
+            "type": "file",
+            "collection": "ProjectAssets",
+            "alt": "API endpoint documentation",
+            "width": 1100,
+            "height": 750
+          }
         }
       ]
     },
@@ -297,65 +286,62 @@
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 60
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media collection=\"UserUploads\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "Meeting whiteboard photo",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:brainstorm-session-2023"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "brainstorm-session-2023",
+            "type": "file",
+            "collection": "UserUploads",
+            "alt": "Meeting whiteboard photo",
+            "width": 800,
+            "height": 600
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 55
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media collection=\"UserUploads\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "Team photo from conference",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:team-conference-2023"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "team-conference-2023",
+            "type": "file",
+            "collection": "UserUploads",
+            "alt": "Team photo from conference",
+            "width": 1000,
+            "height": 700
+          }
         }
       ]
     },
     {
-      "type": "paragraph",
+      "type": "mediaSingle",
+      "attrs": {
+        "layout": "center",
+        "width": 75
+      },
       "content": [
         {
-          "type": "text",
-          "text": "<!-- adf:media collection=\"UserUploads\" -->\n!"
-        },
-        {
-          "type": "text",
-          "text": "Office space layout",
-          "marks": [
-            {
-              "type": "link",
-              "attrs": {
-                "href": "media:office-floor-plan"
-              }
-            }
-          ]
+          "type": "media",
+          "attrs": {
+            "id": "office-floor-plan",
+            "type": "file",
+            "collection": "UserUploads",
+            "alt": "Office space layout",
+            "width": 1200,
+            "height": 900
+          }
         }
       ]
     },
