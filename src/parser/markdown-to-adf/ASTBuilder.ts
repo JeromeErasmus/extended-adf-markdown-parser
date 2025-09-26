@@ -154,6 +154,17 @@ export class ASTBuilder {
       ? this.convertInlineTokensToNodes(token.children)
       : this.convertInlineContent(token.content);
     
+    // Check if this paragraph contains only a single mediaSingle element
+    // If so, promote it to block level instead of keeping it as inline
+    if (content.length === 1 && content[0].type === 'mediaSingle') {
+      // Apply any paragraph-level attributes to the mediaSingle
+      const mediaSingle = content[0];
+      if (Object.keys(customAttrs).length > 0) {
+        mediaSingle.attrs = { ...mediaSingle.attrs, ...customAttrs };
+      }
+      return mediaSingle;
+    }
+    
     const node: ADFNode = {
       type: 'paragraph',
       content
@@ -584,11 +595,226 @@ export class ASTBuilder {
   }
 
   private parseInlineMarkdown(content: string): ADFNode[] {
-    // Handle special placeholder URLs like {media:123}, {user:456}
-    content = this.expandPlaceholderURLs(content);
+    // First parse social elements and special syntax before standard markdown processing
+    return this.parseInlineContentWithSocialElements(content);
+  }
+
+  /**
+   * Parse inline content with support for social elements and special ADF syntax
+   */
+  private parseInlineContentWithSocialElements(content: string): ADFNode[] {
+    if (!content) return [];
+
+    const nodes: ADFNode[] = [];
+    let remaining = content;
+
+    while (remaining.length > 0) {
+      // Try to match social elements and special syntax first
+      const socialMatch = this.findNextSocialElement(remaining);
+      
+      if (socialMatch) {
+        // Add text before the social element
+        if (socialMatch.beforeText) {
+          nodes.push(...this.parseInlineMarksRecursively(socialMatch.beforeText));
+        }
+        
+        // Add the social element node
+        nodes.push(socialMatch.node);
+        
+        // Continue with remaining content
+        remaining = socialMatch.afterText;
+      } else {
+        // No more social elements, process remaining content as regular markdown
+        nodes.push(...this.parseInlineMarksRecursively(remaining));
+        break;
+      }
+    }
+
+    return nodes;
+  }
+
+  /**
+   * Find the next social element in the content
+   */
+  private findNextSocialElement(content: string): { beforeText: string; node: ADFNode; afterText: string } | null {
+    // Define patterns for social elements (order matters - most specific first)
+    const patterns = [
+      // User mentions: {user:username} or {user:user-id-123}
+      {
+        regex: /\{user:([^}]+)\}/,
+        type: 'mention',
+        process: (match: RegExpMatchArray) => ({
+          type: 'mention' as const,
+          attrs: {
+            id: match[1],
+            text: `@${match[1]}`,
+            userType: 'DEFAULT'
+          }
+        })
+      },
+      // Emoji: :emoji_name:
+      {
+        regex: /:([a-zA-Z0-9_+-]+):/,
+        type: 'emoji',
+        process: (match: RegExpMatchArray) => ({
+          type: 'emoji' as const,
+          attrs: {
+            shortName: match[1],
+            id: match[1],
+            text: match[0] // fallback to :emoji: format
+          }
+        })
+      },
+      // Date: {date:YYYY-MM-DD}
+      {
+        regex: /\{date:(\d{4}-\d{2}-\d{2})\}/,
+        type: 'date',
+        process: (match: RegExpMatchArray) => ({
+          type: 'date' as const,
+          attrs: {
+            timestamp: match[1]
+          }
+        })
+      },
+      // Status: {status:status text}
+      {
+        regex: /\{status:([^}]+)\}/,
+        type: 'status',
+        process: (match: RegExpMatchArray) => ({
+          type: 'status' as const,
+          attrs: {
+            text: match[1],
+            color: 'neutral',
+            style: 'default'
+          }
+        })
+      },
+      // Inline cards: [text](card:url)
+      {
+        regex: /\[([^\]]*)\]\(card:([^)]+)\)/,
+        type: 'inlineCard',
+        process: (match: RegExpMatchArray) => ({
+          type: 'inlineCard' as const,
+          attrs: {
+            url: match[2]
+          }
+        })
+      },
+      // Media references: ![alt text](media:id) (return special type for block processing)
+      {
+        regex: /!\[([^\]]*)\]\(media:([^)]+)\)/,
+        type: 'mediaReference',
+        process: (match: RegExpMatchArray) => {
+          const [, alt, id] = match;
+          // Return a special node type that will be converted to mediaSingle at block level
+          return {
+            type: 'mediaReference' as const,
+            attrs: {
+              id,
+              alt: alt || '',
+              mediaType: 'file',
+              collection: ''
+            }
+          };
+        }
+      }
+    ];
+
+    let earliestMatch: { index: number; beforeText: string; node: ADFNode; afterText: string } | null = null;
+
+    for (const pattern of patterns) {
+      const match = content.match(pattern.regex);
+      if (match && match.index !== undefined) {
+        if (!earliestMatch || match.index < earliestMatch.index) {
+          const beforeText = content.substring(0, match.index);
+          const afterText = content.substring(match.index + match[0].length);
+          const node = pattern.process(match);
+          
+          earliestMatch = {
+            index: match.index,
+            beforeText,
+            node,
+            afterText
+          };
+        }
+      }
+    }
+
+    return earliestMatch;
+  }
+
+  /**
+   * Process a text node for social elements and return array of ADF nodes
+   */
+  private processTextNodeForSocialElements(text: string): ADFNode[] {
+    if (!text) return [];
+
+    // Use the same social element parsing logic
+    return this.parseInlineContentWithSocialElements(text);
+  }
+
+  /**
+   * Find and process metadata comments for advanced formatting
+   */
+  private findNextMetadataComment(content: string): { beforeText: string; node: ADFNode; afterText: string } | null {
+    // Pattern for metadata comments: <!-- adf:text attr=value ... -->text<!-- /adf:text -->
+    const metadataRegex = /<!--\s*adf:text\s+([^>]+)-->(.*?)<!--\s*\/adf:text\s*-->/;
+    const match = content.match(metadataRegex);
     
-    // Parse inline markdown content with proper mark support
-    return this.parseInlineMarksRecursively(content);
+    if (!match || match.index === undefined) {
+      return null;
+    }
+    
+    const [fullMatch, attributes, text] = match;
+    const beforeText = content.substring(0, match.index);
+    const afterText = content.substring(match.index + fullMatch.length);
+    
+    // Parse attributes
+    const marks: any[] = [];
+    const attrs = attributes.trim();
+    
+    // Parse individual attributes
+    const attrMatches = attrs.matchAll(/(\w+)=(?:([^"\s]+)|"([^"]*)")/g);
+    for (const attrMatch of attrMatches) {
+      const [, attrName, unquotedValue, quotedValue] = attrMatch;
+      const value = quotedValue !== undefined ? quotedValue : unquotedValue;
+      
+      switch (attrName) {
+        case 'underline':
+          if (value === 'true') {
+            marks.push({ type: 'underline' });
+          }
+          break;
+        case 'color':
+          marks.push({ type: 'textColor', attrs: { color: value } });
+          break;
+        case 'backgroundColor':
+          marks.push({ type: 'backgroundColor', attrs: { color: value } });
+          break;
+        case 'subscript':
+          if (value === 'true') {
+            marks.push({ type: 'subsup', attrs: { type: 'sub' } });
+          }
+          break;
+        case 'superscript':
+          if (value === 'true') {
+            marks.push({ type: 'subsup', attrs: { type: 'sup' } });
+          }
+          break;
+      }
+    }
+    
+    const node: ADFNode = {
+      type: 'text',
+      text,
+      ...(marks.length > 0 && { marks })
+    };
+    
+    return {
+      beforeText,
+      node,
+      afterText
+    };
   }
 
   private parseInlineMarksRecursively(content: string): ADFNode[] {
@@ -596,9 +822,57 @@ export class ASTBuilder {
     
     const nodes: ADFNode[] = [];
     
+    // First check for metadata comment formatting
+    const metadataMatch = this.findNextMetadataComment(content);
+    if (metadataMatch) {
+      // Add text before the metadata comment
+      if (metadataMatch.beforeText) {
+        nodes.push(...this.parseInlineMarksRecursively(metadataMatch.beforeText));
+      }
+      
+      // Add the formatted text node
+      nodes.push(metadataMatch.node);
+      
+      // Continue with remaining content
+      nodes.push(...this.parseInlineMarksRecursively(metadataMatch.afterText));
+      return nodes;
+    }
+    
     // Patterns for inline formatting (order matters for precedence)
     const patterns = [
-      // Links: [text](url)
+      // Inline cards: [text](url)<!-- adf:inlineCard -->
+      { 
+        regex: /\[([^\]]+)\]\(([^)]+)\)<!--\s*adf:inlineCard\s*-->/,
+        type: 'inlineCard',
+        process: (match: RegExpMatchArray, before: string, after: string) => {
+          const [fullMatch, linkText, href] = match;
+          return {
+            before,
+            node: {
+              type: 'inlineCard',
+              attrs: { url: href }
+            },
+            after
+          };
+        }
+      },
+      // Inline cards: [text](card:url)
+      { 
+        regex: /\[([^\]]*)\]\(card:([^)]+)\)/,
+        type: 'inlineCard',
+        process: (match: RegExpMatchArray, before: string, after: string) => {
+          const [fullMatch, linkText, url] = match;
+          return {
+            before,
+            node: {
+              type: 'inlineCard',
+              attrs: { url }
+            },
+            after
+          };
+        }
+      },
+      // Regular links: [text](url)
       { 
         regex: /\[([^\]]+)\]\(([^)]+)\)/,
         type: 'link',
@@ -661,6 +935,52 @@ export class ASTBuilder {
               type: 'text',
               text: codeText,
               marks: [{ type: 'code' }]
+            },
+            after
+          };
+        }
+      },
+      // Advanced formatting with metadata comments: <!-- adf:text attributes -->text<!-- /adf:text -->
+      {
+        regex: /<!--\s*adf:text\s+([^>]+)\s*-->([^<]+)<!--\s*\/adf:text\s*-->/,
+        type: 'advancedText',
+        process: (match: RegExpMatchArray, before: string, after: string) => {
+          const [fullMatch, attributesStr, text] = match;
+          const marks: any[] = [];
+          
+          // Parse attributes from the comment
+          try {
+            // Handle key=value pairs
+            const attrMatches = attributesStr.matchAll(/(\w+)=["']?([^"'\s]+)["']?/g);
+            for (const attrMatch of attrMatches) {
+              const [, key, value] = attrMatch;
+              switch (key) {
+                case 'underline':
+                  if (value === 'true') {
+                    marks.push({ type: 'underline' });
+                  }
+                  break;
+                case 'textColor':
+                  marks.push({ type: 'textColor', attrs: { color: value } });
+                  break;
+                case 'backgroundColor':
+                  marks.push({ type: 'backgroundColor', attrs: { color: value } });
+                  break;
+                case 'subsup':
+                  marks.push({ type: 'subsup', attrs: { type: value } }); // 'sub' or 'sup'
+                  break;
+              }
+            }
+          } catch (error) {
+            // If parsing fails, treat as regular text
+          }
+          
+          return {
+            before,
+            node: {
+              type: 'text',
+              text: text.trim(),
+              ...(marks.length > 0 && { marks })
             },
             after
           };
@@ -1115,8 +1435,8 @@ export class ASTBuilder {
       return null;
     }
 
-    // Check if this is an ADF media placeholder
-    const adfMediaMatch = node.url.match(/^adf:media:(.+)$/);
+    // Check if this is an ADF media placeholder (adf:media: or media:)
+    const adfMediaMatch = node.url.match(/^(?:adf:)?media:(.+)$/);
     if (!adfMediaMatch) {
       // Regular image - not a media placeholder
       // For now, we'll treat regular images as unsupported and return null
@@ -1157,17 +1477,23 @@ export class ASTBuilder {
       attrs: mediaAttrs
     };
 
-    // If we have mediaSingle attributes, wrap the media node
-    if (Object.keys(mediaSingleAttrs).length > 0) {
-      return {
-        type: 'mediaSingle',
-        attrs: mediaSingleAttrs,
-        content: [mediaNode]
-      };
+    // Add default collection and alt if missing
+    if (!mediaAttrs.collection) {
+      mediaAttrs.collection = '';
+    }
+    if (!mediaAttrs.alt) {
+      mediaAttrs.alt = node.alt || '';
     }
 
-    // Return just the media node
-    return mediaNode;
+    // Always wrap media in mediaSingle for block-level images
+    return {
+      type: 'mediaSingle',
+      attrs: {
+        layout: 'center',
+        ...mediaSingleAttrs
+      },
+      content: [mediaNode]
+    };
   }
 
   /**
@@ -1194,7 +1520,8 @@ export class ASTBuilder {
   private convertMdastInlineNode(node: any): ADFNode | ADFNode[] | null {
     switch (node.type) {
       case 'text':
-        return { type: 'text', text: node.value };
+        // Process text node for social elements and special syntax
+        return this.processTextNodeForSocialElements(node.value);
       
       case 'strong':
         return this.wrapWithMark(node.children, 'strong');
@@ -1209,6 +1536,15 @@ export class ASTBuilder {
         return this.wrapWithMark(node.children, 'strike');
       
       case 'link':
+        // Check if this is an inline card (card: URL)
+        if (node.url.startsWith('card:')) {
+          return {
+            type: 'inlineCard',
+            attrs: {
+              url: node.url.substring(5) // Remove 'card:' prefix
+            }
+          };
+        }
         return this.wrapWithMark(node.children, 'link', { href: node.url, ...(node.title && { title: node.title }) });
       
       case 'break':
