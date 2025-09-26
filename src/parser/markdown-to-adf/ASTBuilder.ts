@@ -136,13 +136,18 @@ export class ASTBuilder {
     const level = token.metadata?.attrs?.level || 1;
     const customAttrs = this.extractCustomAttributes(token.metadata, ['level']);
     
+    // Use inline tokens if available (for social elements), otherwise parse content string
+    const content = token.children && token.children.length > 0 
+      ? this.convertInlineTokensToNodes(token.children)
+      : this.convertInlineContent(token.content);
+    
     return {
       type: 'heading',
       attrs: {
         level: Math.min(Math.max(level, 1), 6), // Clamp between 1-6
         ...customAttrs
       },
-      content: this.convertInlineContent(token.content)
+      content
     };
   }
 
@@ -299,9 +304,14 @@ export class ASTBuilder {
     const isHeader = token.type === 'tableHeader';
     const customAttrs = this.extractCustomAttributes(token.metadata);
     
+    // Use inline tokens if available (for social elements), otherwise parse content string
+    const content = token.children && token.children.length > 0 
+      ? this.convertInlineTokensToNodes(token.children)
+      : this.convertInlineContent(token.content);
+    
     const node: ADFNode = {
       type: isHeader ? 'tableHeader' : 'tableCell',
-      content: this.convertInlineContent(token.content)
+      content
     };
 
     const attrs: any = { ...customAttrs };
