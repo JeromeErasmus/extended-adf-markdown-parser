@@ -145,24 +145,22 @@ export class Parser {
         onRecovery: options?.onRecovery
       });
       
-      // Initialize enhanced parser if ADF extensions are enabled
-      if (options?.enableAdfExtensions) {
-        try {
-          this.enhancedParser = new EnhancedMarkdownParser({
-            strict: options.strict,
-            gfm: options.gfm !== false, // Default to true
-            frontmatter: options.frontmatter !== false, // Default to true
-            adfExtensions: true,
-            maxNestingDepth: options.maxDepth || 5
-          });
-        } catch (error) {
-          if (options?.strict) {
-            throw new ParserError('Failed to initialize enhanced parser', 'INIT_ERROR');
-          }
-          // Continue without enhanced parser in non-strict mode
-          if (options?.enableLogging) {
-            console.warn('Enhanced parser initialization failed, continuing with basic parser:', error);
-          }
+      // Always initialize enhanced parser for ADF fence block support
+      try {
+        this.enhancedParser = new EnhancedMarkdownParser({
+          strict: options?.strict,
+          gfm: options?.gfm !== false, // Default to true
+          frontmatter: options?.frontmatter !== false, // Default to true
+          adfExtensions: true,
+          maxNestingDepth: options?.maxDepth || 5
+        });
+      } catch (error) {
+        if (options?.strict) {
+          throw new ParserError('Failed to initialize enhanced parser', 'INIT_ERROR');
+        }
+        // Continue without enhanced parser in non-strict mode
+        if (options?.enableLogging) {
+          console.warn('Enhanced parser initialization failed, continuing with basic parser:', error);
         }
       }
     } catch {

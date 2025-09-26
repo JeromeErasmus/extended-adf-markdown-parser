@@ -9,6 +9,7 @@ import { ADFDocument, ADFNode, ADFMark } from '../../types/adf.types.js';
 import type { Root } from 'mdast';
 import type { AdfFenceNode } from '../remark/adf-from-markdown.js';
 import { getNodeMetadata, applyMetadataToAdfNode, generateMetadataComment, isAdfMetadataComment } from '../../utils/metadata-comments.js';
+import { MarkdownTokenizer } from './MarkdownTokenizer.js';
 
 export interface ASTBuildOptions {
   strict?: boolean;
@@ -347,7 +348,7 @@ export class ASTBuilder {
     
     const content = token.children ? 
       this.convertTokensToNodes(token.children) :
-      token.content ? [this.convertParagraph({ ...token, type: 'paragraph' })] : [];
+      token.content ? this.parseBlockContentWithSocialElements(token.content) : [];
 
     return {
       type: 'panel',
@@ -369,9 +370,10 @@ export class ASTBuilder {
     const fenceAttrs = { ...fenceToken.attributes };
     delete fenceAttrs.title; // Remove title as it's handled separately
     
+    
     const content = token.children ? 
       this.convertTokensToNodes(token.children) :
-      token.content ? [this.convertParagraph({ ...token, type: 'paragraph' })] : [];
+      token.content ? this.parseBlockContentWithSocialElements(token.content) : [];
 
     const attrs: any = { ...fenceAttrs, ...customAttrs };
     if (title) attrs.title = title;
@@ -1845,22 +1847,43 @@ export class ASTBuilder {
   }
 
   /**
-   * Split content into markdown blocks (paragraphs, lists, etc.)
+   * Split content into markdown blocks (paragraphs, lists, ADF fence blocks, etc.)
    */
   private splitIntoBlocks(content: string): string[] {
     // Split by double newlines for paragraph breaks
-    // But keep list items together
+    // But keep list items and ADF fence blocks together
     const lines = content.split('\n');
     const blocks: string[] = [];
     let currentBlock = '';
     let inList = false;
+    let inADFFence = false;
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       const isListItem = /^\s*[-*+]\s/.test(line);
       const isEmptyLine = line.trim() === '';
+      const isADFFenceStart = /^~~~(\w+)(?:\s+.*)?$/.test(line.trim());
+      const isADFFenceEnd = line.trim() === '~~~' && inADFFence;
 
-      if (isListItem) {
+      if (isADFFenceStart && !inADFFence) {
+        // Start of ADF fence block
+        if (currentBlock.trim()) {
+          // End current block and start ADF fence
+          blocks.push(currentBlock.trim());
+          currentBlock = '';
+        }
+        inADFFence = true;
+        currentBlock += (currentBlock ? '\n' : '') + line;
+      } else if (isADFFenceEnd) {
+        // End of ADF fence block
+        currentBlock += '\n' + line;
+        blocks.push(currentBlock.trim());
+        currentBlock = '';
+        inADFFence = false;
+      } else if (inADFFence) {
+        // Inside ADF fence block - keep everything together
+        currentBlock += '\n' + line;
+      } else if (isListItem) {
         if (!inList && currentBlock.trim()) {
           // End current block and start list
           blocks.push(currentBlock.trim());
@@ -1900,7 +1923,7 @@ export class ASTBuilder {
   }
 
   /**
-   * Parse a single block of content (paragraph, list, table, heading, blockquote, codeBlock, rule)
+   * Parse a single block of content (ADF fence blocks, horizontal rules, headings, code blocks, blockquotes, lists, tables, paragraphs)
    */
   private parseBlockContent(blockContent: string): ADFNode | null {
     if (!blockContent.trim()) return null;
@@ -1910,12 +1933,30 @@ export class ASTBuilder {
     
     // Check for different block types in priority order
     
-    // 1. Horizontal rule
+    // 1. ADF fence blocks (~~~panel, ~~~expand, ~~~mediaSingle, ~~~mediaGroup)
+    if (/^~~~(\w+)(?:\s+.*)?$/m.test(trimmed) && trimmed.includes('\n~~~')) {
+      // This is a complete ADF fence block - tokenize it properly
+      try {
+        const tokenizer = new MarkdownTokenizer();
+        const tokens = tokenizer.tokenize(blockContent);
+        if (tokens.length > 0) {
+          const node = this.convertTokenToNode(tokens[0]);
+          if (node) {
+            return node;
+          }
+        }
+      } catch (error) {
+        // If tokenization fails, fall through to default parsing
+        console.warn('❌ ADF fence block tokenization failed:', error);
+      }
+    }
+    
+    // 2. Horizontal rule
     if (/^\s*[-*_]\s*[-*_]\s*[-*_]\s*$/.test(trimmed) || /^\s*---+\s*$/.test(trimmed)) {
       return { type: 'rule' };
     }
     
-    // 2. Heading
+    // 3. Heading
     const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)$/);
     if (headingMatch) {
       const level = headingMatch[1].length;
@@ -1927,7 +1968,7 @@ export class ASTBuilder {
       };
     }
     
-    // 3. Code block (fenced)
+    // 4. Code block (fenced)
     if (trimmed.startsWith('```') && trimmed.endsWith('```')) {
       const codeLines = lines.slice(1, -1); // Remove fence lines
       const firstLine = lines[0];
@@ -1944,7 +1985,7 @@ export class ASTBuilder {
       };
     }
     
-    // 4. Blockquote
+    // 5. Blockquote
     const isBlockquote = lines.every(line => 
       line.trim() === '' || line.match(/^\s*>\s?/)
     );
@@ -1963,7 +2004,7 @@ export class ASTBuilder {
       };
     }
     
-    // 5. Ordered list
+    // 6. Ordered list
     const isOrderedList = lines.some(line => /^\s*\d+\.\s/.test(line));
     if (isOrderedList) {
       const listItems: ADFNode[] = [];
@@ -1988,7 +2029,7 @@ export class ASTBuilder {
       };
     }
     
-    // 6. Bullet list
+    // 7. Bullet list
     const isBulletList = lines.some(line => /^\s*[-*+]\s/.test(line));
     if (isBulletList) {
       const listItems: ADFNode[] = [];
@@ -2013,13 +2054,13 @@ export class ASTBuilder {
       };
     }
     
-    // 7. Table
+    // 8. Table
     const isTableBlock = lines.some(line => /^\s*\|.*\|\s*$/.test(line));
     if (isTableBlock) {
       return this.parseTableFromLines(lines);
     }
     
-    // 8. Default: paragraph
+    // 9. Default: paragraph
     return {
       type: 'paragraph',
       content: this.parseInlineContentWithSocialElements(blockContent)

@@ -446,4 +446,215 @@ systemctl status nginx
       expect(panelStr).toContain('"type":"status"');
     });
   });
+
+  describe('ADF Fence Blocks in Expand Blocks', () => {
+    it('should parse nested panel blocks in expand blocks', () => {
+      const markdown = `~~~expand title="Documentation"
+
+~~~panel type=info title="Important Information"
+This is an info panel with {user:admin} :star:
+~~~
+
+Additional content after the panel.
+
+~~~`;
+      
+      const tokens = tokenizer.tokenize(markdown);
+      const adf = builder.buildADF(tokens);
+
+      expect(adf.content[0].type).toBe('expand');
+      
+      const expandContent = adf.content[0].content || [];
+      const panel = expandContent.find((node: any) => node.type === 'panel');
+      
+      expect(panel).toBeDefined();
+      expect(panel.attrs.panelType).toBe('info');
+      expect(panel.attrs.title).toBe('Important Information');
+      
+      // Check social elements within the panel
+      const panelStr = JSON.stringify(panel);
+      expect(panelStr).toContain('"type":"mention"');
+      expect(panelStr).toContain('"type":"emoji"');
+    });
+
+    it('should parse nested mediaSingle blocks in expand blocks', () => {
+      const markdown = `~~~expand title="Media Gallery"
+
+~~~mediaSingle layout=center width=80
+![Description](media:media-id-123)
+~~~
+
+~~~`;
+      
+      const tokens = tokenizer.tokenize(markdown);
+      const adf = builder.buildADF(tokens);
+
+      expect(adf.content[0].type).toBe('expand');
+      
+      const expandContent = adf.content[0].content || [];
+      const mediaSingle = expandContent.find((node: any) => node.type === 'mediaSingle');
+      
+      expect(mediaSingle).toBeDefined();
+      expect(mediaSingle.attrs.layout).toBe('center');
+      expect(mediaSingle.attrs.width).toBe(80);
+    });
+
+    it('should parse nested mediaGroup blocks in expand blocks', () => {
+      const markdown = `~~~expand title="Image Gallery"
+
+~~~mediaGroup
+![Image 1](media:id-1)
+![Image 2](media:id-2)
+~~~
+
+~~~`;
+      
+      const tokens = tokenizer.tokenize(markdown);
+      const adf = builder.buildADF(tokens);
+
+      expect(adf.content[0].type).toBe('expand');
+      
+      const expandContent = adf.content[0].content || [];
+      const mediaGroup = expandContent.find((node: any) => node.type === 'mediaGroup');
+      
+      expect(mediaGroup).toBeDefined();
+      expect(mediaGroup.content).toHaveLength(2); // Two media items
+    });
+
+    it('should parse multiple nested ADF fence blocks in expand blocks', () => {
+      const markdown = `~~~expand title="Complex Nested Content"
+
+~~~panel type=warning title="Warning"
+Important notice with {status:active}
+~~~
+
+~~~mediaSingle layout=wide
+![Diagram](media:diagram-123)
+~~~
+
+~~~panel type=success title="Success"
+Process completed by {user:system.admin} on {date:2024-01-30}
+~~~
+
+~~~`;
+      
+      const tokens = tokenizer.tokenize(markdown);
+      const adf = builder.buildADF(tokens);
+
+      expect(adf.content[0].type).toBe('expand');
+      
+      const expandContent = adf.content[0].content || [];
+      
+      const warningPanel = expandContent.find((node: any) => 
+        node.type === 'panel' && node.attrs?.panelType === 'warning'
+      );
+      const mediaSingle = expandContent.find((node: any) => node.type === 'mediaSingle');
+      const successPanel = expandContent.find((node: any) => 
+        node.type === 'panel' && node.attrs?.panelType === 'success'
+      );
+      
+      expect(warningPanel).toBeDefined();
+      expect(mediaSingle).toBeDefined();
+      expect(successPanel).toBeDefined();
+      
+      // Verify social elements in panels
+      const expandStr = JSON.stringify(expandContent);
+      expect(expandStr).toContain('"type":"status"');
+      expect(expandStr).toContain('"type":"mention"');
+      expect(expandStr).toContain('"type":"date"');
+    });
+  });
+
+  describe('ADF Fence Blocks in Panel Blocks', () => {
+    it('should parse nested expand blocks in panel blocks', () => {
+      const markdown = `~~~panel type=info title="Container Panel"
+
+~~~expand title="Nested Expandable Section"
+This content is nested inside a panel with {user:nested.user}
+~~~
+
+~~~`;
+      
+      const tokens = tokenizer.tokenize(markdown);
+      const adf = builder.buildADF(tokens);
+
+      expect(adf.content[0].type).toBe('panel');
+      expect(adf.content[0].attrs.panelType).toBe('info');
+      
+      const panelContent = adf.content[0].content || [];
+      const nestedExpand = panelContent.find((node: any) => node.type === 'expand');
+      
+      expect(nestedExpand).toBeDefined();
+      expect(nestedExpand.attrs.title).toBe('Nested Expandable Section');
+      
+      // Check social elements within the nested expand
+      const nestedStr = JSON.stringify(nestedExpand);
+      expect(nestedStr).toContain('"type":"mention"');
+    });
+
+    it('should parse nested mediaSingle blocks in panel blocks', () => {
+      const markdown = `~~~panel type=note title="Technical Documentation"
+
+~~~mediaSingle layout=full-width
+![Architecture Diagram](media:arch-diagram)
+~~~
+
+This diagram shows the system architecture.
+
+~~~`;
+      
+      const tokens = tokenizer.tokenize(markdown);
+      const adf = builder.buildADF(tokens);
+
+      expect(adf.content[0].type).toBe('panel');
+      
+      const panelContent = adf.content[0].content || [];
+      const mediaSingle = panelContent.find((node: any) => node.type === 'mediaSingle');
+      
+      expect(mediaSingle).toBeDefined();
+      expect(mediaSingle.attrs.layout).toBe('full-width');
+      
+      // Should also have a paragraph with the description text
+      const paragraph = panelContent.find((node: any) => node.type === 'paragraph');
+      expect(paragraph).toBeDefined();
+    });
+  });
+
+  describe('Deep Nesting of ADF Fence Blocks', () => {
+    it('should handle expand within panel within expand', () => {
+      const markdown = `~~~expand title="Outer Expand"
+
+~~~panel type=info title="Middle Panel"
+
+~~~expand title="Inner Expand"
+Deeply nested content with {user:deep.user} and {status:nested}
+~~~
+
+~~~
+
+~~~`;
+      
+      const tokens = tokenizer.tokenize(markdown);
+      const adf = builder.buildADF(tokens);
+
+      expect(adf.content[0].type).toBe('expand');
+      expect(adf.content[0].attrs.title).toBe('Outer Expand');
+      
+      // Find the nested panel
+      const outerContent = adf.content[0].content || [];
+      const middlePanel = outerContent.find((node: any) => node.type === 'panel');
+      expect(middlePanel).toBeDefined();
+      
+      // Find the inner expand within the panel
+      const panelContent = middlePanel.content || [];
+      const innerExpand = panelContent.find((node: any) => node.type === 'expand');
+      expect(innerExpand).toBeDefined();
+      expect(innerExpand.attrs.title).toBe('Inner Expand');
+      
+      // Check social elements in the deepest level
+      const innerStr = JSON.stringify(innerExpand);
+      expect(innerStr).toContain('"type":"mention"');
+      expect(innerStr).toContain('"type":"status"');
+    });
+  });
 });
