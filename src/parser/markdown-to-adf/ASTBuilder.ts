@@ -1113,7 +1113,12 @@ export class ASTBuilder {
     for (const node of nodes) {
       const adfNode = this.convertMdastNodeToADF(node);
       if (adfNode) {
-        adfNodes.push(adfNode);
+        // Handle special case for multiple nodes from social elements
+        if ((adfNode as any).__multipleNodes) {
+          adfNodes.push(...(adfNode as any).__multipleNodes);
+        } else {
+          adfNodes.push(adfNode);
+        }
       }
     }
     
@@ -1165,7 +1170,18 @@ export class ASTBuilder {
         // Skip frontmatter nodes - they're handled separately
         return null;
       case 'text':
-        adfNode = { type: 'text', text: node.value };
+        // Process text node for social elements and special syntax
+        // Note: This returns an array, but we need to handle it in the calling function
+        const processedNodes = this.processTextNodeForSocialElements(node.value);
+        if (processedNodes.length === 1) {
+          adfNode = processedNodes[0];
+        } else if (processedNodes.length > 1) {
+          // Return multiple nodes as a special marker that the parent can handle
+          return { __multipleNodes: processedNodes } as any;
+        } else {
+          // Empty result, create empty text node
+          adfNode = { type: 'text', text: '' };
+        }
         break;
       case 'image':
         adfNode = this.convertMdastImage(node);

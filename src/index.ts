@@ -258,9 +258,17 @@ export class Parser {
         // Parse markdown to mdast
         const mdast = this.remarkProcessor.parse(markdown);
         
+        if (this.options.enableLogging) {
+          console.log('DEBUG: Basic parser - parsed mdast successfully');
+        }
+        
         // Convert mdast to ADF
         return this.convertMdastToAdf(mdast);
-      } catch {
+      } catch (error) {
+        if (this.options.enableLogging) {
+          console.log('DEBUG: Basic parser failed, error:', error);
+        }
+        
         if (options?.strict) {
           throw new ParserError('Failed to convert markdown to ADF', 'CONVERSION_ERROR');
         }
@@ -525,8 +533,21 @@ export class Parser {
     });
 
     try {
+      // Debug: Check initial state
+      if (this.options.enableLogging) {
+        console.log('DEBUG: Original mdast children types:', mdast.children?.map((c: any) => ({ type: c.type, lang: c.lang })));
+      }
+      
+      // Post-process for ADF fence blocks (same as EnhancedParser)
+      const processedMdast = this.postProcessAdfFenceBlocks(mdast);
+      
+      // Debug: Check after post-processing
+      if (this.options.enableLogging) {
+        console.log('DEBUG: After postProcessing children types:', processedMdast.children?.map((c: any) => ({ type: c.type, nodeType: c.nodeType })));
+      }
+      
       // Convert mdast tree to ADF using the same logic as EnhancedParser
-      const content = builder.convertMdastNodesToADF(mdast.children);
+      const content = builder.convertMdastNodesToADF(processedMdast.children);
       
       return {
         version: 1,
@@ -577,6 +598,76 @@ export class Parser {
     }
     
     return count;
+  }
+
+  /**
+   * Post-process mdast tree to convert code blocks with ADF languages to ADF fence nodes
+   * Same method as used in MarkdownParser and EnhancedMarkdownParser
+   */
+  private postProcessAdfFenceBlocks(tree: any): any {
+    const adfBlockTypes = new Set(['panel', 'expand', 'nestedExpand', 'mediaSingle', 'mediaGroup']);
+    
+    const processedTree = JSON.parse(JSON.stringify(tree)); // Deep clone
+    
+    const processNode = (node: any): void => {
+      if (node.type === 'code' && node.lang && adfBlockTypes.has(node.lang)) {
+        // Convert code block to adfFence node
+        const attributes = this.parseAdfLanguageString(node.lang, node.meta || '');
+        
+        node.type = 'adfFence';
+        node.nodeType = node.lang;
+        node.attributes = attributes;
+        node.value = node.value;
+        
+        // Remove code block properties
+        delete node.lang;
+        delete node.meta;
+      }
+      
+      if (node.children) {
+        node.children.forEach(processNode);
+      }
+    };
+    
+    processedTree.children.forEach(processNode);
+    
+    return processedTree;
+  }
+
+  /**
+   * Parse ADF language string with attributes like "panel type=info title=Test"
+   * Same method as used in MarkdownParser and EnhancedMarkdownParser
+   */
+  private parseAdfLanguageString(lang: string, meta: string): Record<string, any> {
+    const attributes: Record<string, any> = {};
+    
+    // Combine lang and meta for parsing
+    const fullString = `${lang} ${meta}`.trim();
+    
+    // Simple key=value parser
+    const pairs = fullString.match(/(\w+)=([^"'\s]+|"[^"]*"|'[^']*')/g) || [];
+    
+    for (const pair of pairs) {
+      const [, key, value] = pair.match(/(\w+)=([^"'\s]+|"[^"]*"|'[^']*')/) || [];
+      if (key && value && key !== lang) { // Skip the language itself
+        let parsedValue: any = value;
+        
+        // Remove quotes if present
+        if ((parsedValue.startsWith('"') && parsedValue.endsWith('"')) ||
+            (parsedValue.startsWith("'") && parsedValue.endsWith("'"))) {
+          parsedValue = parsedValue.slice(1, -1);
+        }
+        
+        // Try to parse as number or boolean
+        if (parsedValue === 'true') parsedValue = true;
+        else if (parsedValue === 'false') parsedValue = false;
+        else if (!isNaN(Number(parsedValue)) && parsedValue !== '') parsedValue = Number(parsedValue);
+        
+        attributes[key] = parsedValue;
+      }
+    }
+    
+    return attributes;
   }
 }
 
