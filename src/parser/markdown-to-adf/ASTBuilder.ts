@@ -1240,11 +1240,8 @@ export class ASTBuilder {
         .map(child => this.convertMdastNodeToADF(child))
         .filter((adfNode): adfNode is ADFNode => adfNode !== null);
     } else if (value && value.trim()) {
-      // Fallback to raw value (legacy behavior)
-      content = [{
-        type: 'paragraph',
-        content: [{ type: 'text', text: value.trim() }]
-      }];
+      // Parse the raw content as full markdown blocks (including lists, multiple paragraphs, etc.)
+      content = this.parseBlockContentWithSocialElements(value.trim());
     }
 
     // Create the appropriate ADF node based on nodeType
@@ -1809,5 +1806,127 @@ export class ASTBuilder {
     }
     
     return filtered;
+  }
+
+  /**
+   * Parse block content (panel, expand content) as full markdown with social elements
+   */
+  private parseBlockContentWithSocialElements(content: string): ADFNode[] {
+    if (!content || !content.trim()) return [];
+
+    // We need to parse this as full markdown, not just inline content
+    // For now, let's split by double newlines for paragraph breaks and handle lists
+    const blocks = this.splitIntoBlocks(content);
+    const adfNodes: ADFNode[] = [];
+
+    for (const block of blocks) {
+      if (block.trim()) {
+        const blockNode = this.parseBlockContent(block.trim());
+        if (blockNode) {
+          adfNodes.push(blockNode);
+        }
+      }
+    }
+
+    return adfNodes.length > 0 ? adfNodes : [{
+      type: 'paragraph',
+      content: this.parseInlineContentWithSocialElements(content)
+    }];
+  }
+
+  /**
+   * Split content into markdown blocks (paragraphs, lists, etc.)
+   */
+  private splitIntoBlocks(content: string): string[] {
+    // Split by double newlines for paragraph breaks
+    // But keep list items together
+    const lines = content.split('\n');
+    const blocks: string[] = [];
+    let currentBlock = '';
+    let inList = false;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const isListItem = /^\s*[-*+]\s/.test(line);
+      const isEmptyLine = line.trim() === '';
+
+      if (isListItem) {
+        if (!inList && currentBlock.trim()) {
+          // End current block and start list
+          blocks.push(currentBlock.trim());
+          currentBlock = '';
+        }
+        inList = true;
+        currentBlock += (currentBlock ? '\n' : '') + line;
+      } else if (isEmptyLine) {
+        if (inList) {
+          // End list block
+          blocks.push(currentBlock.trim());
+          currentBlock = '';
+          inList = false;
+        } else if (currentBlock.trim()) {
+          // End paragraph block
+          blocks.push(currentBlock.trim());
+          currentBlock = '';
+        }
+      } else {
+        if (inList) {
+          // End list and start new paragraph
+          blocks.push(currentBlock.trim());
+          currentBlock = line;
+          inList = false;
+        } else {
+          currentBlock += (currentBlock ? '\n' : '') + line;
+        }
+      }
+    }
+
+    // Add final block
+    if (currentBlock.trim()) {
+      blocks.push(currentBlock.trim());
+    }
+
+    return blocks;
+  }
+
+  /**
+   * Parse a single block of content (paragraph or list)
+   */
+  private parseBlockContent(blockContent: string): ADFNode | null {
+    if (!blockContent.trim()) return null;
+
+    // Check if this is a list
+    const lines = blockContent.split('\n');
+    const isListBlock = lines.some(line => /^\s*[-*+]\s/.test(line));
+
+    if (isListBlock) {
+      // Parse as bullet list
+      const listItems: ADFNode[] = [];
+      
+      for (const line of lines) {
+        const listMatch = line.match(/^\s*[-*+]\s+(.+)$/);
+        if (listMatch) {
+          const itemContent = this.parseInlineContentWithSocialElements(listMatch[1]);
+          listItems.push({
+            type: 'listItem',
+            content: [{
+              type: 'paragraph',
+              content: itemContent
+            }]
+          });
+        }
+      }
+
+      return {
+        type: 'bulletList',
+        content: listItems
+      };
+    } else {
+      // Parse as paragraph
+      return {
+        type: 'paragraph',
+        content: this.parseInlineContentWithSocialElements(blockContent)
+      };
+    }
   }
 }
