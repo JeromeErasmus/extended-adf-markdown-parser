@@ -6,6 +6,9 @@
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkStringify from 'remark-stringify';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkGfm from 'remark-gfm';
+import { remarkAdf } from './parser/remark/remark-adf.js';
 import type { ADFDocument, ADFNode, ConversionOptions, ValidationResult } from './types';
 import type { ConversionContext } from './parser/types';
 import { AdfValidator } from './validators/AdfValidator';
@@ -119,10 +122,14 @@ export class Parser {
     try {
       this.options = options || {};
       
-      // Initialize remark with our custom plugins
+      // Initialize remark with ADF plugins by default
       this.remarkProcessor = unified()
         .use(remarkParse)
-        // TODO: Add custom ADF plugin here
+        .use(remarkFrontmatter, ['yaml'])  // Enable frontmatter support
+        .use(remarkGfm)                    // Enable tables, strikethrough, etc.
+        .use(remarkAdf, {                  // Enable ADF social elements
+          strict: options?.strict || false
+        })
         .use(remarkStringify);
         
       this.registry = new ConverterRegistry();

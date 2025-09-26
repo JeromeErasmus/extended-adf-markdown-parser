@@ -36,12 +36,19 @@ describe('ASTBuilder Media Placeholders', () => {
       
       expect(result.content).toHaveLength(1);
       expect(result.content[0]).toEqual({
-        type: 'media',
+        type: 'mediaSingle',
         attrs: {
-          id: 'test-image-123',
-          type: 'file',
-          alt: 'Test Image'
-        }
+          layout: 'center'
+        },
+        content: [{
+          type: 'media',
+          attrs: {
+            id: 'test-image-123',
+            type: 'file',
+            alt: 'Test Image',
+            collection: ''
+          }
+        }]
       });
     });
 
@@ -107,11 +114,19 @@ describe('ASTBuilder Media Placeholders', () => {
       const result = astBuilder.buildADFFromMdast(mdastTree);
       
       expect(result.content[0]).toEqual({
-        type: 'media',
+        type: 'mediaSingle',
         attrs: {
-          id: 'no-alt-image',
-          type: 'file'
-        }
+          layout: 'center'
+        },
+        content: [{
+          type: 'media',
+          attrs: {
+            id: 'no-alt-image',
+            type: 'file',
+            alt: '',
+            collection: ''
+          }
+        }]
       });
     });
 
@@ -182,17 +197,23 @@ describe('ASTBuilder Media Placeholders', () => {
       const result = astBuilder.buildADFFromMdast(mdastTree);
       
       expect(result.content[0]).toEqual({
-        type: 'media',
+        type: 'mediaSingle',
         attrs: {
-          id: 'complex-media',
-          type: 'video',
-          alt: 'Complex Media',
-          collection: 'media-library',
-          width: 1920,
-          height: 1080,
-          duration: 300,
-          thumbnail: 'thumb-123'
-        }
+          layout: 'center'
+        },
+        content: [{
+          type: 'media',
+          attrs: {
+            id: 'complex-media',
+            type: 'video',
+            alt: 'Complex Media',
+            collection: 'media-library',
+            width: 1920,
+            height: 1080,
+            duration: 300,
+            thumbnail: 'thumb-123'
+          }
+        }]
       });
     });
 
@@ -234,7 +255,8 @@ describe('ASTBuilder Media Placeholders', () => {
           attrs: {
             id: 'single-media',
             type: 'file',
-            alt: 'Single Media'
+            alt: 'Single Media',
+            collection: ''
           }
         }]
       });
@@ -363,7 +385,8 @@ describe('ASTBuilder Media Placeholders', () => {
           attrs: {
             id: 'only-single',
             type: 'file',
-            alt: 'Only Single'
+            alt: 'Only Single',
+            collection: ''
           }
         }]
       });
