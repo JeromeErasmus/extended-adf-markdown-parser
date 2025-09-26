@@ -211,8 +211,8 @@ This paragraph has multiple metadata attributes.
       const markdown = await parser.stringify(originalAdf);
       
       // Should contain metadata comments
-      expect(markdown).toContain('<!-- adf:heading id="custom-id" textAlign="center" -->');
-      expect(markdown).toContain('<!-- adf:paragraph textAlign="center" backgroundColor="#f0f0f0" -->');
+      expect(markdown).toContain('<!-- adf:heading attrs=\'{"id":"custom-id","textAlign":"center"}\' -->');
+      expect(markdown).toContain('<!-- adf:paragraph attrs=\'{"textAlign":"center","backgroundColor":"#f0f0f0"}\' -->');
 
       // Convert back to ADF
       const reconstructed = await parser.parse(markdown);

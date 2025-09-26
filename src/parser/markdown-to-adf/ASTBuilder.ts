@@ -10,6 +10,7 @@ import type { Root } from 'mdast';
 import type { AdfFenceNode } from '../remark/adf-from-markdown.js';
 import { getNodeMetadata, applyMetadataToAdfNode, generateMetadataComment, isAdfMetadataComment } from '../../utils/metadata-comments.js';
 import { MarkdownTokenizer } from './MarkdownTokenizer.js';
+import { getEmojiData, createFallbackEmojiData, type EmojiData } from '../../utils/emoji-mapping.js';
 
 export interface ASTBuildOptions {
   strict?: boolean;
@@ -346,6 +347,9 @@ export class ASTBuilder {
     const fenceAttrs = { ...fenceToken.attributes };
     delete fenceAttrs.type; // Remove type as it's handled separately
     
+    // The 'attrs' JSON parsing should be handled by the micromark extension
+    // If we still see an 'attrs' string here, it means the micromark parsing failed
+    
     const content = token.children ? 
       this.convertTokensToNodes(token.children) :
       token.content ? this.parseBlockContentWithSocialElements(token.content) : [];
@@ -370,6 +374,7 @@ export class ASTBuilder {
     const fenceAttrs = { ...fenceToken.attributes };
     delete fenceAttrs.title; // Remove title as it's handled separately
     
+    // The 'attrs' JSON parsing should be handled by the micromark extension
     
     const content = token.children ? 
       this.convertTokensToNodes(token.children) :
@@ -407,8 +412,48 @@ export class ASTBuilder {
   private convertMediaGroup(token: Token): ADFNode {
     const customAttrs = this.extractCustomAttributes(token.metadata);
     
-    // Extract media nodes from content
-    const mediaNodes = this.extractMediaFromContent(token.content);
+    // Process the token children to get media references and extract just those
+    let mediaNodes: ADFNode[] = [];
+    
+    if (token.children && token.children.length > 0) {
+      // Process each child token and extract media references
+      for (const childToken of token.children) {
+        const processedChild = this.convertTokenToNode(childToken);
+        if (processedChild && processedChild.type === 'paragraph' && processedChild.content) {
+          // Extract only mediaReference nodes from paragraph content
+          const mediaRefs = processedChild.content.filter((node: ADFNode) => 
+            node.type === 'mediaReference' || node.type === 'media'
+          );
+          mediaNodes.push(...mediaRefs);
+        } else if (processedChild && (processedChild.type === 'mediaReference' || processedChild.type === 'media')) {
+          mediaNodes.push(processedChild);
+        }
+      }
+    }
+
+    // Fallback to content-based extraction if no children processed
+    if (mediaNodes.length === 0) {
+      mediaNodes = this.extractMediaFromContent(token.content);
+    }
+
+    // If still no media nodes found, but we have content, try to process content directly for media
+    if (mediaNodes.length === 0 && token.content) {
+      // Process content as a paragraph and extract media from it
+      const paragraphToken: Token = {
+        type: 'paragraph',
+        content: token.content,
+        children: token.children,
+        position: token.position,
+        raw: token.raw || token.content
+      };
+      const paragraphNode = this.convertParagraph(paragraphToken);
+      if (paragraphNode.content) {
+        const mediaRefs = paragraphNode.content.filter((node: ADFNode) => 
+          node.type === 'mediaReference' || node.type === 'media'
+        );
+        mediaNodes.push(...mediaRefs);
+      }
+    }
 
     const node: ADFNode = {
       type: 'mediaGroup',
@@ -488,6 +533,10 @@ export class ASTBuilder {
   private convertInlineTokenToNode(token: Token): ADFNode[] {
     switch (token.type) {
       case 'text':
+        // Check if text contains social elements that need parsing
+        if (this.hasSocialElements(token.content)) {
+          return this.parseInlineContentWithSocialElements(token.content);
+        }
         return [{
           type: 'text',
           text: token.content
@@ -612,10 +661,34 @@ export class ASTBuilder {
   }
 
   /**
+   * Get emoji data for a shortname, with fallback for unknown emojis
+   */
+  private getEmojiData(shortName: string): EmojiData {
+    const emojiData = getEmojiData(shortName);
+    return emojiData || createFallbackEmojiData(shortName);
+  }
+
+  /**
+   * Check if content contains social elements that need special parsing
+   */
+  private hasSocialElements(content: string): boolean {
+    if (!content) return false;
+    
+    // Check for social element patterns
+    return (
+      content.includes('{user:') ||    // User mentions
+      /:[a-zA-Z0-9_+-]+:/.test(content) ||  // Emoji patterns  
+      content.includes('{date:') ||    // Date elements
+      content.includes('{status:')     // Status elements
+    );
+  }
+
+  /**
    * Parse inline content with support for social elements and special ADF syntax
    */
   private parseInlineContentWithSocialElements(content: string): ADFNode[] {
     if (!content) return [];
+
 
     const nodes: ADFNode[] = [];
     let remaining = content;
@@ -625,6 +698,7 @@ export class ASTBuilder {
       const socialMatch = this.findNextSocialElement(remaining);
       
       if (socialMatch) {
+        
         // Add text before the social element
         if (socialMatch.beforeText) {
           nodes.push(...this.parseInlineMarksRecursively(socialMatch.beforeText));
@@ -641,6 +715,7 @@ export class ASTBuilder {
         break;
       }
     }
+
 
     return nodes;
   }
@@ -668,14 +743,19 @@ export class ASTBuilder {
       {
         regex: /:([a-zA-Z0-9_+-]+):/,
         type: 'emoji',
-        process: (match: RegExpMatchArray) => ({
-          type: 'emoji' as const,
-          attrs: {
-            shortName: match[1],
-            id: match[1],
-            text: match[0] // fallback to :emoji: format
-          }
-        })
+        process: (match: RegExpMatchArray) => {
+          const shortName = match[1];
+          const emojiData = this.getEmojiData(shortName);
+          
+          return {
+            type: 'emoji' as const,
+            attrs: {
+              shortName: shortName, // Use the normalized shortName (without colons)
+              id: emojiData.id,
+              text: emojiData.text
+            }
+          };
+        }
       },
       // Date: {date:YYYY-MM-DD}
       {
@@ -1013,7 +1093,7 @@ export class ASTBuilder {
 
     if (!firstMatch) {
       // No formatting found, return plain text
-      return content.trim() ? [{ type: 'text', text: content }] : [];
+      return content ? [{ type: 'text', text: content }] : [];
     }
 
     const { match, pattern } = firstMatch;
@@ -1203,6 +1283,10 @@ export class ASTBuilder {
         if (node.value && isAdfMetadataComment(node.value)) {
           return null;
         }
+        // Skip ADF processing directives (like inlineCard, blockCard)
+        if (node.value && this.isAdfProcessingDirective(node.value)) {
+          return null;
+        }
         // For other HTML nodes, preserve as unknown if option is set
         if (this.options.preserveUnknownNodes) {
           adfNode = {
@@ -1302,9 +1386,27 @@ export class ASTBuilder {
       
       case 'mediaGroup':
         const groupMediaNodes = this.extractMediaFromContent(value);
+        
+        // If extractMediaFromContent didn't find anything, extract from processed content
+        let finalMediaNodes = groupMediaNodes;
+        if (finalMediaNodes.length === 0 && content.length > 0) {
+          finalMediaNodes = [];
+          // Extract media references from all content nodes
+          for (const node of content) {
+            if (node.type === 'paragraph' && node.content) {
+              const mediaRefs = node.content.filter((child: ADFNode) => 
+                child.type === 'mediaReference' || child.type === 'media'
+              );
+              finalMediaNodes.push(...mediaRefs);
+            } else if (node.type === 'mediaReference' || node.type === 'media') {
+              finalMediaNodes.push(node);
+            }
+          }
+        }
+        
         return {
           type: 'mediaGroup',
-          content: groupMediaNodes.length > 0 ? groupMediaNodes : content
+          content: finalMediaNodes.length > 0 ? finalMediaNodes : content
         };
       
       default:
@@ -1336,7 +1438,7 @@ export class ASTBuilder {
     // Check if this paragraph contains only a single image that's an ADF media placeholder
     if (node.children && node.children.length === 1 && node.children[0].type === 'image') {
       const imageNode = node.children[0];
-      if (imageNode.url && imageNode.url.match(/^adf:media:/)) {
+      if (imageNode.url && imageNode.url.match(/^(?:adf:)?media:/)) {
         // This is a standalone media element - convert it to block-level media/mediaSingle
         // Transfer any paragraph-level metadata to the image node
         const paragraphMetadata = getNodeMetadata(node);
@@ -1366,10 +1468,52 @@ export class ASTBuilder {
       return null;
     }
     
+    // Post-process inline cards: convert link marks that should be inline cards
+    const processedContent = this.postProcessInlineCards(content, node.children);
+    
     return {
       type: 'paragraph',
-      content
+      content: processedContent
     };
+  }
+
+  /**
+   * Post-process content to convert link marks to inline cards when appropriate
+   */
+  /**
+   * Check if an HTML comment is an ADF processing directive
+   */
+  private isAdfProcessingDirective(value: string): boolean {
+    const processingDirectives = ['inlineCard', 'blockCard'];
+    return processingDirectives.some(directive => 
+      value.includes(`adf:${directive}`)
+    );
+  }
+
+  private postProcessInlineCards(content: ADFNode[], originalNodes: any[]): ADFNode[] {
+    // Check if there's an HTML comment with adf:inlineCard
+    const hasInlineCardComment = originalNodes.some(node => 
+      node.type === 'html' && node.value && node.value.includes('adf:inlineCard')
+    );
+    
+    if (!hasInlineCardComment) {
+      return content;
+    }
+    
+    // Convert text nodes with link marks to inline cards
+    return content.map(node => {
+      if (node.type === 'text' && node.marks) {
+        const linkMark = node.marks.find(mark => mark.type === 'link');
+        if (linkMark && linkMark.attrs) {
+          // Convert to inline card
+          return {
+            type: 'inlineCard',
+            attrs: { url: linkMark.attrs.href }
+          };
+        }
+      }
+      return node;
+    });
   }
 
   private convertMdastBlockquote(node: any): ADFNode {
@@ -1491,8 +1635,9 @@ export class ASTBuilder {
       }
     }
 
-    // Add alt text if present and not empty
-    if (node.alt && node.alt.trim()) {
+    // Add alt text only if present, not null/undefined, and not empty string
+    // Empty string from markdown parser means no alt text was provided
+    if (node.alt !== undefined && node.alt !== null && node.alt !== '') {
       mediaAttrs.alt = node.alt;
     }
 
@@ -1502,12 +1647,9 @@ export class ASTBuilder {
       attrs: mediaAttrs
     };
 
-    // Add default collection and alt if missing
+    // Add default collection if missing
     if (!mediaAttrs.collection) {
       mediaAttrs.collection = '';
-    }
-    if (!mediaAttrs.alt) {
-      mediaAttrs.alt = node.alt || '';
     }
 
     // Always wrap media in mediaSingle for block-level images
@@ -1527,6 +1669,8 @@ export class ASTBuilder {
   private convertMdastInlineNodes(nodes: any[]): ADFNode[] {
     const adfNodes: ADFNode[] = [];
     
+    
+    // Convert all nodes normally
     for (const node of nodes) {
       const result = this.convertMdastInlineNode(node);
       if (Array.isArray(result)) {
@@ -1577,6 +1721,22 @@ export class ASTBuilder {
       
       case 'image':
         return this.convertMdastImage(node);
+      
+      case 'html':
+        // Skip ADF metadata comments - they should have been processed already
+        if (node.value && isAdfMetadataComment(node.value)) {
+          return null;
+        }
+        // Skip ADF processing directives (like inlineCard, blockCard)
+        if (node.value && this.isAdfProcessingDirective(node.value)) {
+          return null;
+        }
+        // For other HTML nodes, preserve as text if option is set
+        if (this.options.preserveUnknownNodes) {
+          return { type: 'text', text: `[HTML: ${node.value}]` };
+        } else {
+          return null;
+        }
       
       default:
         // Unknown inline node, treat as text

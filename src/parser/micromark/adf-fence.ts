@@ -213,6 +213,22 @@ export function parseAdfAttributes(attributeString: string): Record<string, any>
         parsedValue = parsedValue.slice(1, -1);
       }
       
+      // Special handling for 'attrs' key containing JSON
+      if (key === 'attrs') {
+        try {
+          const parsedAttrs = JSON.parse(parsedValue);
+          if (typeof parsedAttrs === 'object' && parsedAttrs !== null) {
+            // Merge the parsed attributes into the main attributes object
+            Object.assign(attributes, parsedAttrs);
+            continue; // Don't add 'attrs' as a literal key
+          }
+        } catch (error) {
+          // If JSON parsing fails, treat it as a regular attribute
+          attributes[key] = parsedValue;
+          continue;
+        }
+      }
+      
       // Try to parse as number or boolean
       if (parsedValue === 'true') parsedValue = true;
       else if (parsedValue === 'false') parsedValue = false;

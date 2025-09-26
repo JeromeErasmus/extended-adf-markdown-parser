@@ -41,12 +41,25 @@ const METADATA_PATTERNS = {
 
 /**
  * Check if a string is an ADF metadata comment
+ * Excludes processing directives like inlineCard
  */
 export function isAdfMetadataComment(value: string): boolean {
-  return METADATA_PATTERNS.withAttrsJson.test(value) ||
-         METADATA_PATTERNS.withAttrs.test(value) || 
-         METADATA_PATTERNS.simple.test(value) ||
-         METADATA_PATTERNS.closing.test(value);
+  // Check if it matches any metadata pattern
+  const isMetadataPattern = METADATA_PATTERNS.withAttrsJson.test(value) ||
+                           METADATA_PATTERNS.withAttrs.test(value) || 
+                           METADATA_PATTERNS.simple.test(value) ||
+                           METADATA_PATTERNS.closing.test(value);
+  
+  if (!isMetadataPattern) {
+    return false;
+  }
+  
+  // Exclude processing directives that should be handled differently
+  const processingDirectives = ['inlineCard', 'blockCard'];
+  
+  return !processingDirectives.some(directive => 
+    value.includes(`adf:${directive}`)
+  );
 }
 
 /**

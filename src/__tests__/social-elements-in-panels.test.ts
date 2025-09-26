@@ -208,6 +208,8 @@ Due date: {date:2024-04-01}
       expect(emojiInList).toBeDefined();
       expect(mentionInList.attrs.id).toBe('team.lead');
       expect(emojiInList.attrs.shortName).toBe('star');
+      expect(emojiInList.attrs.id).toBe('2b50');
+      expect(emojiInList.attrs.text).toBe('⭐');
       
       // Check second list item contains mention and status
       const secondItem = bulletList.content[1];

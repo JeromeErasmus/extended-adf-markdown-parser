@@ -113,6 +113,12 @@ export class Parser {
    */
   adfToMarkdown(adf: ADFDocument, options?: ConversionOptions): string {
     return measureSync('adfToMarkdown', () => {
+      // If options are provided, use a temporary engine with merged options
+      if (options && Object.keys(options).length > 0) {
+        const mergedOptions = { ...this.options, ...options };
+        const tempEngine = new AdfToMarkdownEngine(mergedOptions);
+        return tempEngine.convert(adf);
+      }
       return this.adfToMdEngine.convert(adf);
     }, getSafeJSONLength(adf), this.countNodes(adf.content || []));
   }
@@ -143,6 +149,12 @@ export class Parser {
    */
   markdownToAdf(markdown: string, options?: ConversionOptions): ADFDocument {
     return measureSync('markdownToAdf', () => {
+      // If options are provided, use a temporary engine with merged options
+      if (options && Object.keys(options).length > 0) {
+        const mergedOptions = { ...this.options, ...options };
+        const tempEngine = new MarkdownToAdfEngine(mergedOptions);
+        return tempEngine.convert(markdown);
+      }
       return this.mdToAdfEngine.convert(markdown);
     }, markdown.length);
   }

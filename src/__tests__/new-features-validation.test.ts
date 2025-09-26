@@ -45,7 +45,8 @@ describe('🆕 NEW FEATURES - Previously non-working elements', () => {
       
       expect(paragraph.content[1].type).toBe('emoji');
       expect(paragraph.content[1].attrs.shortName).toBe('smile');
-      expect(paragraph.content[1].attrs.text).toBe(':smile:');
+      expect(paragraph.content[1].attrs.id).toBe('1f604');
+      expect(paragraph.content[1].attrs.text).toBe('😄');
       
       expect(paragraph.content[2].type).toBe('text');
       expect(paragraph.content[2].text).toBe(' face');
@@ -99,6 +100,8 @@ describe('🆕 NEW FEATURES - Previously non-working elements', () => {
       // Check emoji
       expect(paragraph.content[5].type).toBe('emoji');
       expect(paragraph.content[5].attrs.shortName).toBe('thumbsup');
+      expect(paragraph.content[5].attrs.id).toBe('1f44d');
+      expect(paragraph.content[5].attrs.text).toBe('👍');
       
       // Check status
       expect(paragraph.content[7].type).toBe('status');

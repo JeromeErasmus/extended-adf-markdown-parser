@@ -128,6 +128,8 @@ Pipeline runs daily at midnight.
       const emoji = subHeading.content.find((node: any) => node.type === 'emoji');
       expect(emoji).toBeDefined();
       expect(emoji.attrs.shortName).toBe('star');
+      expect(emoji.attrs.id).toBe('2b50');
+      expect(emoji.attrs.text).toBe('⭐');
       
       // Check level 3 heading
       const level3Heading = headings[2];
@@ -167,6 +169,8 @@ Pipeline runs daily at midnight.
       expect(mention.attrs.id).toBe('frontend.lead');
       expect(emoji).toBeDefined();
       expect(emoji.attrs.shortName).toBe('star');
+      expect(emoji.attrs.id).toBe('2b50');
+      expect(emoji.attrs.text).toBe('⭐');
     });
 
     it('should parse ordered lists in expand blocks', () => {

@@ -16,6 +16,9 @@ export { ConverterRegistry } from './parser/ConverterRegistry.js';
 // Export test utilities  
 export { normalizeMarkdownForComparison, expectMarkdownEqual, toMatchMarkdown } from './utils/test-utils.js';
 
+// Export metadata utilities
+export { isAdfMetadataComment, parseAdfMetadataComment } from './utils/metadata-comments.js';
+
 // Export conversion engines
 export { MarkdownToAdfEngine } from './parser/engines/MarkdownToAdfEngine.js';
 export { AdfToMarkdownEngine } from './parser/engines/AdfToMarkdownEngine.js';

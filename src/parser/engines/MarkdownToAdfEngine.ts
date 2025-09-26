@@ -291,7 +291,10 @@ export class MarkdownToAdfEngine {
     }
 
     // Convert the tree using AST builder
-    return this.astBuilder.buildADFFromMdast(processedTree, frontmatter);
+    const adf = this.astBuilder.buildADFFromMdast(processedTree, frontmatter);
+    
+    // Post-process to remove empty paragraphs with only whitespace
+    return this.cleanupEmptyParagraphs(adf);
   }
 
   /**
@@ -340,7 +343,10 @@ export class MarkdownToAdfEngine {
       }
 
       // Convert the tree using AST builder
-      return this.astBuilder.buildADFFromMdast(processedTree, frontmatter);
+      const adf = this.astBuilder.buildADFFromMdast(processedTree, frontmatter);
+      
+      // Post-process to remove empty paragraphs with only whitespace
+      return this.cleanupEmptyParagraphs(adf);
     } catch (error) {
       if (this.options.strict) {
         throw error;
@@ -455,6 +461,22 @@ export class MarkdownToAdfEngine {
           parsedValue = parsedValue.slice(1, -1);
         }
         
+        // Special handling for 'attrs' key containing JSON
+        if (key === 'attrs') {
+          try {
+            const parsedAttrs = JSON.parse(parsedValue);
+            if (typeof parsedAttrs === 'object' && parsedAttrs !== null) {
+              // Merge the parsed attributes into the main attributes object
+              Object.assign(attributes, parsedAttrs);
+              continue; // Don't add 'attrs' as a literal key
+            }
+          } catch (error) {
+            // If JSON parsing fails, treat it as a regular attribute
+            attributes[key] = parsedValue;
+            continue;
+          }
+        }
+        
         // Try to parse as number or boolean
         if (parsedValue === 'true') parsedValue = true;
         else if (parsedValue === 'false') parsedValue = false;
@@ -465,6 +487,38 @@ export class MarkdownToAdfEngine {
     }
     
     return attributes;
+  }
+
+  /**
+   * Remove paragraphs that contain only whitespace text nodes
+   */
+  private cleanupEmptyParagraphs(adf: ADFDocument): ADFDocument {
+    const cleanupNode = (node: any): boolean => {
+      // If this is a paragraph with only whitespace text nodes, remove it
+      if (node.type === 'paragraph' && node.content) {
+        const hasOnlyWhitespace = node.content.every((child: any) => 
+          child.type === 'text' && (!child.text || child.text.trim() === '')
+        );
+        
+        if (hasOnlyWhitespace) {
+          return false; // Mark for removal
+        }
+      }
+      
+      // Recursively clean up children
+      if (node.content && Array.isArray(node.content)) {
+        node.content = node.content.filter(cleanupNode);
+      }
+      
+      return true; // Keep this node
+    };
+    
+    const cleanedAdf = { ...adf };
+    if (cleanedAdf.content) {
+      cleanedAdf.content = cleanedAdf.content.filter(cleanupNode);
+    }
+    
+    return cleanedAdf;
   }
 
   /**

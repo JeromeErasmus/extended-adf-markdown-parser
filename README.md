@@ -1,5 +1,7 @@
 # Extended ADF Markdown Parser
 
+> **📖 Official ADF Documentation**: [Atlassian Document Format Structure](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/)
+
 [![npm version](https://badge.fury.io/js/extended-markdown-adf-parser.svg)](https://badge.fury.io/js/extended-markdown-adf-parser)
 [![npm downloads](https://img.shields.io/npm/dm/extended-markdown-adf-parser.svg)](https://npmjs.org/package/extended-markdown-adf-parser)
 [![npm bundle size](https://img.shields.io/bundlephobia/minzip/extended-markdown-adf-parser)](https://bundlephobia.com/package/extended-markdown-adf-parser)

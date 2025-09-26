@@ -123,7 +123,6 @@ describe('ASTBuilder Media Placeholders', () => {
           attrs: {
             id: 'no-alt-image',
             type: 'file',
-            alt: '',
             collection: ''
           }
         }]

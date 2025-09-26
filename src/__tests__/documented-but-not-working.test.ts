@@ -40,6 +40,8 @@ describe('✅ PREVIOUSLY NOT WORKING - Now fixed in unified architecture', () =>
       expect(paragraph.content[0].text).toBe('Happy ');
       expect(paragraph.content[1].type).toBe('emoji');
       expect(paragraph.content[1].attrs.shortName).toBe('smile');
+      expect(paragraph.content[1].attrs.id).toBe('1f604');
+      expect(paragraph.content[1].attrs.text).toBe('😄');
       expect(paragraph.content[2].type).toBe('text');
       expect(paragraph.content[2].text).toBe(' face');
     });
@@ -72,18 +74,16 @@ describe('✅ PREVIOUSLY NOT WORKING - Now fixed in unified architecture', () =>
   });
 
   describe('🔄 Media Elements - Partial success', () => {
-    it('should convert media references (CURRENTLY: paragraph with text, EXPECTED: mediaSingle)', async () => {
+    it('should convert media references (✅ WORKS! Media references now work correctly)', async () => {
       const markdown = '![Alt text](media:123456)';
       const result = await parser.markdownToAdf(markdown);
       
-      // CURRENT BEHAVIOR: Creates paragraph with text content
+      // ✅ WORKING BEHAVIOR: Now creates proper mediaSingle with media content
       expect(result.content).toHaveLength(1);
-      expect(result.content[0].type).toBe('paragraph');
-      
-      // EXPECTED BEHAVIOR (not yet working):
-      // expect(result.content[0].type).toBe('mediaSingle');
-      // expect(result.content[0].content[0].type).toBe('media');
-      // expect(result.content[0].content[0].attrs.id).toBe('123456');
+      expect(result.content[0].type).toBe('mediaSingle');
+      expect(result.content[0].content[0].type).toBe('media');
+      expect(result.content[0].content[0].attrs.id).toBe('123456');
+      expect(result.content[0].content[0].attrs.alt).toBe('Alt text');
     });
 
     it('should convert media group blocks (✅ WORKS! MediaGroup fence blocks work correctly)', async () => {

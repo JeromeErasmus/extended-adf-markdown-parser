@@ -198,8 +198,15 @@
               "type": "paragraph",
               "content": [
                 {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "john.manager",
+                    "text": "@john.manager"
+                  }
+                },
+                {
                   "type": "text",
-                  "text": "{user:john.manager} (Scrum Master)"
+                  "text": " (Scrum Master)"
                 }
               ]
             }
@@ -212,8 +219,15 @@
               "type": "paragraph",
               "content": [
                 {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "sarah.lead",
+                    "text": "@sarah.lead"
+                  }
+                },
+                {
                   "type": "text",
-                  "text": "{user:sarah.lead} (Tech Lead)"
+                  "text": " (Tech Lead)"
                 }
               ]
             }
@@ -226,8 +240,15 @@
               "type": "paragraph",
               "content": [
                 {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "mike.dev",
+                    "text": "@mike.dev"
+                  }
+                },
+                {
                   "type": "text",
-                  "text": "{user:mike.dev} (Frontend Developer)"
+                  "text": " (Frontend Developer)"
                 }
               ]
             }
@@ -240,8 +261,15 @@
               "type": "paragraph",
               "content": [
                 {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "alice.backend",
+                    "text": "@alice.backend"
+                  }
+                },
+                {
                   "type": "text",
-                  "text": "{user:alice.backend} (Backend Developer)"
+                  "text": " (Backend Developer)"
                 }
               ]
             }
@@ -254,8 +282,15 @@
               "type": "paragraph",
               "content": [
                 {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "eve.qa",
+                    "text": "@eve.qa"
+                  }
+                },
+                {
                   "type": "text",
-                  "text": "{user:eve.qa} (QA Engineer)"
+                  "text": " (QA Engineer)"
                 }
               ]
             }
@@ -1621,8 +1656,21 @@
               "type": "paragraph",
               "content": [
                 {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "alice.dev",
+                    "text": "@alice.dev"
+                  }
+                },
+                {
                   "type": "text",
-                  "text": "{user:alice.dev}: Research new testing frameworks by {date:2023-04-15}"
+                  "text": ": Research new testing frameworks by "
+                },
+                {
+                  "type": "date",
+                  "attrs": {
+                    "timestamp": "1681516800000"
+                  }
                 }
               ]
             }
