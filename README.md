@@ -160,7 +160,8 @@ console.log(reconstructed); // Original ADF structure
 ```typescript
 import { Parser } from 'extended-markdown-adf-parser';
 
-const parser = new Parser({ enableAdfExtensions: true });
+// ADF extensions are enabled by default in the unified architecture
+const parser = new Parser();
 
 // Extended Markdown with metadata and ADF elements
 const extendedMarkdown = `---
@@ -279,6 +280,66 @@ metadata:
 ---
 ```
 
+## Architecture
+
+### Unified Parser Architecture (v2.1.6+)
+
+The library has been completely refactored with a **unified architecture** that eliminates duplication and ensures consistent, high-quality conversions across all parser interfaces:
+
+#### Core Components
+
+1. **Unified Parser Class** - The main `Parser` class now uses shared conversion engines internally
+2. **MarkdownToAdfEngine** - Dedicated engine for markdown → ADF conversion
+3. **AdfToMarkdownEngine** - Dedicated engine for ADF → markdown conversion
+4. **Backward Compatibility** - `EnhancedMarkdownParser` now simply extends `Parser`
+
+#### Key Improvements
+
+- **🎯 Consistent Results**: All parsing approaches now produce identical, high-quality results
+- **✨ No Configuration Required**: ADF extensions are enabled by default (no more `enableAdfExtensions` flag)
+- **🔧 Social Elements**: Proper parsing of `{user:mention}`, `:emoji:`, `{status:text}`, and `{date:YYYY-MM-DD}` in all contexts
+- **⚡ Performance**: Shared engines eliminate code duplication and improve maintainability
+- **🛡️ Error Recovery**: Built-in error recovery with configurable retry strategies
+
+#### Usage Patterns
+
+All these approaches now produce **identical results**:
+
+```typescript
+import { Parser, EnhancedMarkdownParser, MarkdownToAdfEngine } from 'extended-markdown-adf-parser';
+
+// 1. Main Parser class (recommended)
+const parser = new Parser();
+const adf = parser.markdownToAdf(markdown);
+
+// 2. Enhanced parser (backward compatibility)
+const enhanced = new EnhancedMarkdownParser();
+const adf2 = enhanced.parseSync(markdown);
+
+// 3. Direct engine usage (for custom implementations)
+const engine = new MarkdownToAdfEngine();
+const adf3 = engine.convert(markdown);
+
+// All produce identical results: adf === adf2 === adf3
+```
+
+#### Migration Guide
+
+**Before (v2.1.5 and earlier):**
+```typescript
+const parser = new Parser({ enableAdfExtensions: true });
+const enhanced = new EnhancedMarkdownParser();
+```
+
+**After (v2.1.6+):**
+```typescript
+// Simply use Parser - ADF extensions enabled by default
+const parser = new Parser();
+
+// EnhancedMarkdownParser still works (backward compatibility)
+const enhanced = new EnhancedMarkdownParser();
+```
+
 ## Testing
 
 This library includes a comprehensive test suite with 399 tests across 29 test suites, ensuring reliability and correctness across all supported features.
@@ -294,7 +355,7 @@ This library includes a comprehensive test suite with 399 tests across 29 test s
 - Performance validation (avg <2ms per conversion)
 
 **Unit Tests** - Individual component testing  
-- Parser classes (`MarkdownParser`, `EnhancedMarkdownParser`)
+- Parser classes (unified `Parser`, `MarkdownToAdfEngine`, `AdfToMarkdownEngine`)
 - Node converters (panels, tables, media, lists, etc.)
 - Mark converters (formatting, links, colors, etc.)
 - Core components (converter registry, validators)

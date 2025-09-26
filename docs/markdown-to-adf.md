@@ -4,125 +4,121 @@ Convert Extended Markdown to Atlassian Document Format (ADF) with full feature s
 
 ## Overview
 
-The library provides two specialized parsers for converting Markdown to ADF, each optimized for different use cases and performance requirements.
+The library features a **unified architecture** (v2.1.6+) with consistent, high-quality conversion across all parser interfaces. All parsers now use shared conversion engines internally.
 
-## Choosing the Right Parser
+## Unified Parser Architecture (v2.1.6+)
 
-The library provides two parser implementations optimized for different use cases:
+The library provides multiple interfaces to the same high-quality conversion engine:
 
-### Basic MarkdownParser
+### Main Parser Class (Recommended)
 
-Use the basic `MarkdownParser` when you need:
-- **High Performance**: Synchronous operation with minimal overhead for simple documents
-- **Simple Conversion**: Basic markdown → ADF conversion with automatic metadata comment detection
-- **Lightweight Processing**: Memory-efficient parsing for large volumes
-- **Smart Processing**: Automatically switches to enhanced processing when metadata comments are detected
+The unified `Parser` class provides all features by default:
 
 ```typescript
-import { MarkdownParser } from 'extended-markdown-adf-parser';
+import { Parser } from 'extended-markdown-adf-parser';
 
-const parser = new MarkdownParser({
-  strict: false  // Enable error recovery (recommended)
+// All features enabled by default
+const parser = new Parser({
+  strict: false,          // Error recovery enabled
+  preserveUnknownNodes: true  // Preserve unknown ADF nodes
 });
 
-// Fast, synchronous parsing
-const adf = parser.parse(markdown);
+// Synchronous parsing
+const adf = parser.markdownToAdf(markdown);
+
+// Asynchronous parsing
+const adf2 = await parser.markdownToAdfAsync(markdown);
 ```
 
-**Best for**: High-throughput applications, simple markdown conversion, performance-critical scenarios.
+**Features Included:**
+- ✅ GitHub Flavored Markdown (tables, strikethrough, task lists)
+- ✅ YAML Frontmatter support
+- ✅ ADF Fence blocks (`~~~panel`, `~~~expand`, etc.)
+- ✅ Social elements (`{user:mention}`, `:emoji:`, `{status:text}`)
+- ✅ Sync/async support
+- ✅ Error recovery
+- ✅ Performance monitoring
 
-### Enhanced MarkdownParser
+### EnhancedMarkdownParser (Backward Compatibility)
 
-Use the `EnhancedMarkdownParser` when you need:
-- **Bidirectional Conversion**: Full ADF → Markdown → ADF round-trip fidelity
-- **GitHub Flavored Markdown**: Tables, strikethrough, task lists, autolinks
-- **YAML Frontmatter**: Document metadata headers
-- **Advanced Features**: Async/sync support, complex attribute preservation
-- **Always Enhanced Processing**: Consistent enhanced processing regardless of content
+Maintained for backward compatibility - **same functionality as Parser**:
 
 ```typescript
 import { EnhancedMarkdownParser } from 'extended-markdown-adf-parser';
 
-const parser = new EnhancedMarkdownParser({
-  strict: false,
-  gfm: true,              // GitHub Flavored Markdown (default: true)
-  frontmatter: true,      // YAML frontmatter support (default: true)  
-  adfExtensions: true,    // ADF fence blocks (default: true)
-  maxNestingDepth: 5      // Prevent infinite recursion (default: 5)
-});
+// Identical functionality to Parser class
+const parser = new EnhancedMarkdownParser();
 
-// Async parsing with full feature support
-const adf = await parser.parse(markdown);
-
-// Bidirectional conversion
-const reconstructedMarkdown = await parser.stringify(adf);
+// Alternative API methods
+const adf = parser.parseSync(markdown);          // Same as parser.markdownToAdf()
+const adf2 = await parser.parse(markdown);      // Same as parser.markdownToAdfAsync()
 ```
 
-**Best for**: Content management systems, documentation tools, full-featured markdown processing.
+### Direct Engine Usage (Advanced)
 
-### Decision Matrix
-
-| Feature | Basic Parser | Enhanced Parser |
-|---------|:------------:|:---------------:|
-| **Performance** | Fastest* | Good |
-| **Memory Usage** | Minimal* | Moderate |
-| **Async/Sync** | Sync only | Both |
-| **Metadata Comments** | Yes | Yes |
-| **Bidirectional** | Markdown→ADF only | Full round-trip |
-| **GitHub Flavored MD** | Basic | Complete |
-| **YAML Frontmatter** | No | Yes |
-| **ADF Extensions** | All ADF blocks | All ADF blocks |
-| **Custom Attributes** | Via metadata | Via metadata |
-
-**Performance Notes:**
-- *Basic Parser maintains fast performance for documents without metadata comments
-- *When metadata comments are detected, Basic Parser automatically uses enhanced processing (similar performance to Enhanced Parser)
-- *Memory usage remains minimal for simple documents, moderate when metadata comments are present
-
-## Configuration Options
-
-### Basic Parser Options
+For custom implementations:
 
 ```typescript
-interface MarkdownParseOptions {
-  tokenizer?: TokenizeOptions;
-  astBuilder?: ASTBuildOptions;
-}
+import { MarkdownToAdfEngine } from 'extended-markdown-adf-parser';
 
-// High-performance configuration
-const fastParser = new MarkdownParser({
-  astBuilder: {
-    strict: false,
-    preserveWhitespace: false
-  }
-});
-
-// Strict validation configuration
-const strictParser = new MarkdownParser({
-  tokenizer: { strict: true },
-  astBuilder: { strict: true }
-});
-```
-
-### Enhanced Parser Options
-
-```typescript
-interface EnhancedMarkdownParseOptions {
-  strict?: boolean;               // Enable strict parsing mode
-  customBlockTypes?: string[];    // Custom ADF block types to support  
-  maxNestingDepth?: number;       // Maximum nesting depth allowed
-  gfm?: boolean;                  // Enable GitHub Flavored Markdown extensions
-  frontmatter?: boolean;          // Enable frontmatter parsing
-  adfExtensions?: boolean;        // Enable ADF fence block extensions
-}
-
-// Content management system configuration
-const cmsParser = new EnhancedMarkdownParser({
+const engine = new MarkdownToAdfEngine({
   strict: false,
   gfm: true,
   frontmatter: true,
-  adfExtensions: true,
-  maxNestingDepth: 8
+  enableAdfExtensions: true
+});
+
+const adf = engine.convert(markdown);
+const adf2 = await engine.convertAsync(markdown);
+```
+
+### All Approaches Produce Identical Results
+
+**Key Benefit**: No more choosing between different quality levels - all interfaces provide the same high-quality conversion.
+
+| Interface | Use Case | API Methods |
+|-----------|----------|-------------|
+| **Parser** | Recommended for new projects | `markdownToAdf()`, `markdownToAdfAsync()` |
+| **EnhancedMarkdownParser** | Backward compatibility | `parseSync()`, `parse()` |
+| **MarkdownToAdfEngine** | Custom implementations | `convert()`, `convertAsync()` |
+
+**Migration Benefits:**
+- 🎯 **Consistent Quality**: All approaches now produce identical, high-quality results
+- ✨ **Simplified API**: No more `enableAdfExtensions` flag needed
+- 🔧 **Social Elements**: Proper parsing of mentions, emojis, status, dates everywhere
+- ⚡ **Performance**: Shared engines improve maintainability and consistency
+
+## Configuration Options
+
+### Unified Parser Options
+
+All parser interfaces support the same configuration options:
+
+```typescript
+interface ConversionOptions {
+  strict?: boolean;               // Enable strict parsing mode (default: false)
+  gfm?: boolean;                 // GitHub Flavored Markdown (default: true)
+  frontmatter?: boolean;         // YAML frontmatter support (default: true)
+  enableAdfExtensions?: boolean; // ADF fence blocks (default: true)
+  maxDepth?: number;             // Maximum nesting depth (default: 5)
+  enableLogging?: boolean;       // Enable debug logging (default: false)
+  preserveWhitespace?: boolean;  // Preserve whitespace (default: false)
+  validateInput?: boolean;       // Validate input (default: false)
+  preserveUnknownNodes?: boolean; // Preserve unknown nodes (default: true)
+  // Error recovery options
+  maxRetries?: number;           // Max retry attempts (default: 3)
+  retryDelay?: number;           // Retry delay in ms (default: 100)
+  fallbackStrategy?: 'strict' | 'best-effort'; // Fallback strategy (default: 'best-effort')
+}
+
+// Example configurations
+const parser = new Parser({
+  strict: false,
+  gfm: true,
+  frontmatter: true,
+  enableAdfExtensions: true,
+  maxDepth: 8,
+  preserveUnknownNodes: true
 });
 ```
 
@@ -146,8 +142,8 @@ This panel has custom background and border colors.
 ~~~
 `;
 
-const parser = new EnhancedMarkdownParser();
-const adf = await parser.parse(markdownWithMetadata);
+const parser = new Parser();
+const adf = parser.markdownToAdf(markdownWithMetadata);
 // Custom attributes are preserved in the ADF structure
 ```
 
@@ -170,8 +166,8 @@ metadata:
 
 Content follows here...`;
 
-const parser = new EnhancedMarkdownParser({ frontmatter: true });
-const adf = await parser.parse(markdownWithFrontmatter);
+const parser = new Parser({ frontmatter: true });
+const adf = await parser.markdownToAdfAsync(markdownWithFrontmatter);
 // Frontmatter is available in adf.frontmatter property
 ```
 
@@ -194,8 +190,8 @@ const gfmMarkdown = `
 Autolink: https://example.com
 `;
 
-const parser = new EnhancedMarkdownParser({ gfm: true });
-const adf = await parser.parse(gfmMarkdown);
+const parser = new Parser({ gfm: true });
+const adf = await parser.markdownToAdfAsync(gfmMarkdown);
 ```
 
 ## Performance

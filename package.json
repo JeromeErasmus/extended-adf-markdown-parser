@@ -5,31 +5,28 @@
   "packageManager": "yarn@4.7.0",
   "type": "module",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.cts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.cts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./types": {
-      "types": "./dist/types/index.d.ts"
-    },
     "./streaming": {
-      "types": "./dist/streaming.d.ts",
+      "types": "./dist/streaming.d.cts",
       "import": "./dist/streaming.mjs",
       "require": "./dist/streaming.js",
       "default": "./dist/streaming.js"
     },
     "./performance": {
-      "types": "./dist/performance.d.ts",
+      "types": "./dist/performance.d.cts",
       "import": "./dist/performance.mjs",
       "require": "./dist/performance.js",
       "default": "./dist/performance.js"
     },
     "./errors": {
-      "types": "./dist/errors.d.ts",
+      "types": "./dist/errors.d.cts",
       "import": "./dist/errors.mjs",
       "require": "./dist/errors.js",
       "default": "./dist/errors.js"

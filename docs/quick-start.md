@@ -42,10 +42,9 @@ const parser = new Parser();
 ```typescript
 import { Parser, type ADFDocument, type ConversionOptions } from 'extended-markdown-adf-parser';
 
-// Create a parser instance with options
+// Create a parser instance with options (ADF extensions enabled by default)
 const parser = new Parser({
-  strict: false,
-  enableAdfExtensions: true
+  strict: false
 });
 ```
 

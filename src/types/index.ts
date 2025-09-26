@@ -10,6 +10,7 @@ export interface ConversionOptions {
   strict?: boolean;
   preserveWhitespace?: boolean;
   validateInput?: boolean;
+  preserveUnknownNodes?: boolean;
   
   // Enhanced parser options
   enableAdfExtensions?: boolean;
