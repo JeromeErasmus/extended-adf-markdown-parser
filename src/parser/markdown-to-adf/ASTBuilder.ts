@@ -42,11 +42,14 @@ export class ASTBuilder {
     
     // Convert tokens to ADF nodes
     const content = this.convertTokensToNodes(contentTokens);
+    
+    // Post-process for nested ADF fence blocks
+    const processedContent = this.postProcessNestedAdfFenceBlocks(content);
 
     return {
       version: this.options.defaultVersion!, // Always use default ADF version (1)
       type: 'doc',
-      content
+      content: processedContent
     };
   }
 
@@ -2271,5 +2274,65 @@ export class ASTBuilder {
       },
       content: tableRows
     };
+  }
+
+  /**
+   * Post-process ADF nodes to handle nested ADF fence blocks
+   * This method identifies situations where ADF fence blocks should be nested
+   * within other blocks instead of being at the document level
+   */
+  private postProcessNestedAdfFenceBlocks(content: ADFNode[]): ADFNode[] {
+    const result: ADFNode[] = [];
+    
+    for (let i = 0; i < content.length; i++) {
+      const node = content[i];
+      
+      // Check if this is an expand or panel that might have subsequent ADF blocks that should be nested
+      if ((node.type === 'expand' || node.type === 'panel') && i < content.length - 1) {
+        // Look ahead for subsequent ADF fence blocks that should be nested
+        const nestedNodes: ADFNode[] = [];
+        let j = i + 1;
+        
+        while (j < content.length) {
+          const nextNode = content[j];
+          
+          // Check if this node should be nested (ADF fence block types)
+          if (this.isAdfFenceBlockType(nextNode.type)) {
+            nestedNodes.push(nextNode);
+            j++;
+          } else {
+            // Stop if we hit a non-ADF-fence block or text content that ends the nesting
+            break;
+          }
+        }
+        
+        if (nestedNodes.length > 0) {
+          // Create a new node with the nested content
+          const enhancedNode = {
+            ...node,
+            content: [
+              ...(node.content || []),
+              ...nestedNodes
+            ]
+          };
+          
+          result.push(enhancedNode);
+          i = j - 1; // Skip the nodes we've nested
+        } else {
+          result.push(node);
+        }
+      } else {
+        result.push(node);
+      }
+    }
+    
+    return result;
+  }
+
+  /**
+   * Check if a node type is an ADF fence block type that can be nested
+   */
+  private isAdfFenceBlockType(nodeType: string): boolean {
+    return ['panel', 'expand', 'nestedExpand', 'mediaSingle', 'mediaGroup'].includes(nodeType);
   }
 }

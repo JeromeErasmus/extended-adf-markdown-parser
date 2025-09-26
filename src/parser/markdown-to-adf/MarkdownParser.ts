@@ -11,6 +11,7 @@ import { ADFDocument } from '../../types/adf.types.js';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
+import { remark } from 'remark';
 import { remarkAdf } from '../remark/remark-adf.js';
 import { processMetadataComments } from '../../utils/metadata-comments.js';
 import type { Root } from 'mdast';
@@ -267,27 +268,86 @@ export class MarkdownParser {
     
     const processedTree = JSON.parse(JSON.stringify(tree)); // Deep clone
     
-    const processNode = (node: any): void => {
-      if (node.type === 'code' && node.lang && adfBlockTypes.has(node.lang)) {
-        // Convert code block to adfFence node
-        const attributes = this.parseAdfLanguageString(node.lang, node.meta || '');
-        
-        node.type = 'adfFence';
-        node.nodeType = node.lang;
-        node.attributes = attributes;
-        node.value = node.value;
-        
-        // Remove code block properties
-        delete node.lang;
-        delete node.meta;
-      }
-      
-      if (node.children) {
-        node.children.forEach(processNode);
-      }
-    };
+    // Multi-pass processing: keep processing until no more ADF fence blocks are found
+    let hasChanges = true;
+    let passCount = 0;
+    const maxPasses = 5; // Prevent infinite loops
     
-    processedTree.children.forEach(processNode);
+    while (hasChanges && passCount < maxPasses) {
+      hasChanges = false;
+      passCount++;
+      
+      const processNode = (node: any): void => {
+        // Handle direct code blocks with ADF languages at any nesting level
+        if (node.type === 'code' && node.lang && adfBlockTypes.has(node.lang)) {
+          // Convert code block to adfFence node
+          const attributes = this.parseAdfLanguageString(node.lang, node.meta || '');
+          
+          node.type = 'adfFence';
+          node.nodeType = node.lang;
+          node.attributes = attributes;
+          
+          // Parse the code content as markdown to get structured children
+          try {
+            const innerProcessor = remark().use(remarkGfm);
+            const innerTree = innerProcessor.parse(node.value || '');
+            const processedInnerTree = innerProcessor.runSync(innerTree) as Root;
+            
+            node.children = processedInnerTree.children;
+            delete node.value; // Remove text value since we now have children
+          } catch (error) {
+            // If processing fails, keep the raw value
+            console.warn('Failed to process ADF fence block content:', error);
+          }
+          
+          // Remove code block properties
+          delete node.lang;
+          delete node.meta;
+          
+          hasChanges = true;
+        }
+        
+        // Handle text nodes that might contain nested ADF fence blocks
+        if (node.type === 'text' && node.value && typeof node.value === 'string') {
+          const textContent = node.value;
+          const adfFencePattern = /^~~~(panel|expand|nestedExpand|mediaSingle|mediaGroup)([^\n]*)\n([\s\S]*?)\n~~~$/;
+          
+          if (adfFencePattern.test(textContent.trim())) {
+            const match = textContent.trim().match(adfFencePattern);
+            if (match) {
+              const [, nodeType, attributesString, content] = match;
+              
+              // Parse the markdown content inside the ADF fence block
+              try {
+                const innerProcessor = remark().use(remarkGfm);
+                const innerTree = innerProcessor.parse(content);
+                const processedInnerTree = innerProcessor.runSync(innerTree) as Root;
+                
+                // Convert text node to adfFence node with processed content
+                node.type = 'adfFence';
+                node.nodeType = nodeType;
+                node.attributes = this.parseAdfLanguageString(nodeType, attributesString.trim());
+                node.children = processedInnerTree.children;
+                
+                delete node.value; // Remove text value since we now have children
+                
+                hasChanges = true;
+              } catch (error) {
+                // If processing fails, keep as text
+                console.warn('Failed to process nested ADF fence block:', error);
+              }
+            }
+          }
+        }
+        
+        // Recursively process children
+        if (node.children) {
+          node.children.forEach(processNode);
+        }
+      };
+      
+      processedTree.children.forEach(processNode);
+    }
     
     return processedTree;
   }

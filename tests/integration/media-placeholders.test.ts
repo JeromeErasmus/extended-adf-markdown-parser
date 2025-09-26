@@ -121,7 +121,6 @@ describe('Media Placeholders Integration', () => {
           attrs: {
             id: 'no-alt-image',
             type: 'file',
-            alt: '',
             collection: ''
           }
         }]
