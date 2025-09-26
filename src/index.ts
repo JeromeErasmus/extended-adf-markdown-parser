@@ -290,46 +290,6 @@ export class Parser {
     return result.data as ADFDocument;
   }
 
-  /**
-   * Check if markdown contains ADF-specific syntax elements
-   * This function allows projects to detect ADF content before conversion
-   */
-  markdownContainsADF(markdown: string): boolean {
-    if (!markdown || typeof markdown !== 'string' || markdown.trim().length === 0) {
-      return false;
-    }
-
-    // Check for fence block syntax (panels, expand sections, media)
-    const fenceBlockPatterns = [
-      /~~~panel\s+type=/,           // ~~~panel type=info
-      /~~~expand\s+title=/,         // ~~~expand title="Details"
-      /~~~mediaSingle\s/,           // ~~~mediaSingle layout=center
-      /~~~mediaGroup\s*$/m,         // ~~~mediaGroup
-      /~~~note\s/,                  // ~~~note (legacy support)
-      /~~~info\s/,                  // ~~~info (legacy support)
-      /~~~warning\s/,               // ~~~warning (legacy support)
-      /~~~success\s/,               // ~~~success (legacy support)
-      /~~~error\s/                  // ~~~error (legacy support)
-    ];
-
-    // Check for media references
-    const mediaPatterns = [
-      /\!\[.*?\]\(media:[^)]+\)/,   // ![alt](media:media-id)
-      /\{media:[^}]+\}/,            // {media:media-id}
-      /\{user:[^}]+\}/,             // {user:username}
-    ];
-
-    // Check for ADF metadata comments
-    const metadataPatterns = [
-      /<!--\s*adf:[^>]+-->/,        // <!-- adf:nodeType attrs -->
-      /<!--\s*\/adf:[^>]+-->/,      // <!-- /adf:nodeType -->
-    ];
-
-    // Check all patterns
-    const allPatterns = [...fenceBlockPatterns, ...mediaPatterns, ...metadataPatterns];
-    
-    return allPatterns.some(pattern => pattern.test(markdown));
-  }
 
   /**
    * Convert Extended Markdown to ADF using enhanced parser (async)
