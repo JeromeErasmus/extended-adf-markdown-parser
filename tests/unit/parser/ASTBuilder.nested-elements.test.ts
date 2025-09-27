@@ -334,8 +334,9 @@ Due: {date:2024-06-01}
       
       if (mentionNode) {
         expect(mentionNode.attrs?.id).toBe('project.lead');
-        expect(emojiNode.attrs?.shortName).toBe('star');
-        expect(emojiNode.attrs?.id).toBe('2b50');
+        expect(emojiNode.attrs?.shortName).toBe(':star:');
+        // Unicode emojis don't have id field per Atlassian docs
+        expect(emojiNode.attrs?.id).toBeUndefined();
         expect(emojiNode.attrs?.text).toBe('⭐');
         expect(statusNode.attrs?.text).toBe('active');
         expect(dateNode.attrs?.timestamp).toBe('2024-06-01');
@@ -415,8 +416,9 @@ Due date: {date:2024-07-15}
       
       // After fix, these should pass
       expect(mentionNode?.attrs?.id).toBe('assignee');
-      expect(emojiNode?.attrs?.shortName).toBe('star');
-      expect(emojiNode?.attrs?.id).toBe('2b50');
+      expect(emojiNode?.attrs?.shortName).toBe(':star:');
+      // Unicode emojis don't have id field per Atlassian docs
+      expect(emojiNode?.attrs?.id).toBeUndefined();
       expect(emojiNode?.attrs?.text).toBe('⭐');
     });
 

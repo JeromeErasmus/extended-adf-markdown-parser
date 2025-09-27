@@ -127,8 +127,9 @@ Pipeline runs daily at midnight.
       expect(subHeading.attrs.level).toBe(2);
       const emoji = subHeading.content.find((node: any) => node.type === 'emoji');
       expect(emoji).toBeDefined();
-      expect(emoji.attrs.shortName).toBe('star');
-      expect(emoji.attrs.id).toBe('2b50');
+      expect(emoji.attrs.shortName).toBe(':star:');
+      // Unicode emojis don't have id field per Atlassian docs
+      expect(emoji.attrs.id).toBeUndefined();
       expect(emoji.attrs.text).toBe('⭐');
       
       // Check level 3 heading
@@ -168,8 +169,9 @@ Pipeline runs daily at midnight.
       expect(mention).toBeDefined();
       expect(mention.attrs.id).toBe('frontend.lead');
       expect(emoji).toBeDefined();
-      expect(emoji.attrs.shortName).toBe('star');
-      expect(emoji.attrs.id).toBe('2b50');
+      expect(emoji.attrs.shortName).toBe(':star:');
+      // Unicode emojis don't have id field per Atlassian docs
+      expect(emoji.attrs.id).toBeUndefined();
       expect(emoji.attrs.text).toBe('⭐');
     });
 

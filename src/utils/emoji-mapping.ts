@@ -4,56 +4,62 @@
  */
 
 export interface EmojiData {
-  id: string;        // Unicode codepoint (e.g., "1f600")
-  text: string;      // Unicode character (e.g., "😀")
   shortName: string; // Shortname (e.g., ":grinning:")
+  text: string;      // Unicode character (e.g., "😀")
+  id?: string;       // Optional: Unicode codepoint for non-standard emojis
 }
 
 /**
  * Common emoji mappings for ADF format
- * Using Unicode codepoints as recommended by Atlassian
+ * Following official Atlassian documentation structure for Unicode emojis
  */
 export const EMOJI_MAP: Record<string, EmojiData> = {
   // Smileys & People
-  'grinning': { id: '1f600', text: '😀', shortName: ':grinning:' },
-  'smiley': { id: '1f603', text: '😃', shortName: ':smiley:' },
-  'smile': { id: '1f604', text: '😄', shortName: ':smile:' },
-  'grin': { id: '1f601', text: '😁', shortName: ':grin:' },
-  'laughing': { id: '1f606', text: '😆', shortName: ':laughing:' },
-  'wink': { id: '1f609', text: '😉', shortName: ':wink:' },
-  'blush': { id: '1f60a', text: '😊', shortName: ':blush:' },
-  'slightly_smiling_face': { id: '1f642', text: '🙂', shortName: ':slightly_smiling_face:' },
+  'grinning': { shortName: ':grinning:', text: '😀' },
+  'smiley': { shortName: ':smiley:', text: '😃' },
+  'smile': { shortName: ':smile:', text: '😄' },
+  'grin': { shortName: ':grin:', text: '😁' },
+  'laughing': { shortName: ':laughing:', text: '😆' },
+  'wink': { shortName: ':wink:', text: '😉' },
+  'blush': { shortName: ':blush:', text: '😊' },
+  'slightly_smiling_face': { shortName: ':slightly_smiling_face:', text: '🙂' },
   
   // Objects & Symbols
-  'star': { id: '2b50', text: '⭐', shortName: ':star:' },
-  'thumbsup': { id: '1f44d', text: '👍', shortName: ':thumbsup:' },
-  '+1': { id: '1f44d', text: '👍', shortName: ':+1:' },
-  'thumbsdown': { id: '1f44e', text: '👎', shortName: ':thumbsdown:' },
-  '-1': { id: '1f44e', text: '👎', shortName: ':-1:' },
-  'heart': { id: '2764', text: '❤️', shortName: ':heart:' },
-  'fire': { id: '1f525', text: '🔥', shortName: ':fire:' },
-  'rocket': { id: '1f680', text: '🚀', shortName: ':rocket:' },
-  'tada': { id: '1f389', text: '🎉', shortName: ':tada:' },
-  'warning': { id: '26a0', text: '⚠️', shortName: ':warning:' },
-  'x': { id: '274c', text: '❌', shortName: ':x:' },
-  'white_check_mark': { id: '2705', text: '✅', shortName: ':white_check_mark:' },
-  'heavy_check_mark': { id: '2714', text: '✔️', shortName: ':heavy_check_mark:' },
+  'star': { shortName: ':star:', text: '⭐' },
+  'thumbsup': { shortName: ':thumbsup:', text: '👍' },
+  '+1': { shortName: ':+1:', text: '👍' },
+  'thumbsdown': { shortName: ':thumbsdown:', text: '👎' },
+  '-1': { shortName: ':-1:', text: '👎' },
+  'heart': { shortName: ':heart:', text: '❤️' },
+  'fire': { shortName: ':fire:', text: '🔥' },
+  'rocket': { shortName: ':rocket:', text: '🚀' },
+  'tada': { shortName: ':tada:', text: '🎉' },
+  'warning': { shortName: ':warning:', text: '⚠️' },
+  'x': { shortName: ':x:', text: '❌' },
+  'white_check_mark': { shortName: ':white_check_mark:', text: '✅' },
+  'heavy_check_mark': { shortName: ':heavy_check_mark:', text: '✔️' },
+  'clapping_hands': { shortName: ':clapping_hands:', text: '👏' },
+  'muscle': { shortName: ':muscle:', text: '💪' },
+  'handshake': { shortName: ':handshake:', text: '🤝' },
+  'trophy': { shortName: ':trophy:', text: '🏆' },
+  'memo': { shortName: ':memo:', text: '📝' },
+  'calendar': { shortName: ':calendar:', text: '📅' },
   
   // Nature
-  'sunny': { id: '2600', text: '☀️', shortName: ':sunny:' },
-  'cloud': { id: '2601', text: '☁️', shortName: ':cloud:' },
-  'umbrella': { id: '2614', text: '☔', shortName: ':umbrella:' },
-  'snowflake': { id: '2744', text: '❄️', shortName: ':snowflake:' },
+  'sunny': { shortName: ':sunny:', text: '☀️' },
+  'cloud': { shortName: ':cloud:', text: '☁️' },
+  'umbrella': { shortName: ':umbrella:', text: '☔' },
+  'snowflake': { shortName: ':snowflake:', text: '❄️' },
   
   // Food
-  'coffee': { id: '2615', text: '☕', shortName: ':coffee:' },
-  'pizza': { id: '1f355', text: '🍕', shortName: ':pizza:' },
-  'hamburger': { id: '1f354', text: '🍔', shortName: ':hamburger:' },
+  'coffee': { shortName: ':coffee:', text: '☕' },
+  'pizza': { shortName: ':pizza:', text: '🍕' },
+  'hamburger': { shortName: ':hamburger:', text: '🍔' },
   
   // Activities
-  'soccer': { id: '26bd', text: '⚽', shortName: ':soccer:' },
-  'basketball': { id: '1f3c0', text: '🏀', shortName: ':basketball:' },
-  'football': { id: '1f3c8', text: '🏈', shortName: ':football:' }
+  'soccer': { shortName: ':soccer:', text: '⚽' },
+  'basketball': { shortName: ':basketball:', text: '🏀' },
+  'football': { shortName: ':football:', text: '🏈' }
 };
 
 /**
@@ -71,8 +77,8 @@ export function createFallbackEmojiData(shortName: string): EmojiData {
   const normalizedShortName = shortName.startsWith(':') ? shortName : `:${shortName}:`;
   
   return {
-    id: shortName.replace(/[^a-zA-Z0-9]/g, ''), // Use shortname as fallback ID
+    shortName: normalizedShortName,
     text: normalizedShortName, // Show shortname as text fallback
-    shortName: normalizedShortName
+    id: shortName.replace(/[^a-zA-Z0-9]/g, '') // Use shortname as fallback ID for non-Unicode
   };
 }

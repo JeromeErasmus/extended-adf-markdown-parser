@@ -16,7 +16,6 @@
           "type": "emoji",
           "attrs": {
             "shortName": ":rocket:",
-            "id": "1f680",
             "text": "🚀"
           }
         }
@@ -64,7 +63,6 @@
           "type": "emoji",
           "attrs": {
             "shortName": ":calendar:",
-            "id": "1f4c5",
             "text": "📅"
           }
         }
@@ -186,7 +184,6 @@
           "type": "emoji",
           "attrs": {
             "shortName": ":thumbsup:",
-            "id": "1f44d",
             "text": "👍"
           }
         }
@@ -203,7 +200,6 @@
           "type": "emoji",
           "attrs": {
             "shortName": ":clapping_hands:",
-            "id": "1f44f",
             "text": "👏"
           }
         },
@@ -215,7 +211,6 @@
           "type": "emoji",
           "attrs": {
             "shortName": ":fire:",
-            "id": "1f525",
             "text": "🔥"
           }
         },
@@ -227,7 +222,6 @@
           "type": "emoji",
           "attrs": {
             "shortName": ":muscle:",
-            "id": "1f4aa",
             "text": "💪"
           }
         }

@@ -21,7 +21,7 @@ export class EmojiConverter implements NodeConverter {
   nodeType = 'emoji';
 
   toMarkdown(node: ADFNode, context: ConversionContext): string {
-    const { shortName, id, text } = node.attrs || {};
+    const { shortName, text } = node.attrs || {};
     
     // If we have the actual emoji text, use it directly
     if (text) {
@@ -33,8 +33,9 @@ export class EmojiConverter implements NodeConverter {
     }
     
     // Otherwise, use the shortName format (e.g. :smile:)
+    // According to Atlassian docs, shortName already includes colons
     if (shortName) {
-      const result = `:${shortName}:`;
+      const result = shortName.startsWith(':') && shortName.endsWith(':') ? shortName : `:${shortName}:`;
       if (node.attrs && Object.keys(node.attrs).length > 0) {
         const metadata = `<!-- adf:emoji attrs='${JSON.stringify(node.attrs)}' -->`;
         return `${result}${metadata}`;

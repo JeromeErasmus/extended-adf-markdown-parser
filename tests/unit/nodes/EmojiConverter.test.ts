@@ -27,14 +27,13 @@ describe('EmojiConverter', () => {
       const node: ADFNode = {
         type: 'emoji',
         attrs: {
-          shortName: 'grinning',
-          id: '1f600',
+          shortName: ':grinning:',
           text: '😀'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('😀<!-- adf:emoji attrs=\'{"shortName":"grinning","id":"1f600","text":"😀"}\' -->');
+      expect(result).toBe('😀<!-- adf:emoji attrs=\'{"shortName":":grinning:","text":"😀"}\' -->');
     });
 
     it('should convert emoji with shortName only', () => {
@@ -53,13 +52,13 @@ describe('EmojiConverter', () => {
       const node: ADFNode = {
         type: 'emoji',
         attrs: {
-          shortName: 'smile',
+          shortName: ':smile:',
           text: '😊'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('😊<!-- adf:emoji attrs=\'{"shortName":"smile","text":"😊"}\' -->');
+      expect(result).toBe('😊<!-- adf:emoji attrs=\'{"shortName":":smile:","text":"😊"}\' -->');
     });
 
     it('should handle emoji with no attributes', () => {
@@ -121,21 +120,20 @@ describe('EmojiConverter', () => {
       const node: ADFNode = {
         type: 'emoji',
         attrs: {
-          shortName: 'thumbs_up',
-          id: '1f44d'
+          shortName: ':thumbs_up:',
+          text: '👍'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe(':thumbs_up:<!-- adf:emoji attrs=\'{"shortName":"thumbs_up","id":"1f44d"}\' -->');
+      expect(result).toBe('👍<!-- adf:emoji attrs=\'{"shortName":":thumbs_up:","text":"👍"}\' -->');
     });
 
     it('should include additional attributes in metadata', () => {
       const node: ADFNode = {
         type: 'emoji',
         attrs: {
-          shortName: 'heart',
-          id: '2764',
+          shortName: ':heart:',
           text: '❤️',
           skinTone: 'default',
           customField: 'value'
@@ -143,34 +141,34 @@ describe('EmojiConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('❤️<!-- adf:emoji attrs=\'{"shortName":"heart","id":"2764","text":"❤️","skinTone":"default","customField":"value"}\' -->');
+      expect(result).toBe('❤️<!-- adf:emoji attrs=\'{"shortName":":heart:","text":"❤️","skinTone":"default","customField":"value"}\' -->');
     });
 
     it('should handle Unicode emoji characters', () => {
       const node: ADFNode = {
         type: 'emoji',
         attrs: {
-          text: '🎉',
-          shortName: 'party'
+          shortName: ':tada:',
+          text: '🎉'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('🎉<!-- adf:emoji attrs=\'{"text":"🎉","shortName":"party"}\' -->');
+      expect(result).toBe('🎉<!-- adf:emoji attrs=\'{"shortName":":tada:","text":"🎉"}\' -->');
     });
 
     it('should handle skin tone variations', () => {
       const node: ADFNode = {
         type: 'emoji',
         attrs: {
+          shortName: ':wave::skin-tone-4:',
           text: '👋🏽',
-          shortName: 'wave',
           skinTone: '3'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('👋🏽<!-- adf:emoji attrs=\'{"text":"👋🏽","shortName":"wave","skinTone":"3"}\' -->');
+      expect(result).toBe('👋🏽<!-- adf:emoji attrs=\'{"shortName":":wave::skin-tone-4:","text":"👋🏽","skinTone":"3"}\' -->');
     });
 
     it('should not include metadata when no attributes', () => {
