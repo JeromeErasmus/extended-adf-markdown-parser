@@ -795,18 +795,26 @@ export class ASTBuilder {
           };
         }
       },
-      // Status: {status:status text}
+      // Status: {status:status text} or {status:status text|color:colorname}
       {
-        regex: /\{status:([^}]+)\}/,
+        regex: /\{status:([^|}]+)(?:\|color:([^}]*))?\}/,
         type: 'status',
-        process: (match: RegExpMatchArray) => ({
-          type: 'status' as const,
-          attrs: {
-            text: match[1],
-            color: 'neutral',
-            style: 'default'
-          }
-        })
+        process: (match: RegExpMatchArray) => {
+          const text = match[1];
+          const color = match[2] || 'neutral'; // Default to neutral if no color specified
+          
+          // Validate color against official Atlassian colors
+          const validColors = ['neutral', 'purple', 'blue', 'red', 'yellow', 'green'];
+          const finalColor = (color && validColors.includes(color)) ? color : 'neutral';
+          
+          return {
+            type: 'status' as const,
+            attrs: {
+              text,
+              color: finalColor
+            }
+          };
+        }
       },
       // Inline cards: [text](card:url)
       {

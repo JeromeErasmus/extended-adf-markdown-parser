@@ -33,7 +33,7 @@ describe('StatusConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`In Progress`<!-- adf:status attrs=\'{"text":"In Progress","color":"blue"}\' -->');
+      expect(result).toBe('{status:In Progress|color:blue}');
     });
 
     it('should use default "Status" text when no text provided', () => {
@@ -45,7 +45,7 @@ describe('StatusConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Status`<!-- adf:status attrs=\'{"color":"green"}\' -->');
+      expect(result).toBe('{status:Status|color:green}');
     });
 
     it('should handle status with no attributes', () => {
@@ -55,7 +55,7 @@ describe('StatusConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Status`');
+      expect(result).toBe('{status:Status}');
     });
 
     it('should handle status with undefined attrs', () => {
@@ -64,21 +64,21 @@ describe('StatusConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Status`');
+      expect(result).toBe('{status:Status}');
     });
 
-    it('should include all official status attributes in metadata', () => {
+    it('should include all official status attributes (text and color)', () => {
       const node: ADFNode = {
         type: 'status',
         attrs: {
           text: 'Done',
           color: 'green',
-          localId: 'status-123'
+          localId: 'status-123' // localId is not included in new inline syntax
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Done`<!-- adf:status attrs=\'{"text":"Done","color":"green","localId":"status-123"}\' -->');
+      expect(result).toBe('{status:Done|color:green}');
     });
 
     it('should handle empty text attribute', () => {
@@ -91,7 +91,7 @@ describe('StatusConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Status`<!-- adf:status attrs=\'{"text":"","color":"red"}\' -->');
+      expect(result).toBe('{status:Status|color:red}'); // Uses default "Status" for empty text
     });
 
     it('should handle text with spaces', () => {
@@ -103,7 +103,7 @@ describe('StatusConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Waiting for Approval`<!-- adf:status attrs=\'{"text":"Waiting for Approval"}\' -->');
+      expect(result).toBe('{status:Waiting for Approval}'); // No color means neutral (simple syntax)
     });
 
     it('should handle text with special characters', () => {
@@ -116,7 +116,7 @@ describe('StatusConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Bug-Fix #123`<!-- adf:status attrs=\'{"text":"Bug-Fix #123","color":"red"}\' -->');
+      expect(result).toBe('{status:Bug-Fix #123|color:red}');
     });
 
     it('should handle different color values', () => {
@@ -134,51 +134,55 @@ describe('StatusConverter', () => {
         };
 
         const result = converter.toMarkdown(node, mockContext);
-        expect(result).toBe(`\`${text}\`<!-- adf:status attrs='{"text":"${text}","color":"${color}"}' -->`);
+        if (color === 'neutral') {
+          expect(result).toBe(`{status:${text}}`);
+        } else {
+          expect(result).toBe(`{status:${text}|color:${color}}`);
+        }
       });
     });
 
-    it('should handle custom attributes', () => {
+    it('should handle custom attributes (ignores non-standard attributes)', () => {
       const node: ADFNode = {
         type: 'status',
         attrs: {
           text: 'Custom Status',
-          customField: 'value',
-          priority: 'high',
-          department: 'Engineering'
+          customField: 'value', // Not included in inline syntax
+          priority: 'high',     // Not included in inline syntax
+          department: 'Engineering' // Not included in inline syntax
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Custom Status`<!-- adf:status attrs=\'{"text":"Custom Status","customField":"value","priority":"high","department":"Engineering"}\' -->');
+      expect(result).toBe('{status:Custom Status}'); // Only text and color supported in new syntax
     });
 
-    it('should handle localId attribute', () => {
+    it('should handle localId attribute (ignores localId in new syntax)', () => {
       const node: ADFNode = {
         type: 'status',
         attrs: {
           text: 'To Do',
-          localId: 'abc-123-def',
+          localId: 'abc-123-def', // Not included in inline syntax
           color: 'neutral'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`To Do`<!-- adf:status attrs=\'{"text":"To Do","localId":"abc-123-def","color":"neutral"}\' -->');
+      expect(result).toBe('{status:To Do}'); // Neutral color uses simple syntax
     });
 
-    it('should handle custom attributes (for backward compatibility)', () => {
+    it('should handle custom attributes (focuses on text and color only)', () => {
       const node: ADFNode = {
         type: 'status',
         attrs: {
           text: 'Custom Status',
           color: 'blue',
-          customAttribute: 'customValue'
+          customAttribute: 'customValue' // Not included in inline syntax
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Custom Status`<!-- adf:status attrs=\'{"text":"Custom Status","color":"blue","customAttribute":"customValue"}\' -->');
+      expect(result).toBe('{status:Custom Status|color:blue}');
     });
   });
 });

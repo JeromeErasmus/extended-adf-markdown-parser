@@ -184,20 +184,23 @@ const backToMarkdown = parser.adfToMarkdown(adf);
 
 #### Status Format Standards
 - **Basic status**: `{status:In Progress}` → Creates neutral-colored status badge  
-- **Colored status**: Use metadata comments for official Atlassian colors
+- **Colored status**: Use inline color attribute for official Atlassian colors
+  ```markdown
+  {status:Complete|color:green}
+  {status:Blocked|color:red}
+  {status:In Progress|color:yellow}
+  {status:Available|color:blue}
+  {status:High Priority|color:purple}
+  {status:Draft|color:neutral}
+  ```
+- **Legacy syntax**: Metadata comments still supported for backward compatibility
   ```markdown
   <!-- adf:status color="green" -->
   {status:Complete}
-  
-  <!-- adf:status color="red" -->  
-  {status:Blocked}
-  
-  <!-- adf:status color="yellow" -->
-  {status:In Progress}
   ```
 - **Available colors**: `neutral` (default), `green`, `red`, `yellow`, `blue`, `purple`
 - **ADF compliance**: Follows official Atlassian Document Format specification
-- **Output format**: `` `Status Text` `` with preserved metadata for round-trip accuracy
+- **Round-trip accuracy**: Inline syntax preserves colors through conversions
 
 #### Emoji Format Standards
 - **Input**: `:smile:` (colon format)

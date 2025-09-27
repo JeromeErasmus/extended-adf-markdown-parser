@@ -20,18 +20,16 @@ export class StatusConverter implements NodeConverter {
   nodeType = 'status';
 
   toMarkdown(node: ADFNode, context: ConversionContext): string {
-    const { text, color, localId, style } = node.attrs || {};
+    const { text, color } = node.attrs || {};
     
-    // Use a badge-like format for status
     const statusText = text || 'Status';
-    const result = `\`${statusText}\``;
     
-    // Add metadata comment to preserve attributes if needed
-    if (node.attrs && Object.keys(node.attrs).length > 0) {
-      const metadata = `<!-- adf:status attrs='${JSON.stringify(node.attrs)}' -->`;
-      return `${result}${metadata}`;
+    // Use the new inline syntax for round-trip compatibility
+    if (color && color !== 'neutral') {
+      return `{status:${statusText}|color:${color}}`;
+    } else {
+      // For neutral color (default), use simple syntax
+      return `{status:${statusText}}`;
     }
-    
-    return result;
   }
 }

@@ -13,7 +13,17 @@ Status: {status:In Progress}
 Status: {status:Blocked}
 ```
 
-### Status with Color
+### Status with Inline Color Attributes
+```markdown
+{status:Ready for Review|color:green}
+{status:Needs Attention|color:red}
+{status:In Progress|color:yellow}
+{status:Available|color:blue}
+{status:High Priority|color:purple}
+{status:Draft|color:neutral}
+```
+
+### Legacy Status with Metadata Comments (Backward Compatibility)
 ```markdown
 <!-- adf:status color="green" -->
 {status:Ready for Review}
@@ -24,9 +34,21 @@ Status: {status:Blocked}
 
 ### Multiple Status Types
 ```markdown
-Priority: {status:High} {status:Medium} {status:Low}
-Phase: {status:Planning} {status:Development} {status:Testing} {status:Complete}
+Priority: {status:High|color:red} {status:Medium|color:yellow} {status:Low|color:green}
+Phase: {status:Planning} {status:Development|color:yellow} {status:Testing|color:blue} {status:Complete|color:green}
 ```
+
+### Syntax Comparison
+
+| Feature | Inline Syntax | Legacy Metadata Syntax |
+|---------|---------------|-------------------------|
+| **Conciseness** | `{status:Done\|color:green}` | `<!-- adf:status color="green" -->{status:Done}` |
+| **Readability** | ✅ Single line, clear intent | ❌ Two lines, less readable |
+| **Round-trip** | ✅ Perfect preservation | ✅ Perfect preservation |
+| **User-friendly** | ✅ Easy to write and remember | ❌ Verbose, hard to remember |
+| **Compatibility** | ✅ Works with all colors | ✅ Works with all colors |
+
+**Recommendation**: Use the inline syntax `{status:text|color:value}` for new content. Legacy syntax is maintained for backward compatibility.
 
 ## .adf-schema.json schema
 

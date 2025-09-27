@@ -82,7 +82,6 @@ describe('🆕 NEW FEATURES - Previously non-working elements', () => {
       expect(paragraph.content[1].type).toBe('status');
       expect(paragraph.content[1].attrs.text).toBe('In Progress');
       expect(paragraph.content[1].attrs.color).toBe('neutral');
-      expect(paragraph.content[1].attrs.style).toBe('default');
     });
 
     it('should handle multiple social elements in one paragraph', async () => {
