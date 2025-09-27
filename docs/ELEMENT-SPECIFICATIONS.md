@@ -49,7 +49,7 @@ This parser supports standard Markdown plus Atlassian Document Format (ADF) exte
 - **[Mention](./specifications/element-specifications-mention.md)** - User and group references
 - **[Emoji](./specifications/element-specifications-emoji.md)** - Emoji characters and expressions
 - **[Date](./specifications/element-specifications-date.md)** - Date and timestamp elements
-- **[Status](./specifications/element-specifications-status.md)** - Status indicators and badges
+- **[Status](./specifications/element-specifications-status.md)** - Status indicators and badges ✨ _Enhanced v2.3.2_ - New inline color syntax
 - **[Inline Card](./specifications/element-specifications-inline-card.md)** - Rich link previews
 
 ### Advanced Features
@@ -147,6 +147,52 @@ Each element specification includes:
 - **Markdown Syntax** - How to write it in Markdown
 - **ADF Schema** - JSON schema for the ADF representation
 - **Examples** - Practical usage examples
+
+## Recent Enhancements
+
+### Status Elements ✨ _Enhanced in v2.3.2_
+
+The status element received a major usability enhancement with **inline color syntax**:
+
+#### New Inline Color Syntax
+```markdown
+{status:Complete|color:green}        # Success states
+{status:Blocked|color:red}           # Error states  
+{status:In Progress|color:yellow}    # Warning states
+{status:Available|color:blue}        # Info states
+{status:High Priority|color:purple}  # Priority states
+{status:Draft|color:neutral}         # Default states
+```
+
+#### Key Benefits
+- **✅ User-Friendly**: Easy-to-write inline syntax vs. verbose metadata comments
+- **✅ Round-Trip Compatible**: Perfect conversion between Markdown ↔ ADF
+- **✅ Atlassian Compliant**: Uses official ADF specification colors and attributes
+- **✅ Backward Compatible**: Legacy `{status:text}` format still supported
+- **✅ Comprehensive**: Supports all official Atlassian status colors
+
+#### Migration Example
+```markdown
+# Old syntax (still works)
+<!-- adf:status color="green" -->
+{status:Complete}
+
+# New syntax (recommended)
+{status:Complete|color:green}
+```
+
+See **[Status Element Specification](./specifications/element-specifications-status.md)** for complete documentation and examples.
+
+### Nested ADF Fence Blocks ✨ _Added in v2.2.0_
+
+Complex hierarchical structures with unlimited nesting depth:
+```markdown
+~~~expand title="Project Overview"
+~~~panel type=info title="Prerequisites"
+Content here...
+~~~
+~~~
+```
 
 ## Next Steps
 

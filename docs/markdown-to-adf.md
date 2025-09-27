@@ -35,7 +35,7 @@ const adf2 = await parser.markdownToAdfAsync(markdown);
 - ✅ YAML Frontmatter support  
 - ✅ ADF Fence blocks (`~~~panel`, `~~~expand`, etc.)
 - ✅ **Nested ADF Fence blocks** ✨ _New in v2.2.0_ - Complex hierarchical structures
-- ✅ Social elements (`{user:mention}`, `:emoji:`, `{status:text}`)
+- ✅ Social elements (`{user:mention}`, `:emoji:`, `{status:text|color:value}`)
 - ✅ Sync/async support
 - ✅ Error recovery
 - ✅ Performance monitoring
@@ -193,6 +193,52 @@ Autolink: https://example.com
 
 const parser = new Parser({ gfm: true });
 const adf = await parser.markdownToAdfAsync(gfmMarkdown);
+```
+
+### Enhanced Status Elements ✨ _New in v2.3.2_
+
+Create colored status indicators with inline syntax:
+
+```typescript
+const statusMarkdown = `
+# Project Status Dashboard
+
+**Authentication Module**: {status:Complete|color:green}
+**Dashboard UI**: {status:In Progress|color:yellow}  
+**API Integration**: {status:Blocked|color:red}
+**Testing**: {status:Not Started}
+
+## Team Status
+- **Alice Johnson**: {status:Available|color:blue}
+- **Bob Smith**: {status:Busy|color:neutral}
+- **Carol Davis**: {status:On Vacation|color:purple}
+
+Priority levels: {status:Critical|color:red} {status:High|color:yellow} {status:Normal|color:green}
+`;
+
+const parser = new Parser();
+const adf = parser.markdownToAdf(statusMarkdown);
+
+// Results in proper ADF status nodes with:
+// - Required text and color attributes per Atlassian spec
+// - Valid colors: neutral, green, red, yellow, blue, purple  
+// - Perfect round-trip conversion compatibility
+// - Backward compatibility with legacy {status:text} format
+```
+
+**Status Color Options:**
+- `neutral` (default) - Gray status badge
+- `green` - Success, complete, approved states
+- `red` - Error, blocked, critical issues
+- `yellow` - Warning, in progress, pending states  
+- `blue` - Information, available, active states
+- `purple` - Special priority, review states
+
+**Syntax Formats:**
+```markdown
+{status:Basic Status}                    # Neutral color (default)
+{status:Complete|color:green}            # Colored status (new inline syntax)
+{status:High Priority|color:purple}      # Multi-word status with color
 ```
 
 ### Nested ADF Fence Blocks ✨ _New in v2.2.0_
