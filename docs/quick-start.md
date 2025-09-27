@@ -153,6 +153,39 @@ const markdownWithMedia = `
 const adf = parser.markdownToAdf(markdownWithMedia);
 ```
 
+### Social Elements
+
+The parser supports Atlassian social elements with bidirectional conversion:
+
+```typescript
+const markdownWithSocial = `
+# Team Update
+
+Meeting scheduled for 2025-09-27 with {user:alice} and {user:bob}.
+
+Status: {status:in-progress} :rocket: :thumbsup:
+
+Deadline: {date:2025-12-31}
+`;
+
+const adf = parser.markdownToAdf(markdownWithSocial);
+// Dates are converted to Unix timestamps in ADF
+// Emojis use Atlassian-compliant format with colons
+
+const backToMarkdown = parser.adfToMarkdown(adf);
+// Preserves social elements and converts timestamps back to YYYY-MM-DD
+```
+
+#### Date Format Support
+- **Standalone dates**: `2025-09-27` → Unix timestamp in ADF
+- **Braced format**: `{date:2025-09-27}` → Unix timestamp in ADF  
+- **Round-trip accuracy**: Maintains date precision through multiple conversions
+
+#### Emoji Format Standards
+- **Input**: `:smile:` (colon format)
+- **ADF**: `{"shortName": ":smile:", "text": "😄"}` (Atlassian-compliant)
+- **Output**: `:smile:` (preserved format)
+
 ## Advanced Features
 
 ### Custom Attributes with Metadata Comments

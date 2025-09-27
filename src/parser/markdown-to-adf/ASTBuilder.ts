@@ -681,7 +681,8 @@ export class ASTBuilder {
     return (
       content.includes('{user:') ||    // User mentions
       /:[a-zA-Z0-9_+-]+:/.test(content) ||  // Emoji patterns  
-      content.includes('{date:') ||    // Date elements
+      content.includes('{date:') ||    // Date elements with braces
+      /(^|[^\w-])\d{4}-\d{2}-\d{2}(?![\w-])/.test(content) ||  // Standalone dates YYYY-MM-DD
       content.includes('{status:')     // Status elements
     );
   }
@@ -753,7 +754,7 @@ export class ASTBuilder {
           return {
             type: 'emoji' as const,
             attrs: {
-              shortName: shortName, // Use the normalized shortName (without colons)
+              shortName: `:${shortName}:`, // Include colons in shortName per Atlassian docs
               id: emojiData.id,
               text: emojiData.text
             }
@@ -764,12 +765,35 @@ export class ASTBuilder {
       {
         regex: /\{date:(\d{4}-\d{2}-\d{2})\}/,
         type: 'date',
-        process: (match: RegExpMatchArray) => ({
-          type: 'date' as const,
-          attrs: {
-            timestamp: match[1]
-          }
-        })
+        process: (match: RegExpMatchArray) => {
+          const dateString = match[1];
+          const date = new Date(dateString + 'T00:00:00.000Z');
+          const timestamp = date.getTime().toString();
+          
+          return {
+            type: 'date' as const,
+            attrs: {
+              timestamp
+            }
+          };
+        }
+      },
+      // Standalone date: YYYY-MM-DD (must be word-bounded to avoid partial matches)
+      {
+        regex: /(^|[^\w-])(\d{4}-\d{2}-\d{2})(?![\w-])/,
+        type: 'date',
+        process: (match: RegExpMatchArray) => {
+          const dateString = match[2]; // Second capture group since we have boundary check
+          const date = new Date(dateString + 'T00:00:00.000Z');
+          const timestamp = date.getTime().toString();
+          
+          return {
+            type: 'date' as const,
+            attrs: {
+              timestamp
+            }
+          };
+        }
       },
       // Status: {status:status text}
       {

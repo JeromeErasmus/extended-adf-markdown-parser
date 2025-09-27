@@ -52,8 +52,8 @@ Warning: System maintenance :warning: :wrench:
       const emojiNodes = paragraph.content.filter((node: any) => node.type === 'emoji');
       
       expect(emojiNodes).toHaveLength(2);
-      expect(emojiNodes[0].attrs.shortName).toBe('warning');
-      expect(emojiNodes[1].attrs.shortName).toBe('wrench');
+      expect(emojiNodes[0].attrs.shortName).toBe(':warning:');
+      expect(emojiNodes[1].attrs.shortName).toBe(':wrench:');
     });
 
     it('should parse status indicators in success panels', async () => {
@@ -95,8 +95,11 @@ Started: {date:2024-02-01}
       const dateNodes = paragraph.content.filter((node: any) => node.type === 'date');
       
       expect(dateNodes).toHaveLength(2);
-      expect(dateNodes[0].attrs.timestamp).toBe('2024-03-15');
-      expect(dateNodes[1].attrs.timestamp).toBe('2024-02-01');
+      // Dates should be converted to Unix timestamps
+      const timestamp1 = new Date('2024-03-15T00:00:00.000Z').getTime().toString();
+      const timestamp2 = new Date('2024-02-01T00:00:00.000Z').getTime().toString();
+      expect(dateNodes[0].attrs.timestamp).toBe(timestamp1);
+      expect(dateNodes[1].attrs.timestamp).toBe(timestamp2);
     });
   });
 
@@ -128,9 +131,10 @@ Due date: {date:2024-04-01}
       expect(dateNode).toBeDefined();
       
       expect(mentionNode.attrs.id).toBe('project.manager');
-      expect(emojiNode.attrs.shortName).toBe('briefcase');
+      expect(emojiNode.attrs.shortName).toBe(':briefcase:');
       expect(statusNode.attrs.text).toBe('in-progress');
-      expect(dateNode.attrs.timestamp).toBe('2024-04-01');
+      const expectedTimestamp = new Date('2024-04-01T00:00:00.000Z').getTime().toString();
+      expect(dateNode.attrs.timestamp).toBe(expectedTimestamp);
     });
 
     it('should handle social elements mixed with formatting in panels', async () => {
@@ -207,8 +211,9 @@ Due date: {date:2024-04-01}
       expect(mentionInList).toBeDefined();
       expect(emojiInList).toBeDefined();
       expect(mentionInList.attrs.id).toBe('team.lead');
-      expect(emojiInList.attrs.shortName).toBe('star');
-      expect(emojiInList.attrs.id).toBe('2b50');
+      expect(emojiInList.attrs.shortName).toBe(':star:');
+      // Unicode emojis don't have id field per Atlassian docs
+      expect(emojiInList.attrs.id).toBeUndefined();
       expect(emojiInList.attrs.text).toBe('⭐');
       
       // Check second list item contains mention and status

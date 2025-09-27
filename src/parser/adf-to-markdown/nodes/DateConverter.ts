@@ -13,7 +13,7 @@ import type { ADFNode } from '../../../types';
  * 
  * Markdown Representation:
  * ```markdown
- * [2023-12-25](adf://date/1703462400000)<!-- adf:date attrs='{"timestamp":"1703462400000"}' -->
+ * 2023-12-25<!-- adf:date attrs='{"timestamp":"1703462400000"}' -->
  * ```
  */
 export class DateConverter implements NodeConverter {
@@ -31,25 +31,22 @@ export class DateConverter implements NodeConverter {
     
     // Handle invalid dates
     if (isNaN(date.getTime())) {
-      const dateUrl = `adf://date/${timestamp}`;
       if (node.attrs && Object.keys(node.attrs).length > 0) {
         const metadata = `<!-- adf:date attrs='${JSON.stringify(node.attrs)}' -->`;
-        return `[Invalid Date](${dateUrl})${metadata}`;
+        return `[Invalid Date]${metadata}`;
       }
-      return `[Invalid Date](${dateUrl})`;
+      return `[Invalid Date]`;
     }
     
-    const dateString = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+    // Format as YYYY-MM-DD
+    const dateString = date.toISOString().split('T')[0];
     
-    // Use placeholder URL scheme for dates
-    const dateUrl = `adf://date/${timestamp}`;
-    
-    // Add metadata comment to preserve attributes if needed
+    // Add metadata comment to preserve attributes for round-trip conversion
     if (node.attrs && Object.keys(node.attrs).length > 0) {
       const metadata = `<!-- adf:date attrs='${JSON.stringify(node.attrs)}' -->`;
-      return `[${dateString}](${dateUrl})${metadata}`;
+      return `${dateString}${metadata}`;
     }
     
-    return `[${dateString}](${dateUrl})`;
+    return dateString;
   }
 }

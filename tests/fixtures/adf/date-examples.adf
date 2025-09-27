@@ -1,0 +1,445 @@
+{
+  "version": 1,
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 1
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Date Examples"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "This document demonstrates various ways to use dates in markdown."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Standalone Dates"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Project kickoff: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1736899200000"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Milestone review: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1743379200000"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Final delivery: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1751241600000"
+          }
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Dates in Different Contexts"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "In Lists"
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Design phase: "
+                },
+                {
+                  "type": "date",
+                  "attrs": {
+                    "timestamp": "1739491200000"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Development phase: "
+                },
+                {
+                  "type": "date",
+                  "attrs": {
+                    "timestamp": "1743465600000"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Testing phase: "
+                },
+                {
+                  "type": "date",
+                  "attrs": {
+                    "timestamp": "1747353600000"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Launch date: "
+                },
+                {
+                  "type": "date",
+                  "attrs": {
+                    "timestamp": "1751241600000"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "With Special Formats"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Braced dates: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1727395200000"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Mixed with text: The meeting on "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1733011200000"
+          }
+        },
+        {
+          "type": "text",
+          "text": " will be virtual."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Edge Cases"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Leap Year"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "February 29th: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1709164800000"
+          }
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Year Boundaries"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "New Year: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1735689600000"
+          }
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Year end: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1767225600000"
+          }
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Unix Epoch"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Historic date: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Complex Scenarios"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Multiple Dates in Paragraph"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "The project timeline spans from "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1735689600000"
+          }
+        },
+        {
+          "type": "text",
+          "text": " to "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1767225600000"
+          }
+        },
+        {
+          "type": "text",
+          "text": " with key milestones on "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1742169600000"
+          }
+        },
+        {
+          "type": "text",
+          "text": ", "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1750291200000"
+          }
+        },
+        {
+          "type": "text",
+          "text": ", and "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1758153600000"
+          }
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Last updated: "
+        },
+        {
+          "type": "date",
+          "attrs": {
+            "timestamp": "1733011200000"
+          }
+        }
+      ]
+    }
+  ]
+}

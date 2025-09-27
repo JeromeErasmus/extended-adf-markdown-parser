@@ -299,7 +299,9 @@ no language specified
       expect(status).toBeDefined();
       expect(status.attrs.text).toBe('low');
       expect(date).toBeDefined();
-      expect(date.attrs.timestamp).toBe('2024-01-30');
+      // Date should be converted to Unix timestamp (2024-01-30 00:00:00 UTC)
+      const expectedTimestamp = new Date('2024-01-30T00:00:00.000Z').getTime().toString();
+      expect(date.attrs.timestamp).toBe(expectedTimestamp);
     });
   });
 

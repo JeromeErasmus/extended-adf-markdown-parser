@@ -43,11 +43,11 @@ Emoji elements represent emoji characters within ADF documents. They can referen
       "properties": {
         "shortName": {
           "type": "string",
-          "description": "Emoji shortname (e.g., :smile:)"
+          "description": "Emoji shortname with colons (e.g., :smile:)"
         },
         "id": {
           "type": "string",
-          "description": "Custom emoji ID"
+          "description": "Custom emoji ID (optional for Unicode emojis)"
         },
         "text": {
           "type": "string",
@@ -60,6 +60,27 @@ Emoji elements represent emoji characters within ADF documents. They can referen
   "required": ["type", "attrs"]
 }
 ```
+
+## Conversion Behavior
+
+### Markdown to ADF
+- `:smile:` (colon format) → `{"type": "emoji", "attrs": {"shortName": ":smile:", "text": "😄"}}`
+- Unicode emojis use the official Atlassian format with colons in `shortName`
+- The `id` field is omitted for standard Unicode emojis per Atlassian documentation
+
+### ADF to Markdown
+- `{"type": "emoji", "attrs": {"shortName": ":smile:", "text": "😄"}}` → `:smile:`
+- Emojis are converted back to colon shortname format
+- Additional attributes are preserved if present
+
+### Emoji Format Standards
+- **Correct**: `shortName: ":smile:"` (with colons)
+- **Incorrect**: `shortName: "smile"` (without colons)
+
+Per [Atlassian's official documentation](https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/emoji/), Unicode emojis should:
+- Include colons in the `shortName` field
+- Omit the `id` field
+- Include the `text` field with the Unicode character
 
 ## Examples
 

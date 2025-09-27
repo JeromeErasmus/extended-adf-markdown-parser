@@ -77,7 +77,7 @@ describe('ASTBuilder Nested Elements Parsing', () => {
       
       // FAILING TEST - demonstrates the bug
       if (emojiNode) {
-        expect(emojiNode.attrs?.shortName).toBe('white_check_mark');
+        expect(emojiNode.attrs?.shortName).toBe(':white_check_mark:');
       } else {
         const textNode = cellContent.find((node: any) => node.type === 'text');
         expect(textNode?.text).toContain(':white_check_mark:');
@@ -130,7 +130,9 @@ describe('ASTBuilder Nested Elements Parsing', () => {
       
       // FAILING TEST - demonstrates the bug
       if (dateNode) {
-        expect(dateNode.attrs?.timestamp).toBe('2024-03-15');
+        // Date should be converted to Unix timestamp
+        const expectedTimestamp = new Date('2024-03-15T00:00:00.000Z').getTime().toString();
+        expect(dateNode.attrs?.timestamp).toBe(expectedTimestamp);
       } else {
         const textNode = cellContent.find((node: any) => node.type === 'text');
         expect(textNode?.text).toContain('{date:2024-03-15}');
@@ -208,7 +210,7 @@ describe('ASTBuilder Nested Elements Parsing', () => {
       
       // FAILING TEST - demonstrates the bug
       if (emojiNode) {
-        expect(emojiNode.attrs?.shortName).toBe('wave');
+        expect(emojiNode.attrs?.shortName).toBe(':wave:');
       } else {
         const textNode = h1Content.find((node: any) => node.type === 'text');
         expect(textNode?.text).toContain(':wave:');
@@ -339,7 +341,9 @@ Due: {date:2024-06-01}
         expect(emojiNode.attrs?.id).toBeUndefined();
         expect(emojiNode.attrs?.text).toBe('⭐');
         expect(statusNode.attrs?.text).toBe('active');
-        expect(dateNode.attrs?.timestamp).toBe('2024-06-01');
+        // Date should be converted to Unix timestamp
+        const expectedTimestamp = new Date('2024-06-01T00:00:00.000Z').getTime().toString();
+        expect(dateNode.attrs?.timestamp).toBe(expectedTimestamp);
       }
     });
 
@@ -367,9 +371,11 @@ Due date: {date:2024-07-15}
       
       if (mentionNode) {
         expect(mentionNode.attrs?.id).toBe('assignee');
-        expect(emojiNode.attrs?.shortName).toBe('briefcase');
+        expect(emojiNode.attrs?.shortName).toBe(':briefcase:');
         expect(statusNode.attrs?.text).toBe('in-progress');
-        expect(dateNode.attrs?.timestamp).toBe('2024-07-15');
+        // Date should be converted to Unix timestamp
+        const expectedTimestamp = new Date('2024-07-15T00:00:00.000Z').getTime().toString();
+        expect(dateNode.attrs?.timestamp).toBe(expectedTimestamp);
       }
     });
   });
@@ -399,7 +405,7 @@ Due date: {date:2024-07-15}
       // After fix, these should all pass
       expect(mentionNode?.attrs?.id).toBe('owner.name');
       expect(statusNode?.attrs?.text).toBe('active');
-      expect(emojiNode?.attrs?.shortName).toBe('check_mark');
+      expect(emojiNode?.attrs?.shortName).toBe(':check_mark:');
     });
 
     it('AFTER FIX: should parse social elements in headings correctly', () => {
@@ -459,7 +465,9 @@ Due date: {date:2024-07-15}
       expect(mentionNode?.attrs?.id).toBe('build.engineer');
       expect(mentionNode?.attrs?.text).toBe('@build.engineer');
       expect(statusNode?.attrs?.text).toBe('active');
-      expect(dateNode?.attrs?.timestamp).toBe('2024-01-20');
+      // Date should be converted to Unix timestamp
+      const expectedTimestamp = new Date('2024-01-20T00:00:00.000Z').getTime().toString();
+      expect(dateNode?.attrs?.timestamp).toBe(expectedTimestamp);
     });
   });
 });

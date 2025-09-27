@@ -9,6 +9,13 @@ Date elements represent temporal information within ADF documents. They can disp
 ### Standard Date Format
 ```markdown
 {date:2023-12-25}
+2023-12-25
+```
+
+> **Note**: Both `{date:YYYY-MM-DD}` format and standalone `YYYY-MM-DD` format are supported and convert to Unix timestamps in ADF.
+
+### ISO Date Format
+```markdown
 {date:2023-03-15T10:30:00Z}
 ```
 
@@ -45,7 +52,7 @@ Date elements represent temporal information within ADF documents. They can disp
       "properties": {
         "timestamp": {
           "type": "string",
-          "description": "Unix timestamp or ISO 8601 date string"
+          "description": "Unix timestamp in milliseconds (string format)"
         },
         "displayMode": {
           "type": "string",
@@ -67,6 +74,24 @@ Date elements represent temporal information within ADF documents. They can disp
   },
   "required": ["type", "attrs"]
 }
+```
+
+## Conversion Behavior
+
+### Markdown to ADF
+- `2023-12-25` (standalone) → `{"type": "date", "attrs": {"timestamp": "1703462400000"}}`
+- `{date:2023-12-25}` (braced) → `{"type": "date", "attrs": {"timestamp": "1703462400000"}}`
+- Dates are converted to Unix timestamps in milliseconds (UTC, 00:00:00)
+
+### ADF to Markdown  
+- `{"type": "date", "attrs": {"timestamp": "1703462400000"}}` → `2023-12-25<!-- adf:date attrs='{"timestamp":"1703462400000"}' -->`
+- Timestamps are converted back to `YYYY-MM-DD` format
+- Additional attributes are preserved in metadata comments for round-trip accuracy
+
+### Round-trip Conversion
+The parser ensures that dates maintain accuracy through multiple conversion cycles:
+```
+2023-12-25 → ADF (timestamp) → 2023-12-25 (identical)
 ```
 
 ## Examples

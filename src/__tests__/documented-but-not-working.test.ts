@@ -39,8 +39,9 @@ describe('✅ PREVIOUSLY NOT WORKING - Now fixed in unified architecture', () =>
       expect(paragraph.content[0].type).toBe('text');
       expect(paragraph.content[0].text).toBe('Happy ');
       expect(paragraph.content[1].type).toBe('emoji');
-      expect(paragraph.content[1].attrs.shortName).toBe('smile');
-      expect(paragraph.content[1].attrs.id).toBe('1f604');
+      expect(paragraph.content[1].attrs.shortName).toBe(':smile:');
+      // Unicode emojis don't have id field per Atlassian docs
+      expect(paragraph.content[1].attrs.id).toBeUndefined();
       expect(paragraph.content[1].attrs.text).toBe('😄');
       expect(paragraph.content[2].type).toBe('text');
       expect(paragraph.content[2].text).toBe(' face');
@@ -56,7 +57,9 @@ describe('✅ PREVIOUSLY NOT WORKING - Now fixed in unified architecture', () =>
       expect(paragraph.content[0].type).toBe('text');
       expect(paragraph.content[0].text).toBe('Meeting on ');
       expect(paragraph.content[1].type).toBe('date');
-      expect(paragraph.content[1].attrs.timestamp).toBe('2023-12-25');
+      // Date should be converted to Unix timestamp
+      const expectedTimestamp = new Date('2023-12-25T00:00:00.000Z').getTime().toString();
+      expect(paragraph.content[1].attrs.timestamp).toBe(expectedTimestamp);
     });
 
     it('should convert status to proper status nodes', async () => {

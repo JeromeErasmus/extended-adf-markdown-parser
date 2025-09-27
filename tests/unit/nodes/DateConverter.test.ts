@@ -33,7 +33,7 @@ describe('DateConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe(`[2023-12-25](adf://date/${timestamp})<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
+      expect(result).toBe(`2023-12-25<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
     });
 
     it('should handle date without timestamp', () => {
@@ -65,7 +65,7 @@ describe('DateConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe(`[2021-01-01](adf://date/${timestamp})<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
+      expect(result).toBe(`2021-01-01<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
     });
 
     it('should handle Unix timestamp in seconds', () => {
@@ -79,7 +79,7 @@ describe('DateConverter', () => {
 
       const result = converter.toMarkdown(node, mockContext);
       // JavaScript Date treats this as milliseconds since epoch, so it's actually January 19, 1970
-      expect(result).toBe(`[1970-01-19](adf://date/${timestamp})<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
+      expect(result).toBe(`1970-01-19<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
     });
 
     it('should include additional attributes in metadata', () => {
@@ -94,7 +94,7 @@ describe('DateConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('[2023-12-25](adf://date/1703462400000)<!-- adf:date attrs=\'{"timestamp":"1703462400000","format":"DD/MM/YYYY","timezone":"UTC","customField":"value"}\' -->');
+      expect(result).toBe('2023-12-25<!-- adf:date attrs=\'{"timestamp":"1703462400000","format":"DD/MM/YYYY","timezone":"UTC","customField":"value"}\' -->');
     });
 
     it('should handle invalid timestamp gracefully', () => {
@@ -106,7 +106,7 @@ describe('DateConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('[Invalid Date](adf://date/invalid)<!-- adf:date attrs=\'{"timestamp":"invalid"}\' -->');
+      expect(result).toBe('[Invalid Date]<!-- adf:date attrs=\'{"timestamp":"invalid"}\' -->');
     });
 
     it('should handle empty timestamp', () => {
@@ -131,7 +131,7 @@ describe('DateConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe(`[2023-12-25](adf://date/${timestamp})<!-- adf:date attrs='{"timestamp":1703462400000}' -->`);
+      expect(result).toBe(`2023-12-25<!-- adf:date attrs='{"timestamp":1703462400000}' -->`);
     });
 
     it('should handle leap year dates', () => {
@@ -144,7 +144,24 @@ describe('DateConverter', () => {
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe(`[2020-02-29](adf://date/${timestamp})<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
+      expect(result).toBe(`2020-02-29<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
+    });
+
+    it('should output plain date without metadata when no attributes', () => {
+      const timestamp = '1703462400000'; // 2023-12-25
+      const node: ADFNode = {
+        type: 'date',
+        attrs: {
+          timestamp
+        }
+      };
+
+      // Temporarily remove all other attributes to test plain date output
+      delete node.attrs.timestamp;
+      node.attrs = { timestamp };
+
+      const result = converter.toMarkdown(node, mockContext);
+      expect(result).toBe(`2023-12-25<!-- adf:date attrs='{"timestamp":"${timestamp}"}' -->`);
     });
   });
 });
