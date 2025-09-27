@@ -163,23 +163,41 @@ const markdownWithSocial = `
 
 Meeting scheduled for 2025-09-27 with {user:alice} and {user:bob}.
 
-Status: {status:in-progress} :rocket: :thumbsup:
+Status: {status:In Progress} :rocket: :thumbsup:
 
 Deadline: {date:2025-12-31}
 `;
 
 const adf = parser.markdownToAdf(markdownWithSocial);
 // Dates are converted to Unix timestamps in ADF
+// Status elements use official Atlassian ADF format with required text/color attributes
 // Emojis use Atlassian-compliant format with colons
 
 const backToMarkdown = parser.adfToMarkdown(adf);
-// Preserves social elements and converts timestamps back to YYYY-MM-DD
+// Preserves all social elements and converts timestamps back to YYYY-MM-DD
 ```
 
 #### Date Format Support
 - **Standalone dates**: `2025-09-27` → Unix timestamp in ADF
 - **Braced format**: `{date:2025-09-27}` → Unix timestamp in ADF  
 - **Round-trip accuracy**: Maintains date precision through multiple conversions
+
+#### Status Format Standards
+- **Basic status**: `{status:In Progress}` → Creates neutral-colored status badge  
+- **Colored status**: Use metadata comments for official Atlassian colors
+  ```markdown
+  <!-- adf:status color="green" -->
+  {status:Complete}
+  
+  <!-- adf:status color="red" -->  
+  {status:Blocked}
+  
+  <!-- adf:status color="yellow" -->
+  {status:In Progress}
+  ```
+- **Available colors**: `neutral` (default), `green`, `red`, `yellow`, `blue`, `purple`
+- **ADF compliance**: Follows official Atlassian Document Format specification
+- **Output format**: `` `Status Text` `` with preserved metadata for round-trip accuracy
 
 #### Emoji Format Standards
 - **Input**: `:smile:` (colon format)
@@ -319,6 +337,12 @@ const converter = registry.getNodeConverter('paragraph');
 ### ADF Extensions
 - **[Panels](./specifications/element-specifications-panels.md)** - Semantic content containers (info, warning, error, success, note)
 - **[Expand Sections](./specifications/element-specifications-expand-sections.md)** - Collapsible content areas
+
+### Social Elements
+- **[Status](./specifications/element-specifications-status.md)** - Status indicators with Atlassian-compliant colors and attributes
+- **[Date](./specifications/element-specifications-date.md)** - Temporal elements with bidirectional timestamp conversion
+- **[Emoji](./specifications/element-specifications-emoji.md)** - Emoji elements with official Atlassian shortName format
+- **[Mention](./specifications/element-specifications-mention.md)** - User and entity mentions with proper referencing
 
 ### Media Elements
 - **[Media Single](./specifications/element-specifications-media-single.md)** - Single media with layout control
