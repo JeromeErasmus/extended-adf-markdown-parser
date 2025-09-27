@@ -75,7 +75,7 @@ Status: {status:completed} and {status:deployed}
       expect(statusNodes[0].attrs.text).toBe('completed');
       expect(statusNodes[1].attrs.text).toBe('deployed');
       expect(statusNodes[0].attrs.color).toBe('neutral');
-      expect(statusNodes[0].attrs.style).toBe('default');
+      // Note: 'style' attribute is not part of official Atlassian ADF spec
     });
 
     it('should parse dates in note panels', async () => {

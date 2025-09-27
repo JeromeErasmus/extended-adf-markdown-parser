@@ -28,24 +28,24 @@
 - Search functionality broken [Medium]
 - Mobile responsive issues [High]
 
-## Status with Colors and Styles
+## Status with Colors
 
 ### Quality Assurance Status
 
-<!-- adf:status color="green" style="bold" -->
-[Unit Tests: Passing]
+<!-- adf:status color="green" -->
+{status:Unit Tests: Passing}
 
-<!-- adf:status color="green" style="subtle" -->
-[Integration Tests: Passing]
+<!-- adf:status color="green" -->
+{status:Integration Tests: Passing}
 
-<!-- adf:status color="red" style="bold" -->
-[Performance Tests: Failing]
+<!-- adf:status color="red" -->
+{status:Performance Tests: Failing}
 
-<!-- adf:status color="yellow" style="subtle" -->
-[Security Scan: Warning]
+<!-- adf:status color="yellow" -->
+{status:Security Scan: Warning}
 
-<!-- adf:status color="blue" style="bold" -->
-[Code Coverage: 85%]
+<!-- adf:status color="blue" -->
+{status:Code Coverage: 85%}
 
 ### Deployment Pipeline
 

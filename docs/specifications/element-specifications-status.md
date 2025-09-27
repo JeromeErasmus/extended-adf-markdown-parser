@@ -2,30 +2,30 @@
 
 ## Description
 
-Status elements display status indicators with customizable text, colors, and styles within ADF documents. They provide visual cues for project states, task completion, approval workflows, and other categorical information. Status elements support various color schemes and styling options.
+Status elements display status indicators with customizable text and colors within ADF documents. They provide visual cues for project states, task completion, approval workflows, and other categorical information. Status elements support various color schemes as defined in the Atlassian Document Format specification.
 
 ## .md markdown syntax
 
 ### Basic Status
 ```markdown
-Status: [Complete]
-Status: [In Progress]
-Status: [Blocked]
+Status: {status:Complete}
+Status: {status:In Progress}
+Status: {status:Blocked}
 ```
 
 ### Status with Color
 ```markdown
-<!-- adf:status color="green" style="bold" -->
-[Ready for Review]
+<!-- adf:status color="green" -->
+{status:Ready for Review}
 
-<!-- adf:status color="red" style="subtle" -->
-[Needs Attention]
+<!-- adf:status color="red" -->
+{status:Needs Attention}
 ```
 
 ### Multiple Status Types
 ```markdown
-Priority: [High] [Medium] [Low]
-Phase: [Planning] [Development] [Testing] [Complete]
+Priority: {status:High} {status:Medium} {status:Low}
+Phase: {status:Planning} {status:Development} {status:Testing} {status:Complete}
 ```
 
 ## .adf-schema.json schema
@@ -52,12 +52,7 @@ Phase: [Planning] [Development] [Testing] [Complete]
         },
         "localId": {
           "type": "string",
-          "description": "Local identifier for the status"
-        },
-        "style": {
-          "type": "string",
-          "enum": ["bold", "subtle"],
-          "description": "Status display style"
+          "description": "Unique identifier, auto-generated"
         }
       },
       "required": ["text", "color"],

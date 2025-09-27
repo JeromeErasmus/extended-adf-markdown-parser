@@ -67,19 +67,18 @@ describe('StatusConverter', () => {
       expect(result).toBe('`Status`');
     });
 
-    it('should include all status attributes in metadata', () => {
+    it('should include all official status attributes in metadata', () => {
       const node: ADFNode = {
         type: 'status',
         attrs: {
           text: 'Done',
           color: 'green',
-          localId: 'status-123',
-          style: 'bold'
+          localId: 'status-123'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Done`<!-- adf:status attrs=\'{"text":"Done","color":"green","localId":"status-123","style":"bold"}\' -->');
+      expect(result).toBe('`Done`<!-- adf:status attrs=\'{"text":"Done","color":"green","localId":"status-123"}\' -->');
     });
 
     it('should handle empty text attribute', () => {
@@ -168,18 +167,18 @@ describe('StatusConverter', () => {
       expect(result).toBe('`To Do`<!-- adf:status attrs=\'{"text":"To Do","localId":"abc-123-def","color":"neutral"}\' -->');
     });
 
-    it('should handle style attribute', () => {
+    it('should handle custom attributes (for backward compatibility)', () => {
       const node: ADFNode = {
         type: 'status',
         attrs: {
-          text: 'Highlighted',
-          style: 'lozenge',
-          color: 'blue'
+          text: 'Custom Status',
+          color: 'blue',
+          customAttribute: 'customValue'
         }
       };
 
       const result = converter.toMarkdown(node, mockContext);
-      expect(result).toBe('`Highlighted`<!-- adf:status attrs=\'{"text":"Highlighted","style":"lozenge","color":"blue"}\' -->');
+      expect(result).toBe('`Custom Status`<!-- adf:status attrs=\'{"text":"Custom Status","color":"blue","customAttribute":"customValue"}\' -->');
     });
   });
 });
